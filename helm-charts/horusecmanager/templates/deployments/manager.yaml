@@ -25,13 +25,13 @@ spec:
       containers:
         - env:
             - name: REACT_APP_HORUSEC_ENDPOINT_API
-              value: http:\/\/api-horus-dev.zup.com.br
+              value: {{ .Values.components.api.ingress.scheme -}}:\/\/{{- .Values.components.api.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_ANALYTIC
-              value: http:\/\/analytic-horus-dev.zup.com.br
+              value: {{ .Values.components.analytic.ingress.scheme -}}:\/\/{{- .Values.components.analytic.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_ACCOUNT
-              value: http:\/\/account-horus-dev.zup.com.br
+              value: {{ .Values.components.account.ingress.scheme -}}:\/\/{{- .Values.components.account.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
-              value: http:\/\/auth-horus-dev.zup.com.br
+              value: {{ .Values.components.auth.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
           image: horuszup/horusec-manager:v1.7.1
           imagePullPolicy: Always
           livenessProbe:

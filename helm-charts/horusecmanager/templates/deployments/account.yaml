@@ -27,7 +27,7 @@ spec:
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
             - name: HORUSEC_MANAGER_URL
-              value: http://horus-dev.zup.com.br
+              value: {{ .Values.components.manager.ingress.scheme -}}://{{- .Values.components.manager.ingress.host }}
             - name: HORUSEC_BROKER_HOST
               value: rabbitmq.queue
             - name: HORUSEC_BROKER_PORT
@@ -39,7 +39,7 @@ spec:
             - name: HORUSEC_DISABLED_BROKER
               value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_GRPC_AUTH_URL
-              value: auth.horusec.svc.cluster.local:8007
+              value: "auth.{{- .Release.Namespace -}}.svc.cluster.local:{{- .Values.components.auth.port.grpc }}"
             - name: HORUSEC_GRPC_USE_CERTS
               value: "false"
             - name: HORUSEC_BROKER_USERNAME
