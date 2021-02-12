@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: horusec-auth
+  name: auth
+  namespace: horusec
+spec:
+  ports:
+    - name: http
+      port: 8006
+      protocol: TCP
+      targetPort: http
+    - name: grcp
+      port: 8007
+      protocol: TCP
+      targetPort: grcp
+  selector:
+    app: horusec-auth
+  type: ClusterIP

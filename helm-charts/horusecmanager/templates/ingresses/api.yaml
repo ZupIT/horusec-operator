@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: horusec-api
+  name: api
+  namespace: horusec
+spec:
+  rules:
+    - host: api-horus-dev.zup.com.br
+      http:
+        paths:
+          - backend:
+              serviceName: api
+              servicePort: 8000
+            path: /

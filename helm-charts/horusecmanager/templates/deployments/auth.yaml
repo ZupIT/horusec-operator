@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: horusec-auth
+  name: auth
+  namespace: horusec
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: horusec-auth
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: horusec-auth
+    spec:
+      containers:
+        - env:
+            - name: HORUSEC_SWAGGER_HOST
+              value: 0.0.0.0
+            - name: HORUSEC_PORT
+              value: "8006"
+            - name: HORUSEC_DATABASE_SQL_DIALECT
+              value: postgres
+            - name: HORUSEC_DATABASE_SQL_LOG_MODE
+              value: "false"
+            - name: HORUSEC_API_URL
+            - name: HORUSEC_GRPC_PORT
+              value: "8007"
+            - name: HORUSEC_GRPC_USE_CERTS
+              value: "false"
+            - name: HORUSEC_BROKER_HOST
+              value: rabbitmq.queue
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
+            - name: HORUSEC_DISABLED_BROKER
+              value: "false"
+            - name: HORUSEC_AUTH_TYPE
+              value: horusec
+            - name: HORUSEC_ENABLE_APPLICATION_ADMIN
+              value: {{ .Values.global.enableAdmin | quote }}
+            - name: HORUSEC_APPLICATION_ADMIN_DATA
+              value: '{"username":"horusec-admin","email":"horusec-admin@example.com","password":"Devpass0*"}'
+            - name: HORUSEC_BROKER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: broker-username
+                  name: broker-username
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: broker-password
+                  name: broker-password
+            - name: HORUSEC_DATABASE_SQL_URI
+              valueFrom:
+                secretKeyRef:
+                  key: database-uri
+                  name: database-uri
+            - name: HORUSEC_JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: jwt-token
+                  name: jwt-token
+          image: horuszup/horusec-auth:latest
+          imagePullPolicy: Always
+          name: horusec-auth
+          ports:
+            - containerPort: 8006
+              name: http
+              protocol: TCP
+            - containerPort: 8007
+              name: grcp
+              protocol: TCP
+          resources: {}
+          securityContext: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: auth
+      serviceAccountName: auth
+      terminationGracePeriodSeconds: 30
