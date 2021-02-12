@@ -7,14 +7,12 @@ metadata:
   namespace: horusec
 spec:
   ports:
-    - name: http
-      port: 8006
+  {{- range $key, $value := .Values.components.auth.port }}
+    - name: {{ $key }}
+      port: {{ $value }}
       protocol: TCP
-      targetPort: http
-    - name: grcp
-      port: 8007
-      protocol: TCP
-      targetPort: grcp
+      targetPort: {{ $key }}
+  {{- end }}
   selector:
     app: horusec-auth
   type: ClusterIP

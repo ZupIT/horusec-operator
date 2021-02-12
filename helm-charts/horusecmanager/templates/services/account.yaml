@@ -7,10 +7,12 @@ metadata:
   namespace: horusec
 spec:
   ports:
-    - name: http
-      port: 8003
+  {{- range $key, $value := .Values.components.account.port }}
+    - name: {{ $key }}
+      port: {{ $value }}
       protocol: TCP
-      targetPort: http
+      targetPort: {{ $key }}
+  {{- end }}
   selector:
     app: horusec-account
   type: ClusterIP

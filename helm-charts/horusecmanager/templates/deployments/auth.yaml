@@ -80,12 +80,11 @@ spec:
           imagePullPolicy: Always
           name: horusec-auth
           ports:
-            - containerPort: 8006
-              name: http
+          {{- range $key, $value := .Values.components.auth.port }}
+            - containerPort: {{ $value }}
+              name: {{ $key }}
               protocol: TCP
-            - containerPort: 8007
-              name: grcp
-              protocol: TCP
+          {{- end }}
           resources: {}
           securityContext: {}
           terminationMessagePath: /dev/termination-log

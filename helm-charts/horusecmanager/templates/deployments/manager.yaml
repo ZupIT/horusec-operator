@@ -45,9 +45,11 @@ spec:
             timeoutSeconds: 1
           name: horusec-manager
           ports:
-            - containerPort: 8080
-              name: http
+          {{- range $key, $value := .Values.components.manager.port }}
+            - containerPort: {{ $value }}
+              name: {{ $key }}
               protocol: TCP
+          {{- end }}
           readinessProbe:
             failureThreshold: 3
             httpGet:

@@ -73,9 +73,11 @@ spec:
           imagePullPolicy: Always
           name: horusec-account
           ports:
-            - containerPort: 8003
-              name: http
+          {{- range $key, $value := .Values.components.account.port }}
+            - containerPort: {{ $value }}
+              name: {{ $key }}
               protocol: TCP
+          {{- end }}
           resources: {}
           securityContext: {}
           terminationMessagePath: /dev/termination-log
