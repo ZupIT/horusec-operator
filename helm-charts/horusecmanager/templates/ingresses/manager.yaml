@@ -1,3 +1,4 @@
+{{- if and .Values.components.manager.enabled .Values.components.manager.ingress.enabled }}
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -14,3 +15,4 @@ spec:
               serviceName: manager
               servicePort: 8080
             path: /
+{{- end }}
