@@ -24,7 +24,7 @@ components:
     port:
       http: 8003
     ingress:
-      enabled: false
+      enabled: true
       scheme: "http"
       host: "account-horus-dev.zup.com.br"
       protocols:
@@ -36,7 +36,7 @@ components:
     port:
       http: 8005
     ingress:
-      enabled: false
+      enabled: true
       scheme: "http"
       host: "analytic-horus-dev.zup.com.br"
       protocols:
@@ -47,7 +47,7 @@ components:
     port:
       http: 8000
     ingress:
-      enabled: false
+      enabled: true
       scheme: "http"
       host: "api-horus-dev.zup.com.br"
       protocols:
@@ -59,7 +59,7 @@ components:
       http: 8006
       grpc: 8007
     ingress:
-      enabled: false
+      enabled: true
       scheme: "http"
       host: "auth-horus-dev.zup.com.br"
       protocols:
@@ -71,7 +71,7 @@ components:
     port:
       http: 8080
     ingress:
-      enabled: false
+      enabled: true
       scheme: "http"
       host: "horus-dev.zup.com.br"
       protocols:
