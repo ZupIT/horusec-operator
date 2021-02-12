@@ -40,9 +40,9 @@ spec:
             - name: HORUSEC_BROKER_HOST
               value: rabbitmq.queue
             - name: HORUSEC_BROKER_PORT
-              value: "5672"
+              value: {{ .Values.global.broker.port | quote }}
             - name: HORUSEC_DISABLED_BROKER
-              value: "false"
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_AUTH_TYPE
               value: horusec
             - name: HORUSEC_ENABLE_APPLICATION_ADMIN
@@ -52,13 +52,13 @@ spec:
             - name: HORUSEC_BROKER_USERNAME
               valueFrom:
                 secretKeyRef:
-                  key: broker-username
-                  name: broker-username
+                  key: username
+                  name: {{ .Values.global.broker.secretName }}
             - name: HORUSEC_BROKER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key: broker-password
-                  name: broker-password
+                  key: password
+                  name: {{ .Values.global.broker.secretName }}
             - name: HORUSEC_DATABASE_SQL_URI
               valueFrom:
                 secretKeyRef:
@@ -67,8 +67,8 @@ spec:
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: jwt-token
-                  name: jwt-token
+                  key: secret-key
+                  name: {{ .Values.global.jwt.secretName }}
           image: horuszup/horusec-auth:latest
           imagePullPolicy: Always
           name: horusec-auth

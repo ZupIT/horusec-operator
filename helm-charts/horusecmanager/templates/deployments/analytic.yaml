@@ -45,8 +45,8 @@ spec:
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  key: jwt-token
-                  name: jwt-token
+                  key: secret-key
+                  name: {{ .Values.global.jwt.secretName }}
           image: horuszup/horusec-analytic:v1.0.0
           imagePullPolicy: Always
           name: horusec-analytic
