@@ -8,11 +8,11 @@ metadata:
   namespace: horusec
 spec:
   rules:
-    - host: api-horus-dev.zup.com.br
+    - host: {{ .Values.components.api.ingress.host }}
       http:
         paths:
           - backend:
               serviceName: api
-              servicePort: 8000
+              servicePort: {{ .Values.components.api.port.http }}
             path: /
 {{- end }}

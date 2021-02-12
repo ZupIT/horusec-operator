@@ -8,11 +8,11 @@ metadata:
   namespace: horusec
 spec:
   rules:
-    - host: analytic-horus-dev.zup.com.br
+    - host: {{ .Values.components.analytic.ingress.host }}
       http:
         paths:
           - backend:
               serviceName: analytic
-              servicePort: 8005
+              servicePort: {{ .Values.components.analytic.port.http }}
             path: /
 {{- end }}
