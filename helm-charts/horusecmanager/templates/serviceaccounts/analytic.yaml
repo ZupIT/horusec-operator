@@ -5,5 +5,3 @@ metadata:
     app: horusec-analytic
   name: analytic
   namespace: horusec
-secrets:
-  - name: analytic-token-9n8kq

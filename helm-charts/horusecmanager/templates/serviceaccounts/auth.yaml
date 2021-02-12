@@ -5,5 +5,3 @@ metadata:
     app: horusec-auth
   name: auth
   namespace: horusec
-secrets:
-  - name: auth-token-j5mwv

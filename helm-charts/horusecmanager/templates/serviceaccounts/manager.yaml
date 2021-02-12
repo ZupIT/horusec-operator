@@ -5,5 +5,3 @@ metadata:
     app: horusec-manager
   name: manager
   namespace: horusec
-secrets:
-  - name: manager-token-f7c2s

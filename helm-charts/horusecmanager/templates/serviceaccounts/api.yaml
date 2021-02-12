@@ -5,5 +5,3 @@ metadata:
     app: horusec-api
   name: api
   namespace: horusec
-secrets:
-  - name: api-token-cwtqd

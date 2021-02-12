@@ -5,5 +5,3 @@ metadata:
     app: horusec-account
   name: account
   namespace: horusec
-secrets:
-  - name: account-token-dw54p
