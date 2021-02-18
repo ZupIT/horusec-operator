@@ -1,42 +1,80 @@
 apiVersion: install.horusec.io/v1alpha1
 kind: HorusecManager
 metadata:
-  name: horusecmanager-sample
+  name: sample
 spec:
   # Default values copied from <project_dir>/helm-charts/horusecmanager/values.yaml
-  affinity: {}
-  autoscaling:
-    enabled: false
-    maxReplicas: 100
-    minReplicas: 1
-    targetCPUUtilizationPercentage: 80
-  fullnameOverride: ""
-  image:
-    pullPolicy: IfNotPresent
-    repository: nginx
-    tag: ""
-  imagePullSecrets: []
-  ingress:
-    annotations: {}
-    enabled: false
-    hosts:
-    - host: chart-example.local
-      paths: []
-    tls: []
-  nameOverride: ""
-  nodeSelector: {}
-  podAnnotations: {}
-  podSecurityContext: {}
-  replicaCount: 1
-  resources: {}
-  securityContext: {}
-  service:
-    port: 80
-    type: ClusterIP
-  serviceAccount:
-    annotations: {}
-    create: true
-    name: ""
-  tolerations: []
-  
-  
+  profile: demo
+  global:
+    enableAdmin: false
+    jwt:
+      secretName: "horusec-jwt"
+    broker:
+      enabled: true
+      host: "rabbitmq.queue"
+      port: 5672
+      secretName: "horusec-broker"
+    database:
+      host: "postgresql.database"
+      port: 5432
+      dialect: "postgres"
+      sslMode: false
+      logMode: false
+      secretName: "horusec-database"
+  components:
+    account:
+      name: account
+      enabled: true
+      port:
+        http: 8003
+      ingress:
+        enabled: true
+        scheme: "http"
+        host: "account-horus-dev.zup.com.br"
+        protocols:
+          - http
+    analytic:
+      name: analytic
+      enabled: true
+      port:
+        http: 8005
+      ingress:
+        enabled: true
+        scheme: "http"
+        host: "analytic-horus-dev.zup.com.br"
+        protocols:
+          - http
+    api:
+      name: api
+      enabled: true
+      port:
+        http: 8000
+      ingress:
+        enabled: true
+        scheme: "http"
+        host: "api-horus-dev.zup.com.br"
+        protocols:
+          - http
+    auth:
+      name: auth
+      enabled: true
+      port:
+        http: 8006
+        grpc: 8007
+      ingress:
+        enabled: true
+        scheme: "http"
+        host: "auth-horus-dev.zup.com.br"
+        protocols:
+          - http
+    manager:
+      name: manager
+      enabled: true
+      port:
+        http: 8080
+      ingress:
+        enabled: true
+        scheme: "http"
+        host: "horus-dev.zup.com.br"
+        protocols:
+          - http
