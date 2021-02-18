@@ -1,3 +1,4 @@
+{{- if .Values.components.auth.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -96,3 +97,4 @@ spec:
       serviceAccount: auth
       serviceAccountName: auth
       terminationGracePeriodSeconds: 30
+{{- end }}

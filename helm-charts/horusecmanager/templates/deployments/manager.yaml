@@ -1,3 +1,4 @@
+{{- if .Values.components.manager.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -70,3 +71,4 @@ spec:
       serviceAccount: manager
       serviceAccountName: manager
       terminationGracePeriodSeconds: 30
+{{- end }}
