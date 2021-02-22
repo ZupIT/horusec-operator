@@ -10,6 +10,8 @@ spec:
     listKind: HorusecManagerList
     plural: horusecmanagers
     singular: horusecmanager
+    shortNames:
+      - hm
   scope: Namespaced
   versions:
   - name: v1alpha1
