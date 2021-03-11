@@ -5,7 +5,7 @@ metadata:
   labels:
     app: horusec-manager
   name: manager
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   rules:
     - host: {{ .Values.components.manager.ingress.host }}

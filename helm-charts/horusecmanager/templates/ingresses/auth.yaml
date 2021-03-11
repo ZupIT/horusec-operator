@@ -5,7 +5,7 @@ metadata:
   labels:
     app: horusec-auth
   name: auth
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   rules:
     - host: {{ .Values.components.auth.ingress.host }}

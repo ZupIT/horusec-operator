@@ -5,7 +5,7 @@ metadata:
   labels:
     app: horusec-api
   name: api
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   ports:
   {{- range $key, $value := .Values.components.api.port }}

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
