@@ -54,6 +54,7 @@ components:
         - http
   auth:
     name: auth
+    type: horusec
     enabled: true
     port:
       http: 8006

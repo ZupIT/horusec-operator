@@ -145,6 +145,12 @@ spec:
                           http:
                             type: integer
                         type: object
+                      type:
+                        enum:
+                        - horusec
+                        - ldap
+                        - keycloak
+                        type: string
                     type: object
                   manager:
                     properties:
@@ -207,9 +213,21 @@ spec:
                       secretName:
                         type: string
                     type: object
+                  keycloak:
+                    properties:
+                      basePath:
+                        type: string
+                      clientId:
+                        type: string
+                      clientSecret:
+                        type: string
+                      otp:
+                        type: boolean
+                      realm:
+                        type: string
+                    type: object
                 type: object
             type: object
-            x-kubernetes-preserve-unknown-fields: true
           status:
             description: Status defines the observed state of HorusecManager
             type: object
