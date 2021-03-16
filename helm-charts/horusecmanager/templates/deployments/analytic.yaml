@@ -5,7 +5,7 @@ metadata:
   labels:
     app: horusec-analytic
   name: analytic
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1

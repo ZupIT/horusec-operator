@@ -14,7 +14,15 @@ spec:
       - hm
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - description: Status defines the observed state of HorusecManager
+      jsonPath: .status.conditions[-1:].reason
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: HorusecManager is the Schema for the horusecmanagers API
@@ -33,6 +41,173 @@ spec:
             type: object
           spec:
             description: Spec defines the desired state of HorusecManager
+            properties:
+              components:
+                properties:
+                  account:
+                    properties:
+                      enabled:
+                        type: boolean
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          protocols:
+                            items:
+                              type: string
+                            type: array
+                          scheme:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      port:
+                        properties:
+                          http:
+                            type: integer
+                        type: object
+                    type: object
+                  analytic:
+                    properties:
+                      enabled:
+                        type: boolean
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          protocols:
+                            items:
+                              type: string
+                            type: array
+                          scheme:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      port:
+                        properties:
+                          http:
+                            type: integer
+                        type: object
+                    type: object
+                  api:
+                    properties:
+                      enabled:
+                        type: boolean
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          protocols:
+                            items:
+                              type: string
+                            type: array
+                          scheme:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      port:
+                        properties:
+                          http:
+                            type: integer
+                        type: object
+                    type: object
+                  auth:
+                    properties:
+                      enabled:
+                        type: boolean
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          protocols:
+                            items:
+                              type: string
+                            type: array
+                          scheme:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                    type: object
+                  manager:
+                    properties:
+                      enabled:
+                        type: boolean
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          protocols:
+                            items:
+                              type: string
+                            type: array
+                          scheme:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      port:
+                        properties:
+                          http:
+                            type: integer
+                        type: object
+                    type: object
+                type: object
+              global:
+                properties:
+                  broker:
+                    properties:
+                      enabled:
+                        type: boolean
+                      host:
+                        type: string
+                      port:
+                        type: integer
+                      secretName:
+                        type: string
+                    type: object
+                  database:
+                    properties:
+                      dialect:
+                        type: string
+                      host:
+                        type: string
+                      logMode:
+                        type: boolean
+                      port:
+                        type: integer
+                      secretName:
+                        type: string
+                      sslMode:
+                        type: boolean
+                    type: object
+                  enableAdmin:
+                    type: boolean
+                  jwt:
+                    properties:
+                      secretName:
+                        type: string
+                    type: object
+                type: object
             type: object
             x-kubernetes-preserve-unknown-fields: true
           status:

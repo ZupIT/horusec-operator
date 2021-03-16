@@ -1,9 +1,12 @@
-{{- if .Release.IsInstall }}
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migration
-  namespace: horusec
+  name: {{ .Release.Name }}-migration
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-1"
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     metadata:
@@ -27,4 +30,3 @@ spec:
                   name: {{ .Values.global.database.secretName }}
             - name: HORUSEC_DATABASE_SQL_URI
               value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/horusec_db{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
-{{- end }}
