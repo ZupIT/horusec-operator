@@ -21,6 +21,7 @@ spec:
       labels:
         app: horusec-account
     spec:
+      {{- include "account.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_PORT
@@ -70,8 +71,8 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-account:v1.0.1
-          imagePullPolicy: Always
+          image: "{{ template "account.image" . }}"
+          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-account
           ports:
           {{- range $key, $value := .Values.components.account.port }}

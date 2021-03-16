@@ -23,6 +23,7 @@ spec:
       labels:
         app: horusec-analytic
     spec:
+      {{- include "analytic.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_SWAGGER_HOST
@@ -55,8 +56,8 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-analytic:v1.0.0
-          imagePullPolicy: Always
+          image: "{{ template "analytic.image" . }}"
+          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-analytic
           ports:
           {{- range $key, $value := .Values.components.analytic.port }}

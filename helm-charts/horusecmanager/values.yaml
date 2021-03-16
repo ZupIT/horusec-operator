@@ -1,6 +1,9 @@
 profile: demo
 
 global:
+  image:
+    registry: docker.io
+    pullSecrets: [ ]
   enableAdmin: false
   jwt:
     secretName: "horusec-jwt"
@@ -16,64 +19,100 @@ global:
     sslMode: false
     logMode: false
     secretName: "horusec-database"
+  keycloak:
+    basePath: http://keycloak.local
+    clientId: account
+    clientSecret: c4f2f7b1-478b-4b52-9758-c272b936da8c
+    realm: master
+    otp: false
 
 components:
   account:
     name: account
     enabled: true
+    image:
+      registry: docker.io
+      repository: horuszup/horusec-account
+      tag: v1.2.0
+      pullPolicy: IfNotPresent
+      pullSecrets: [ ]
     port:
       http: 8003
     ingress:
       enabled: true
       scheme: "http"
-      host: "account-horus-dev.zup.com.br"
+      host: "account.local"
       protocols:
         - http
 
   analytic:
     name: analytic
     enabled: true
+    image:
+      registry: docker.io
+      repository: horuszup/horusec-analytic
+      tag: v1.2.0
+      pullPolicy: IfNotPresent
+      pullSecrets: [ ]
     port:
       http: 8005
     ingress:
       enabled: true
       scheme: "http"
-      host: "analytic-horus-dev.zup.com.br"
+      host: "analytic.local"
       protocols:
         - http
   api:
     name: api
     enabled: true
+    image:
+      registry: docker.io
+      repository: horuszup/horusec-api
+      tag: v2.10.0
+      pullPolicy: IfNotPresent
+      pullSecrets: [ ]
     port:
       http: 8000
     ingress:
       enabled: true
       scheme: "http"
-      host: "api-horus-dev.zup.com.br"
+      host: "api.local"
       protocols:
         - http
   auth:
     name: auth
     type: horusec
     enabled: true
+    image:
+      registry: docker.io
+      repository: horuszup/horusec-auth
+      tag: v1.7.0
+      pullPolicy: IfNotPresent
+      pullSecrets: [ ]
     port:
       http: 8006
       grpc: 8007
     ingress:
       enabled: true
       scheme: "http"
-      host: "auth-horus-dev.zup.com.br"
+      host: "auth.local"
       protocols:
         - http
 
   manager:
     name: manager
     enabled: true
+    image:
+      registry: docker.io
+      repository: horuszup/horusec-manager
+      tag: v1.8.0
+      pullPolicy: IfNotPresent
+      pullSecrets: [ ]
     port:
       http: 8080
     ingress:
       enabled: true
       scheme: "http"
-      host: "horus-dev.zup.com.br"
+      host: "manager.local"
       protocols:
         - http

@@ -23,6 +23,7 @@ spec:
       labels:
         app: horusec-auth
     spec:
+      {{- include "auth.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_SWAGGER_HOST
@@ -77,8 +78,20 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-auth:latest
-          imagePullPolicy: Always
+{{- if eq .Values.components.auth.type "keycloak" }}
+            - name: HORUSEC_KEYCLOAK_BASE_PATH
+              value: {{ .Values.global.keycloak.basePath }}
+            - name: HORUSEC_KEYCLOAK_CLIENT_ID
+              value: {{ .Values.global.keycloak.clientId }}
+            - name: HORUSEC_KEYCLOAK_CLIENT_SECRET
+              value: {{ .Values.global.keycloak.clientSecret }}
+            - name: HORUSEC_KEYCLOAK_REALM
+              value: {{ .Values.global.keycloak.realm }}
+            - name: HORUSEC_KEYCLOAK_OTP
+              value: {{ .Values.global.keycloak.otp | quote }}
+{{- end }}
+          image: "{{ template "auth.image" . }}"
+          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-auth
           ports:
           {{- range $key, $value := .Values.components.auth.port }}
