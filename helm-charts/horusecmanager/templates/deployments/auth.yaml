@@ -90,6 +90,10 @@ spec:
             - name: HORUSEC_KEYCLOAK_OTP
               value: {{ .Values.global.keycloak.otp | quote }}
 {{- end }}
+            {{- if .Values.components.auth.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.auth.extraEnv | nindent 12 }}
+            {{- end }}
           image: "{{ template "auth.image" . }}"
           imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-auth

@@ -44,6 +44,7 @@ components:
       host: "account.local"
       protocols:
         - http
+    extraEnv: []
 
   analytic:
     name: analytic
@@ -62,6 +63,8 @@ components:
       host: "analytic.local"
       protocols:
         - http
+    extraEnv: []
+
   api:
     name: api
     enabled: true
@@ -79,6 +82,7 @@ components:
       host: "api.local"
       protocols:
         - http
+    extraEnv: []
   auth:
     name: auth
     type: horusec
@@ -98,6 +102,7 @@ components:
       host: "auth.local"
       protocols:
         - http
+    extraEnv: []
 
   manager:
     name: manager
@@ -116,3 +121,4 @@ components:
       host: "manager.local"
       protocols:
         - http
+    extraEnv: []

@@ -71,6 +71,10 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
+            {{- if .Values.components.account.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.account.extraEnv | nindent 12 }}
+            {{- end }}
           image: "{{ template "account.image" . }}"
           imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-account

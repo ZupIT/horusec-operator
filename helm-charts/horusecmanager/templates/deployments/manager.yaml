@@ -43,6 +43,10 @@ spec:
             - name: REACT_APP_KEYCLOAK_REALM
               value: {{ .Values.global.keycloak.realm }}
 {{- end }}
+            {{- if .Values.components.manager.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
+            {{- end }}
           image: "{{ template "manager.image" . }}"
           imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           livenessProbe:

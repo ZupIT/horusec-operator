@@ -48,6 +48,25 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -73,6 +92,25 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -98,6 +136,25 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -123,6 +180,25 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -156,6 +232,25 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
