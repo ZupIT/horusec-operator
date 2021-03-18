@@ -48,7 +48,7 @@ spec:
             {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "manager.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.manager.image.pullPolicy | quote }}
           livenessProbe:
             failureThreshold: 3
             httpGet:

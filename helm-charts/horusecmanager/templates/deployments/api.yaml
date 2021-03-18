@@ -77,7 +77,7 @@ spec:
             {{- toYaml .Values.components.api.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "api.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.api.image.pullPolicy | quote }}
           name: horusec-api
           ports:
           {{- range $key, $value := .Values.components.api.port }}

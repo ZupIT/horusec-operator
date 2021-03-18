@@ -95,7 +95,7 @@ spec:
             {{- toYaml .Values.components.auth.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "auth.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.auth.image.pullPolicy | quote }}
           name: horusec-auth
           ports:
           {{- range $key, $value := .Values.components.auth.port }}

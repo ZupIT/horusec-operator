@@ -61,7 +61,7 @@ spec:
             {{- toYaml .Values.components.analytic.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "analytic.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.analytic.image.pullPolicy | quote }}
           name: horusec-analytic
           ports:
           {{- range $key, $value := .Values.components.analytic.port }}
