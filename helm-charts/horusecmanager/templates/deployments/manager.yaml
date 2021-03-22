@@ -35,7 +35,7 @@ spec:
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
               value: {{ .Values.components.auth.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
 {{- if eq .Values.components.auth.type "keycloak" }}
-{{- $parsed := urlParse .Values.global.keycloak.serverURL }}
+{{- $parsed := urlParse .Values.global.keycloak.publicURL }}
             - name: REACT_APP_KEYCLOAK_BASE_PATH
               value: {{ $parsed.scheme -}}:\/\/{{- $parsed.host -}}\{{- $parsed.path }}
             - name: REACT_APP_KEYCLOAK_CLIENT_ID
