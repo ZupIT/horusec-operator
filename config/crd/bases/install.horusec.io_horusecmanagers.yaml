@@ -348,7 +348,6 @@ spec:
                         type: string
                     required:
                     - clients
-                    - internalURL
                     - publicURL
                     - realm
                     type: object
