@@ -80,11 +80,11 @@ spec:
                   name: {{ .Values.global.jwt.secretName }}
 {{- if eq .Values.components.auth.type "keycloak" }}
             - name: HORUSEC_KEYCLOAK_BASE_PATH
-              value: {{ .Values.global.keycloak.basePath }}
+              value: {{ .Values.global.keycloak.serverURL }}
             - name: HORUSEC_KEYCLOAK_CLIENT_ID
-              value: {{ .Values.global.keycloak.clientId }}
+              value: {{ .Values.global.keycloak.clients.confidential.id }}
             - name: HORUSEC_KEYCLOAK_CLIENT_SECRET
-              value: {{ .Values.global.keycloak.clientSecret }}
+              value: {{ .Values.global.keycloak.clients.confidential.secret }}
             - name: HORUSEC_KEYCLOAK_REALM
               value: {{ .Values.global.keycloak.realm }}
             - name: HORUSEC_KEYCLOAK_OTP

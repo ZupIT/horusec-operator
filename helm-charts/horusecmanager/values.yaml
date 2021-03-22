@@ -4,14 +4,18 @@ global:
   image:
     registry: docker.io
     pullSecrets: [ ]
+
   enableAdmin: false
+
   jwt:
     secretName: "horusec-jwt"
+
   broker:
     enabled: true
     host: "rabbitmq.queue"
     port: 5672
     secretName: "horusec-broker"
+
   database:
     host: "postgresql.database"
     port: 5432
@@ -19,12 +23,17 @@ global:
     sslMode: false
     logMode: false
     secretName: "horusec-database"
+
   keycloak:
-    basePath: http://keycloak.local
-    clientId: account
-    clientSecret: c4f2f7b1-478b-4b52-9758-c272b936da8c
-    realm: master
+    serverURL: http://keycloak.local/auth
+    realm: zup
     otp: false
+    clients:
+      public:
+        id: manager
+      confidential:
+        id: auth
+        secret: c4f2f7b1-478b-4b52-9758-c272b936da8c
 
 components:
   account:
@@ -83,6 +92,7 @@ components:
       protocols:
         - http
     extraEnv: []
+
   auth:
     name: auth
     type: horusec

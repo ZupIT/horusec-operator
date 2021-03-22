@@ -315,16 +315,39 @@ spec:
                     type: object
                   keycloak:
                     properties:
-                      basePath:
-                        type: string
-                      clientId:
-                        type: string
-                      clientSecret:
-                        type: string
+                      clients:
+                        properties:
+                          confidential:
+                            properties:
+                              id:
+                                type: string
+                              secret:
+                                type: string
+                            required:
+                            - id
+                            - secret
+                            type: object
+                          public:
+                            properties:
+                              id:
+                                type: string
+                            required:
+                            - id
+                            type: object
+                        required:
+                        - confidential
+                        - public
+                        type: object
                       otp:
                         type: boolean
                       realm:
                         type: string
+                      serverURL:
+                        type: string
+                    required:
+                    - clients
+                    - realm
+                    - serverURL
                     type: object
                 type: object
             type: object
