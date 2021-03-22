@@ -338,16 +338,19 @@ spec:
                         - confidential
                         - public
                         type: object
+                      internalURL:
+                        type: string
                       otp:
                         type: boolean
-                      realm:
+                      publicURL:
                         type: string
-                      serverURL:
+                      realm:
                         type: string
                     required:
                     - clients
+                    - internalURL
+                    - publicURL
                     - realm
-                    - serverURL
                     type: object
                 type: object
             type: object
