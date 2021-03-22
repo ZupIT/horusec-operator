@@ -5,5 +5,5 @@ metadata:
   labels:
     app: horusec-manager
   name: manager
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 {{- end }}

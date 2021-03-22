@@ -5,5 +5,5 @@ metadata:
   labels:
     app: horusec-auth
   name: auth
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 {{- end }}

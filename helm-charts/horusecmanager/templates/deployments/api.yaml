@@ -5,7 +5,7 @@ metadata:
   labels:
     app: horusec-api
   name: api
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -23,6 +23,7 @@ spec:
       labels:
         app: horusec-api
     spec:
+      {{- include "api.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_SWAGGER_HOST
@@ -71,8 +72,12 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-api:v2.8.0
-          imagePullPolicy: Always
+            {{- if .Values.components.api.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.api.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "api.image" . }}"
+          imagePullPolicy: {{ .Values.components.api.image.pullPolicy | quote }}
           name: horusec-api
           ports:
           {{- range $key, $value := .Values.components.api.port }}

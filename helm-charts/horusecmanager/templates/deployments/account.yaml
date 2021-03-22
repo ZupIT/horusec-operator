@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: account
-  namespace: horusec
+  namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -21,6 +21,7 @@ spec:
       labels:
         app: horusec-account
     spec:
+      {{- include "account.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_PORT
@@ -70,8 +71,12 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-account:v1.0.1
-          imagePullPolicy: Always
+            {{- if .Values.components.account.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.account.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "account.image" . }}"
+          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
           name: horusec-account
           ports:
           {{- range $key, $value := .Values.components.account.port }}
