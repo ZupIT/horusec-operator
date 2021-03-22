@@ -25,7 +25,8 @@ global:
     secretName: "horusec-database"
 
   keycloak:
-    serverURL: http://keycloak.local/auth
+    publicURL: http://keycloak.local/auth
+    internalURL: "" # This field is optional. If not filled, the publicURL will be used.
     realm: zup
     otp: false
     clients:
