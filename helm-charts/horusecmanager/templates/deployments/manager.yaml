@@ -23,6 +23,7 @@ spec:
       labels:
         app: horusec-manager
     spec:
+      {{- include "manager.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: REACT_APP_HORUSEC_ENDPOINT_API
@@ -33,8 +34,21 @@ spec:
               value: {{ .Values.components.account.ingress.scheme -}}:\/\/{{- .Values.components.account.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
               value: {{ .Values.components.auth.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
-          image: horuszup/horusec-manager:v1.7.1
-          imagePullPolicy: Always
+{{- if eq .Values.components.auth.type "keycloak" }}
+{{- $parsed := urlParse .Values.global.keycloak.publicURL }}
+            - name: REACT_APP_KEYCLOAK_BASE_PATH
+              value: {{ $parsed.scheme -}}:\/\/{{- $parsed.host -}}\{{- $parsed.path }}
+            - name: REACT_APP_KEYCLOAK_CLIENT_ID
+              value: {{ .Values.global.keycloak.clients.public.id }}
+            - name: REACT_APP_KEYCLOAK_REALM
+              value: {{ .Values.global.keycloak.realm }}
+{{- end }}
+            {{- if .Values.components.manager.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "manager.image" . }}"
+          imagePullPolicy: {{ .Values.components.manager.image.pullPolicy | quote }}
           livenessProbe:
             failureThreshold: 3
             httpGet:

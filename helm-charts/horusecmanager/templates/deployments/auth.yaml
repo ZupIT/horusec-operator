@@ -23,6 +23,7 @@ spec:
       labels:
         app: horusec-auth
     spec:
+      {{- include "auth.imagePullSecrets" . | nindent 6 -}}
       containers:
         - env:
             - name: HORUSEC_SWAGGER_HOST
@@ -45,7 +46,7 @@ spec:
             - name: HORUSEC_DISABLED_BROKER
               value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_AUTH_TYPE
-              value: horusec
+              value: {{ .Values.components.auth.type }}
             - name: HORUSEC_ENABLE_APPLICATION_ADMIN
               value: {{ .Values.global.enableAdmin | quote }}
             - name: HORUSEC_APPLICATION_ADMIN_DATA
@@ -77,8 +78,30 @@ spec:
                 secretKeyRef:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
-          image: horuszup/horusec-auth:latest
-          imagePullPolicy: Always
+{{- if eq .Values.components.auth.type "keycloak" }}
+            - name: HORUSEC_KEYCLOAK_BASE_PATH
+            {{- if empty .Values.global.keycloak.internalURL }}
+              {{- $parsed := urlParse .Values.global.keycloak.publicURL }}
+              value: {{ $parsed.scheme -}}://{{- $parsed.host }}
+            {{- else }}
+              {{- $parsed := urlParse .Values.global.keycloak.internalURL }}
+              value: {{ $parsed.scheme -}}://{{- $parsed.host }}
+            {{- end }}
+            - name: HORUSEC_KEYCLOAK_CLIENT_ID
+              value: {{ .Values.global.keycloak.clients.confidential.id }}
+            - name: HORUSEC_KEYCLOAK_CLIENT_SECRET
+              value: {{ .Values.global.keycloak.clients.confidential.secret }}
+            - name: HORUSEC_KEYCLOAK_REALM
+              value: {{ .Values.global.keycloak.realm }}
+            - name: HORUSEC_KEYCLOAK_OTP
+              value: {{ .Values.global.keycloak.otp | quote }}
+{{- end }}
+            {{- if .Values.components.auth.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.auth.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "auth.image" . }}"
+          imagePullPolicy: {{ .Values.components.auth.image.pullPolicy | quote }}
           name: horusec-auth
           ports:
           {{- range $key, $value := .Values.components.auth.port }}

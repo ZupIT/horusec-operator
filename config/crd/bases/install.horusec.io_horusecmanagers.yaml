@@ -48,6 +48,26 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -73,6 +93,26 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -98,6 +138,26 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -123,6 +183,26 @@ spec:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -145,11 +225,37 @@ spec:
                           http:
                             type: integer
                         type: object
+                      type:
+                        enum:
+                        - horusec
+                        - ldap
+                        - keycloak
+                        type: string
                     type: object
                   manager:
                     properties:
                       enabled:
                         type: boolean
+                      extraEnv:
+                        items:
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        type: array
+                      image:
+                        properties:
+                          pullPolicy:
+                            type: string
+                          pullSecrets:
+                            items:
+                              type: object
+                            type: array
+                          registry:
+                            type: string
+                          repository:
+                            type: string
+                          tag:
+                            type: string
+                        type: object
                       ingress:
                         properties:
                           enabled:
@@ -207,9 +313,46 @@ spec:
                       secretName:
                         type: string
                     type: object
+                  keycloak:
+                    properties:
+                      clients:
+                        properties:
+                          confidential:
+                            properties:
+                              id:
+                                type: string
+                              secret:
+                                type: string
+                            required:
+                            - id
+                            - secret
+                            type: object
+                          public:
+                            properties:
+                              id:
+                                type: string
+                            required:
+                            - id
+                            type: object
+                        required:
+                        - confidential
+                        - public
+                        type: object
+                      internalURL:
+                        type: string
+                      otp:
+                        type: boolean
+                      publicURL:
+                        type: string
+                      realm:
+                        type: string
+                    required:
+                    - clients
+                    - publicURL
+                    - realm
+                    type: object
                 type: object
             type: object
-            x-kubernetes-preserve-unknown-fields: true
           status:
             description: Status defines the observed state of HorusecManager
             type: object
