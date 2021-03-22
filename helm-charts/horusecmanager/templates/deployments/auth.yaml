@@ -79,8 +79,9 @@ spec:
                   key: secret-key
                   name: {{ .Values.global.jwt.secretName }}
 {{- if eq .Values.components.auth.type "keycloak" }}
+            {{- $parsed := urlParse .Values.global.keycloak.serverURL }}
             - name: HORUSEC_KEYCLOAK_BASE_PATH
-              value: {{ .Values.global.keycloak.serverURL }}
+              value: {{ $parsed.scheme -}}://{{- $parsed.host }}
             - name: HORUSEC_KEYCLOAK_CLIENT_ID
               value: {{ .Values.global.keycloak.clients.confidential.id }}
             - name: HORUSEC_KEYCLOAK_CLIENT_SECRET
