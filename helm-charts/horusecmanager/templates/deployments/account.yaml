@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account
+  name: {{ .Values.components.account.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600

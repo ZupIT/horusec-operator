@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app: horusec-analytic
-  name: analytic
+  name: {{ .Values.components.analytic.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:

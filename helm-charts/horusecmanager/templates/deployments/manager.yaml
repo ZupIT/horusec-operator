@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app: horusec-manager
-  name: manager
+  name: {{ .Values.components.manager.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
@@ -34,6 +34,8 @@ spec:
               value: {{ .Values.components.account.ingress.scheme -}}:\/\/{{- .Values.components.account.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
               value: {{ .Values.components.auth.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
+            - name: REACT_APP_HORUSEC_MANAGER_PATH
+              value: \{{ .Values.components.manager.ingress.path }}
 {{- if eq .Values.components.auth.type "keycloak" }}
 {{- $parsed := urlParse .Values.global.keycloak.publicURL }}
             - name: REACT_APP_KEYCLOAK_BASE_PATH

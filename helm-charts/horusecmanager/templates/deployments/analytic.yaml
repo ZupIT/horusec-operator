@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app: horusec-analytic
-  name: analytic
+  name: {{ .Values.components.analytic.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600

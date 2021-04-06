@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app: horusec-auth
-  name: auth
+  name: {{ .Values.components.auth.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600
