@@ -1,0 +1,40 @@
+{{- if (include "ingress.enabled" .) }}
+apiVersion: {{ include "ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  labels:
+    app: horusec-manager
+  name: horusec
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- $hosts := list }}
+{{- $rules := dict }}
+  {{- range $key, $val := .Values.components }}
+    {{- if $val.ingress.enabled }}
+      {{- $hosts = append $hosts $val.ingress.host | uniq }}
+      {{- $_ := set $rules $key $val }}
+    {{- end }}
+  {{- end }}
+  rules:
+  {{- range $host := $hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+    {{- range $key, $val := $rules }}
+      {{- if and (eq $host $val.ingress.host) (ne $key "manager") }}
+          - path: {{ $val.ingress.path }}
+            pathType: Prefix
+            backend:
+              serviceName: {{ $val.name }}
+              servicePort: {{ $val.port.http }}
+      {{- else if and (eq $host $val.ingress.host) (eq $key "manager") }}
+          - path: / # always expose manager on base path
+            pathType: Prefix
+            backend:
+              serviceName: {{ $val.name }}
+              servicePort: {{ $val.port.http }}
+      {{- end }}
+  {{- end }}
+  {{- end }}
+
+{{- end }}
