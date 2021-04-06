@@ -208,3 +208,23 @@ imagePullSecrets:
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Ingress.
+*/}}
+{{- define "ingress.apiVersion" -}}
+{{- if semverCompare "<1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "networking.k8s.io/v1beta1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+True if Ingress is enabled for any of the components.
+*/}}
+{{- define "ingress.enabled" -}}
+{{- if or .Values.components.auth.ingress.enabled .Values.components.manager.ingress.enabled .Values.components.api.ingress.enabled .Values.components.analytic.ingress.enabled .Values.components.account.ingress.enabled }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
