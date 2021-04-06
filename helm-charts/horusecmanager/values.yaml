@@ -52,6 +52,7 @@ components:
       enabled: true
       scheme: "http"
       host: "account.local"
+      path: /account
       protocols:
         - http
     extraEnv: []
@@ -71,6 +72,7 @@ components:
       enabled: true
       scheme: "http"
       host: "analytic.local"
+      path: /analytic
       protocols:
         - http
     extraEnv: []
@@ -90,6 +92,7 @@ components:
       enabled: true
       scheme: "http"
       host: "api.local"
+      path: /api
       protocols:
         - http
     extraEnv: []
@@ -111,6 +114,7 @@ components:
       enabled: true
       scheme: "http"
       host: "auth.local"
+      path: /auth
       protocols:
         - http
     extraEnv: []
@@ -130,6 +134,7 @@ components:
       enabled: true
       scheme: "http"
       host: "manager.local"
+      path: /horusec
       protocols:
         - http
     extraEnv: []
