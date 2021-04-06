@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   labels:
     app: horusec-api
-  name: api
+  name: {{ .Values.components.api.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   progressDeadlineSeconds: 600

@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app: horusec-api
-  name: api
+  name: {{ .Values.components.api.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:

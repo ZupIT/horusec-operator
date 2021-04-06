@@ -4,7 +4,7 @@ kind: Service
 metadata:
   labels:
     app: horusec-manager
-  name: manager
+  name: {{ .Values.components.manager.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
