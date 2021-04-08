@@ -48,9 +48,11 @@ spec:
             - name: HORUSEC_AUTH_TYPE
               value: {{ .Values.components.auth.type }}
             - name: HORUSEC_ENABLE_APPLICATION_ADMIN
-              value: {{ .Values.global.enableAdmin | quote }}
+              value: {{ .Values.global.administrator.enabled | quote }}
+{{- if .Values.global.administrator.enabled }}
             - name: HORUSEC_APPLICATION_ADMIN_DATA
-              value: '{"username":"horusec-admin","email":"horusec-admin@example.com","password":"Devpass0*"}'
+              value: '{"username":{{ .Values.global.administrator.username | quote }},"email":{{ .Values.global.administrator.email | quote }},"password":{{ .Values.global.administrator.password | quote }}}'
+{{- end }}
             - name: HORUSEC_BROKER_USERNAME
               valueFrom:
                 secretKeyRef:
