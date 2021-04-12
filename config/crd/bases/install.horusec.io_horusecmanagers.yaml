@@ -74,6 +74,8 @@ spec:
                             type: boolean
                           host:
                             type: string
+                          path:
+                            type: string
                           protocols:
                             items:
                               type: string
@@ -118,6 +120,8 @@ spec:
                           enabled:
                             type: boolean
                           host:
+                            type: string
+                          path:
                             type: string
                           protocols:
                             items:
@@ -164,6 +168,8 @@ spec:
                             type: boolean
                           host:
                             type: string
+                          path:
+                            type: string
                           protocols:
                             items:
                               type: string
@@ -208,6 +214,8 @@ spec:
                           enabled:
                             type: boolean
                           host:
+                            type: string
+                          path:
                             type: string
                           protocols:
                             items:
@@ -262,6 +270,8 @@ spec:
                             type: boolean
                           host:
                             type: string
+                          path:
+                            type: string
                           protocols:
                             items:
                               type: string
@@ -280,6 +290,17 @@ spec:
                 type: object
               global:
                 properties:
+                  administrator:
+                    properties:
+                      email:
+                        type: string
+                      enabled:
+                        type: boolean
+                      password:
+                        type: string
+                      username:
+                        type: string
+                    type: object
                   broker:
                     properties:
                       enabled:
@@ -306,8 +327,21 @@ spec:
                       sslMode:
                         type: boolean
                     type: object
-                  enableAdmin:
-                    type: boolean
+                  image:
+                    properties:
+                      pullPolicy:
+                        type: string
+                      pullSecrets:
+                        items:
+                          type: object
+                        type: array
+                      registry:
+                        type: string
+                      repository:
+                        type: string
+                      tag:
+                        type: string
+                    type: object
                   jwt:
                     properties:
                       secretName:

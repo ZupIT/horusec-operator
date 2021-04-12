@@ -5,7 +5,11 @@ global:
     registry: docker.io
     pullSecrets: [ ]
 
-  enableAdmin: false
+  administrator:
+    enabled: false
+    username: ""
+    email: ""
+    password: ""
 
   jwt:
     secretName: "horusec-jwt"
