@@ -81,7 +81,7 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
-          resources: {}
+          resources: {{- toYaml .Values.components.account.container.resources | nindent 12 }}
           securityContext: {{- omit .Values.components.account.container.securityContext "enabled" | toYaml | nindent 12 }}
       securityContext: {{- omit .Values.components.account.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: account

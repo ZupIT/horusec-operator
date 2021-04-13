@@ -106,7 +106,7 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
-          resources: {}
+          resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
           securityContext: {{- omit .Values.components.auth.container.securityContext "enabled" | toYaml | nindent 12 }}
       securityContext: {{- omit .Values.components.auth.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: auth

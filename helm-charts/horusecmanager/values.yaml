@@ -92,6 +92,13 @@ components:
       securityContext:
         enabled: true
         runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   analytic:
     name: analytic
@@ -127,6 +134,13 @@ components:
       securityContext:
         enabled: true
         runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   api:
     name: api
@@ -162,6 +176,13 @@ components:
       securityContext:
         enabled: true
         runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   auth:
     name: auth
@@ -199,6 +220,13 @@ components:
       securityContext:
         enabled: true
         runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   manager:
     name: manager
@@ -234,3 +262,10 @@ components:
       securityContext:
         enabled: true
         runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
