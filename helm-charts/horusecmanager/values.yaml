@@ -47,7 +47,7 @@ components:
     image:
       registry: docker.io
       repository: horuszup/horusec-account
-      tag: v1.2.0
+      tag: v1.2.1
       pullPolicy: IfNotPresent
       pullSecrets: [ ]
     port:
@@ -67,7 +67,7 @@ components:
     image:
       registry: docker.io
       repository: horuszup/horusec-analytic
-      tag: v1.2.0
+      tag: v1.2.1
       pullPolicy: IfNotPresent
       pullSecrets: [ ]
     port:
@@ -87,7 +87,7 @@ components:
     image:
       registry: docker.io
       repository: horuszup/horusec-api
-      tag: v2.10.0
+      tag: v2.10.1
       pullPolicy: IfNotPresent
       pullSecrets: [ ]
     port:
@@ -108,7 +108,7 @@ components:
     image:
       registry: docker.io
       repository: horuszup/horusec-auth
-      tag: v1.7.0
+      tag: v1.7.1
       pullPolicy: IfNotPresent
       pullSecrets: [ ]
     port:
@@ -129,7 +129,7 @@ components:
     image:
       registry: docker.io
       repository: horuszup/horusec-manager
-      tag: v1.8.0
+      tag: v1.9.0
       pullPolicy: IfNotPresent
       pullSecrets: [ ]
     port:
