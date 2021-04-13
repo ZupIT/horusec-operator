@@ -3,12 +3,12 @@
 Return the proper Horusec Auth image name
 */}}
 {{- define "auth.image" -}}
-{{- $registryName := .Values.components.auth.image.registry -}}
-{{- $repositoryName := .Values.components.auth.image.repository -}}
-{{- $tag := .Values.components.auth.image.tag | toString -}}
+{{- $registryName := .Values.components.auth.container.image.registry -}}
+{{- $repositoryName := .Values.components.auth.container.image.repository -}}
+{{- $tag := .Values.components.auth.container.image.tag | toString -}}
 {{- if .Values.global }}
-    {{- if .Values.global.image.registry }}
-        {{- printf "%s/%s:%s" .Values.global.image.registry $repositoryName $tag -}}
+    {{- if .Values.global.common.container.image.registry }}
+        {{- printf "%s/%s:%s" .Values.global.common.container.image.registry $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
@@ -21,12 +21,12 @@ Return the proper Horusec Auth image name
 Return the proper Horusec Manager image name
 */}}
 {{- define "manager.image" -}}
-{{- $registryName := .Values.components.manager.image.registry -}}
-{{- $repositoryName := .Values.components.manager.image.repository -}}
-{{- $tag := .Values.components.manager.image.tag | toString -}}
+{{- $registryName := .Values.components.manager.container.image.registry -}}
+{{- $repositoryName := .Values.components.manager.container.image.repository -}}
+{{- $tag := .Values.components.manager.container.image.tag | toString -}}
 {{- if .Values.global }}
-    {{- if .Values.global.image.registry }}
-        {{- printf "%s/%s:%s" .Values.global.image.registry $repositoryName $tag -}}
+    {{- if .Values.global.common.container.image.registry }}
+        {{- printf "%s/%s:%s" .Values.global.common.container.image.registry $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
@@ -39,12 +39,12 @@ Return the proper Horusec Manager image name
 Return the proper Horusec Account image name
 */}}
 {{- define "account.image" -}}
-{{- $registryName := .Values.components.account.image.registry -}}
-{{- $repositoryName := .Values.components.account.image.repository -}}
-{{- $tag := .Values.components.account.image.tag | toString -}}
+{{- $registryName := .Values.components.account.container.image.registry -}}
+{{- $repositoryName := .Values.components.account.container.image.repository -}}
+{{- $tag := .Values.components.account.container.image.tag | toString -}}
 {{- if .Values.global }}
-    {{- if .Values.global.image.registry }}
-        {{- printf "%s/%s:%s" .Values.global.image.registry $repositoryName $tag -}}
+    {{- if .Values.global.common.container.image.registry }}
+        {{- printf "%s/%s:%s" .Values.global.common.container.image.registry $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
@@ -57,12 +57,12 @@ Return the proper Horusec Account image name
 Return the proper Horusec API image name
 */}}
 {{- define "api.image" -}}
-{{- $registryName := .Values.components.api.image.registry -}}
-{{- $repositoryName := .Values.components.api.image.repository -}}
-{{- $tag := .Values.components.api.image.tag | toString -}}
+{{- $registryName := .Values.components.api.container.image.registry -}}
+{{- $repositoryName := .Values.components.api.container.image.repository -}}
+{{- $tag := .Values.components.api.container.image.tag | toString -}}
 {{- if .Values.global }}
-    {{- if .Values.global.image.registry }}
-        {{- printf "%s/%s:%s" .Values.global.image.registry $repositoryName $tag -}}
+    {{- if .Values.global.common.container.image.registry }}
+        {{- printf "%s/%s:%s" .Values.global.common.container.image.registry $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
@@ -75,12 +75,12 @@ Return the proper Horusec API image name
 Return the proper Horusec Analytic image name
 */}}
 {{- define "analytic.image" -}}
-{{- $registryName := .Values.components.analytic.image.registry -}}
-{{- $repositoryName := .Values.components.analytic.image.repository -}}
-{{- $tag := .Values.components.analytic.image.tag | toString -}}
+{{- $registryName := .Values.components.analytic.container.image.registry -}}
+{{- $repositoryName := .Values.components.analytic.container.image.repository -}}
+{{- $tag := .Values.components.analytic.container.image.tag | toString -}}
 {{- if .Values.global }}
-    {{- if .Values.global.image.registry }}
-        {{- printf "%s/%s:%s" .Values.global.image.registry $repositoryName $tag -}}
+    {{- if .Values.global.common.container.image.registry }}
+        {{- printf "%s/%s:%s" .Values.global.common.container.image.registry $repositoryName $tag -}}
     {{- else -}}
         {{- printf "%s/%s:%s" $registryName $repositoryName $tag -}}
     {{- end -}}
@@ -94,20 +94,20 @@ Return the proper Horusec Account Image Registry Secret Names
 */}}
 {{- define "account.imagePullSecrets" -}}
 {{- if .Values.global }}
-{{- if .Values.global.image.pullSecrets }}
+{{- if .Values.global.common.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.image.pullSecrets }}
+{{- range .Values.global.common.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.components.account.image.pullSecrets }}
+{{- else if .Values.components.account.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.account.image.pullSecrets }}
+{{- range .Values.components.account.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.components.account.image.pullSecrets }}
+{{- else if .Values.components.account.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.account.image.pullSecrets }}
+{{- range .Values.components.account.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
@@ -118,20 +118,20 @@ Return the proper Horusec Analytic Image Registry Secret Names
 */}}
 {{- define "analytic.imagePullSecrets" -}}
 {{- if .Values.global }}
-{{- if .Values.global.image.pullSecrets }}
+{{- if .Values.global.common.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.image.pullSecrets }}
+{{- range .Values.global.common.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.components.analytic.image.pullSecrets }}
+{{- else if .Values.components.analytic.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.analytic.image.pullSecrets }}
+{{- range .Values.components.analytic.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.components.analytic.image.pullSecrets }}
+{{- else if .Values.components.analytic.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.analytic.image.pullSecrets }}
+{{- range .Values.components.analytic.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
@@ -142,20 +142,20 @@ Return the proper Horusec API Image Registry Secret Names
 */}}
 {{- define "api.imagePullSecrets" -}}
 {{- if .Values.global }}
-{{- if .Values.global.image.pullSecrets }}
+{{- if .Values.global.common.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.image.pullSecrets }}
+{{- range .Values.global.common.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.components.api.image.pullSecrets }}
+{{- else if .Values.components.api.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.api.image.pullSecrets }}
+{{- range .Values.components.api.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.components.api.image.pullSecrets }}
+{{- else if .Values.components.api.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.api.image.pullSecrets }}
+{{- range .Values.components.api.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
@@ -166,20 +166,20 @@ Return the proper Horusec Manager Image Registry Secret Names
 */}}
 {{- define "manager.imagePullSecrets" -}}
 {{- if .Values.global }}
-{{- if .Values.global.image.pullSecrets }}
+{{- if .Values.global.common.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.image.pullSecrets }}
+{{- range .Values.global.common.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.components.manager.image.pullSecrets }}
+{{- else if .Values.components.manager.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.manager.image.pullSecrets }}
+{{- range .Values.components.manager.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.components.manager.image.pullSecrets }}
+{{- else if .Values.components.manager.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.manager.image.pullSecrets }}
+{{- range .Values.components.manager.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
@@ -190,20 +190,20 @@ Return the proper Horusec Auth Image Registry Secret Names
 */}}
 {{- define "auth.imagePullSecrets" -}}
 {{- if .Values.global }}
-{{- if .Values.global.image.pullSecrets }}
+{{- if .Values.global.common.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.global.image.pullSecrets }}
+{{- range .Values.global.common.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if .Values.components.auth.image.pullSecrets }}
+{{- else if .Values.components.auth.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.auth.image.pullSecrets }}
+{{- range .Values.components.auth.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if .Values.components.auth.image.pullSecrets }}
+{{- else if .Values.components.auth.container.image.pullSecrets }}
 imagePullSecrets:
-{{- range .Values.components.auth.image.pullSecrets }}
+{{- range .Values.components.auth.container.image.pullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}

@@ -1,4 +1,4 @@
-{{- if .Values.components.account.autoscaling.enabled }}
+{{- if .Values.components.account.pod.autoscaling.enabled }}
 apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:

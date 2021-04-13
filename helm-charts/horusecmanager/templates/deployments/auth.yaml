@@ -7,7 +7,7 @@ metadata:
   name: {{ .Values.components.auth.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if not .Values.components.auth.autoscaling.enabled }}
+  {{- if not .Values.components.auth.pod.autoscaling.enabled }}
   replicas: {{ .Values.components.auth.replicaCount }}
   {{- end }}
   selector:
@@ -98,7 +98,7 @@ spec:
             {{- toYaml .Values.components.auth.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "auth.image" . }}"
-          imagePullPolicy: {{ .Values.components.auth.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.auth.container.image.pullPolicy | quote }}
           name: horusec-auth
           ports:
           {{- range $key, $value := .Values.components.auth.port }}
@@ -107,8 +107,8 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {}
-          securityContext: {}
-      securityContext: {}
+          securityContext: {{- omit .Values.components.auth.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.auth.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: auth
       terminationGracePeriodSeconds: 30
 {{- end }}

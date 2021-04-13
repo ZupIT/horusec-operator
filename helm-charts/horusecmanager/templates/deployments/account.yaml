@@ -7,7 +7,7 @@ metadata:
   name: {{ .Values.components.account.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if not .Values.components.account.autoscaling.enabled }}
+  {{- if not .Values.components.account.pod.autoscaling.enabled }}
   replicas: {{ .Values.components.account.replicaCount }}
   {{- end }}
   selector:
@@ -73,7 +73,7 @@ spec:
             {{- toYaml .Values.components.account.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "account.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.account.container.image.pullPolicy | quote }}
           name: horusec-account
           ports:
           {{- range $key, $value := .Values.components.account.port }}
@@ -82,8 +82,8 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {}
-          securityContext: {}
-      securityContext: {}
+          securityContext: {{- omit .Values.components.account.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.account.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: account
       terminationGracePeriodSeconds: 30
 {{- end }}

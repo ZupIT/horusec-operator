@@ -7,7 +7,7 @@ metadata:
   name: {{ .Values.components.api.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if not .Values.components.api.autoscaling.enabled }}
+  {{- if not .Values.components.api.pod.autoscaling.enabled }}
   replicas: {{ .Values.components.api.replicaCount }}
   {{- end }}
   selector:
@@ -72,7 +72,7 @@ spec:
             {{- toYaml .Values.components.api.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "api.image" . }}"
-          imagePullPolicy: {{ .Values.components.api.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.api.container.image.pullPolicy | quote }}
           name: horusec-api
           ports:
           {{- range $key, $value := .Values.components.api.port }}
@@ -81,8 +81,8 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {}
-          securityContext: {}
-      securityContext: {}
+          securityContext: {{- omit .Values.components.api.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.api.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: api
       terminationGracePeriodSeconds: 30
 {{- end }}
