@@ -60,6 +60,13 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 11
+      # targetCPU: 50
+      # targetMemory: 50
 
   analytic:
     name: analytic
@@ -80,6 +87,13 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 11
+      # targetCPU: 50
+      # targetMemory: 50
 
   api:
     name: api
@@ -100,6 +114,13 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 11
+      # targetCPU: 50
+      # targetMemory: 50
 
   auth:
     name: auth
@@ -122,6 +143,13 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 11
+      # targetCPU: 50
+      # targetMemory: 50
 
   manager:
     name: manager
@@ -142,3 +170,10 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 11
+      # targetCPU: 50
+      # targetMemory: 50
