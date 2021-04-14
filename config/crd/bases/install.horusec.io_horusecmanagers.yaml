@@ -46,13 +46,8 @@ spec:
                 properties:
                   account:
                     properties:
-                      enabled:
-                        type: boolean
-                      extraEnv:
-                        items:
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        type: array
+                        container:
+                          properties:
                       image:
                         properties:
                           pullPolicy:
@@ -60,6 +55,7 @@ spec:
                           pullSecrets:
                             items:
                               type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                             type: array
                           registry:
                             type: string
@@ -68,6 +64,39 @@ spec:
                           tag:
                             type: string
                         type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        enabled:
+                          type: boolean
+                        extraEnv:
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: array
                       ingress:
                         properties:
                           enabled:
@@ -85,21 +114,48 @@ spec:
                         type: object
                       name:
                         type: string
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
                       port:
                         properties:
                           http:
+                              format: int64
                             type: integer
                         type: object
+                        replicaCount:
+                          format: int64
+                          type: integer
                     type: object
                   analytic:
                     properties:
-                      enabled:
-                        type: boolean
-                      extraEnv:
-                        items:
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        type: array
+                        container:
+                          properties:
                       image:
                         properties:
                           pullPolicy:
@@ -107,6 +163,7 @@ spec:
                           pullSecrets:
                             items:
                               type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                             type: array
                           registry:
                             type: string
@@ -115,6 +172,39 @@ spec:
                           tag:
                             type: string
                         type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        enabled:
+                          type: boolean
+                        extraEnv:
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: array
                       ingress:
                         properties:
                           enabled:
@@ -132,21 +222,48 @@ spec:
                         type: object
                       name:
                         type: string
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
                       port:
                         properties:
                           http:
+                              format: int64
                             type: integer
                         type: object
+                        replicaCount:
+                          format: int64
+                          type: integer
                     type: object
                   api:
                     properties:
-                      enabled:
-                        type: boolean
-                      extraEnv:
-                        items:
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        type: array
+                        container:
+                          properties:
                       image:
                         properties:
                           pullPolicy:
@@ -154,6 +271,7 @@ spec:
                           pullSecrets:
                             items:
                               type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                             type: array
                           registry:
                             type: string
@@ -162,6 +280,39 @@ spec:
                           tag:
                             type: string
                         type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        enabled:
+                          type: boolean
+                        extraEnv:
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: array
                       ingress:
                         properties:
                           enabled:
@@ -179,21 +330,48 @@ spec:
                         type: object
                       name:
                         type: string
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
                       port:
                         properties:
                           http:
+                              format: int64
                             type: integer
                         type: object
+                        replicaCount:
+                          format: int64
+                          type: integer
                     type: object
                   auth:
                     properties:
-                      enabled:
-                        type: boolean
-                      extraEnv:
-                        items:
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        type: array
+                        container:
+                          properties:
                       image:
                         properties:
                           pullPolicy:
@@ -201,6 +379,7 @@ spec:
                           pullSecrets:
                             items:
                               type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                             type: array
                           registry:
                             type: string
@@ -209,6 +388,39 @@ spec:
                           tag:
                             type: string
                         type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        enabled:
+                          type: boolean
+                        extraEnv:
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: array
                       ingress:
                         properties:
                           enabled:
@@ -226,13 +438,46 @@ spec:
                         type: object
                       name:
                         type: string
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
                       port:
                         properties:
                           grpc:
+                              format: int64
                             type: integer
                           http:
+                              format: int64
                             type: integer
                         type: object
+                        replicaCount:
+                          format: int64
+                          type: integer
                       type:
                         enum:
                         - horusec
@@ -242,13 +487,8 @@ spec:
                     type: object
                   manager:
                     properties:
-                      enabled:
-                        type: boolean
-                      extraEnv:
-                        items:
-                          type: object
-                          x-kubernetes-preserve-unknown-fields: true
-                        type: array
+                        container:
+                          properties:
                       image:
                         properties:
                           pullPolicy:
@@ -256,6 +496,7 @@ spec:
                           pullSecrets:
                             items:
                               type: object
+                                    x-kubernetes-preserve-unknown-fields: true
                             type: array
                           registry:
                             type: string
@@ -264,6 +505,39 @@ spec:
                           tag:
                             type: string
                         type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        enabled:
+                          type: boolean
+                        extraEnv:
+                          items:
+                            type: object
+                            x-kubernetes-preserve-unknown-fields: true
+                          type: array
                       ingress:
                         properties:
                           enabled:
@@ -281,11 +555,43 @@ spec:
                         type: object
                       name:
                         type: string
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
                       port:
                         properties:
                           http:
+                              format: int64
                             type: integer
                         type: object
+                        replicaCount:
+                          format: int64
+                          type: integer
                     type: object
                 type: object
               global:
@@ -308,10 +614,82 @@ spec:
                       host:
                         type: string
                       port:
+                          format: int64
                         type: integer
                       secretName:
                         type: string
                     type: object
+                    common:
+                      properties:
+                        container:
+                          properties:
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
+                                    x-kubernetes-preserve-unknown-fields: true
+                                  type: array
+                                registry:
+                                  type: string
+                              type: object
+                            resources:
+                              properties:
+                                limits:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                                requests:
+                                  properties:
+                                    cpu:
+                                      type: string
+                                    memory:
+                                      type: string
+                                  type: object
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                runAsUser:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                        pod:
+                          properties:
+                            autoscaling:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                maxReplicas:
+                                  format: int64
+                                  type: integer
+                                minReplicas:
+                                  format: int64
+                                  type: integer
+                                targetCPU:
+                                  format: int64
+                                  type: integer
+                                targetMemory:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            securityContext:
+                              properties:
+                                enabled:
+                                  type: boolean
+                                fsGroup:
+                                  format: int64
+                                  type: integer
+                              type: object
+                          type: object
+                      type: object
                   database:
                     properties:
                       dialect:
@@ -321,26 +699,12 @@ spec:
                       logMode:
                         type: boolean
                       port:
+                          format: int64
                         type: integer
                       secretName:
                         type: string
                       sslMode:
                         type: boolean
-                    type: object
-                  image:
-                    properties:
-                      pullPolicy:
-                        type: string
-                      pullSecrets:
-                        items:
-                          type: object
-                        type: array
-                      registry:
-                        type: string
-                      repository:
-                        type: string
-                      tag:
-                        type: string
                     type: object
                   jwt:
                     properties:
