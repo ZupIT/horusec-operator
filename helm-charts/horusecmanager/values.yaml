@@ -1,9 +1,26 @@
 profile: demo
 
 global:
-  image:
-    registry: docker.io
-    pullSecrets: [ ]
+  common:
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+
+    container:
+      image:
+        registry: docker.io
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
 
   administrator:
     enabled: false
@@ -44,12 +61,6 @@ components:
   account:
     name: account
     enabled: true
-    image:
-      registry: docker.io
-      repository: horuszup/horusec-account
-      tag: v1.2.0
-      pullPolicy: IfNotPresent
-      pullSecrets: [ ]
     port:
       http: 8003
     ingress:
@@ -60,16 +71,38 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-account
+        tag: v1.2.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   analytic:
     name: analytic
     enabled: true
-    image:
-      registry: docker.io
-      repository: horuszup/horusec-analytic
-      tag: v1.2.0
-      pullPolicy: IfNotPresent
-      pullSecrets: [ ]
     port:
       http: 8005
     ingress:
@@ -80,16 +113,38 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-analytic
+        tag: v1.2.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   api:
     name: api
     enabled: true
-    image:
-      registry: docker.io
-      repository: horuszup/horusec-api
-      tag: v2.10.0
-      pullPolicy: IfNotPresent
-      pullSecrets: [ ]
     port:
       http: 8000
     ingress:
@@ -100,17 +155,39 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-api
+        tag: v2.10.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   auth:
     name: auth
     type: horusec
     enabled: true
-    image:
-      registry: docker.io
-      repository: horuszup/horusec-auth
-      tag: v1.7.0
-      pullPolicy: IfNotPresent
-      pullSecrets: [ ]
     port:
       http: 8006
       grpc: 8007
@@ -122,16 +199,38 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-auth
+        tag: v1.7.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi
 
   manager:
     name: manager
     enabled: true
-    image:
-      registry: docker.io
-      repository: horuszup/horusec-manager
-      tag: v1.8.0
-      pullPolicy: IfNotPresent
-      pullSecrets: [ ]
     port:
       http: 8080
     ingress:
@@ -142,3 +241,31 @@ components:
       protocols:
         - http
     extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: true
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-manager
+        tag: v1.9.0
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: true
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests:
+          cpu: 300m
+          memory: 512Mi

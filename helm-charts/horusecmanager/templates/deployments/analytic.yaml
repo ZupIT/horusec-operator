@@ -1,5 +1,5 @@
 {{- if .Values.components.analytic.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   labels:
@@ -7,17 +7,12 @@ metadata:
   name: {{ .Values.components.analytic.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
+  {{- if not .Values.components.analytic.pod.autoscaling.enabled }}
+  replicas: {{ .Values.components.analytic.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: horusec-analytic
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -61,7 +56,7 @@ spec:
             {{- toYaml .Values.components.analytic.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "analytic.image" . }}"
-          imagePullPolicy: {{ .Values.components.analytic.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.analytic.container.image.pullPolicy | quote }}
           name: horusec-analytic
           ports:
           {{- range $key, $value := .Values.components.analytic.port }}
@@ -69,15 +64,9 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
-          resources: {}
-          securityContext: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: analytic
+          resources: {{- toYaml .Values.components.analytic.container.resources | nindent 12 }}
+          securityContext: {{- omit .Values.components.analytic.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.analytic.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: analytic
       terminationGracePeriodSeconds: 30
 {{- end }}

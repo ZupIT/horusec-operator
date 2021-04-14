@@ -1,5 +1,5 @@
 {{- if .Values.components.manager.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   labels:
@@ -7,17 +7,12 @@ metadata:
   name: {{ .Values.components.manager.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
+  {{- if not .Values.components.manager.pod.autoscaling.enabled }}
+  replicas: {{ .Values.components.manager.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: horusec-manager
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -33,7 +28,7 @@ spec:
             - name: REACT_APP_HORUSEC_ENDPOINT_ACCOUNT
               value: {{ .Values.components.account.ingress.scheme -}}:\/\/{{- .Values.components.account.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
-              value: {{ .Values.components.auth.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
+              value: {{ .Values.components.manager.ingress.scheme -}}:\/\/{{- .Values.components.manager.ingress.host }}
             - name: REACT_APP_HORUSEC_MANAGER_PATH
               value: \{{ .Values.components.manager.ingress.path }}
 {{- if eq .Values.components.auth.type "keycloak" }}
@@ -50,7 +45,7 @@ spec:
             {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "manager.image" . }}"
-          imagePullPolicy: {{ .Values.components.manager.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.manager.container.image.pullPolicy | quote }}
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -76,15 +71,9 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-          resources: {}
-          securityContext: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: manager
+          resources: {{- toYaml .Values.components.manager.container.resources | nindent 12 }}
+          securityContext: {{- omit .Values.components.manager.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.manager.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: manager
       terminationGracePeriodSeconds: 30
 {{- end }}

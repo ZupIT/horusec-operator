@@ -1,21 +1,18 @@
 {{- if .Values.components.account.enabled }}
-apiVersion: apps/v1
+apiVersion: {{ include "deployment.apiVersion" . }}
 kind: Deployment
 metadata:
+  labels:
+    app: horusec-account
   name: {{ .Values.components.account.name }}
   namespace: {{ .Release.Namespace }}
 spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
+  {{- if not .Values.components.account.pod.autoscaling.enabled }}
+  replicas: {{ .Values.components.account.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
       app: horusec-account
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -76,7 +73,7 @@ spec:
             {{- toYaml .Values.components.account.extraEnv | nindent 12 }}
             {{- end }}
           image: "{{ template "account.image" . }}"
-          imagePullPolicy: {{ .Values.components.account.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.components.account.container.image.pullPolicy | quote }}
           name: horusec-account
           ports:
           {{- range $key, $value := .Values.components.account.port }}
@@ -84,15 +81,9 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
-          resources: {}
-          securityContext: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      serviceAccount: account
+          resources: {{- toYaml .Values.components.account.container.resources | nindent 12 }}
+          securityContext: {{- omit .Values.components.account.container.securityContext "enabled" | toYaml | nindent 12 }}
+      securityContext: {{- omit .Values.components.account.pod.securityContext "enabled" | toYaml | nindent 8 }}
       serviceAccountName: account
       terminationGracePeriodSeconds: 30
 {{- end }}
