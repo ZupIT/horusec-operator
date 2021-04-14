@@ -81,8 +81,12 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {{- toYaml .Values.components.api.container.resources | nindent 12 }}
+          {{- if .Values.components.api.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.api.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.api.pod.securityContext.enabled }}
       securityContext: {{- omit .Values.components.api.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       serviceAccountName: api
       terminationGracePeriodSeconds: 30
 {{- end }}

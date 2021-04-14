@@ -107,8 +107,12 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
+          {{- if .Values.components.auth.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.auth.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.auth.pod.securityContext.enabled }}
       securityContext: {{- omit .Values.components.auth.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       serviceAccountName: auth
       terminationGracePeriodSeconds: 30
 {{- end }}
