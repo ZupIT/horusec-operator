@@ -82,8 +82,12 @@ spec:
               protocol: TCP
           {{- end }}
           resources: {{- toYaml .Values.components.account.container.resources | nindent 12 }}
+          {{- if .Values.components.account.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.account.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.account.pod.securityContext.enabled }}
       securityContext: {{- omit .Values.components.account.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       serviceAccountName: account
       terminationGracePeriodSeconds: 30
 {{- end }}

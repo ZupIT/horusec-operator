@@ -10,7 +10,7 @@ global:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
 
     container:
@@ -19,7 +19,7 @@ global:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
 
   administrator:
@@ -80,7 +80,7 @@ components:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
     container:
       image:
@@ -90,7 +90,7 @@ components:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
       resources:
         limits: {}
@@ -122,7 +122,7 @@ components:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
     container:
       image:
@@ -132,7 +132,7 @@ components:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
       resources:
         limits: {}
@@ -164,7 +164,7 @@ components:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
     container:
       image:
@@ -174,7 +174,7 @@ components:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
       resources:
         limits: {}
@@ -208,7 +208,7 @@ components:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
     container:
       image:
@@ -218,7 +218,7 @@ components:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
       resources:
         limits: {}
@@ -250,7 +250,7 @@ components:
         # targetCPU: 50
         # targetMemory: 50
       securityContext:
-        enabled: true
+        enabled: false
         fsGroup: 1001
     container:
       image:
@@ -260,7 +260,7 @@ components:
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
-        enabled: true
+        enabled: false
         runAsUser: 1001
       resources:
         limits: {}

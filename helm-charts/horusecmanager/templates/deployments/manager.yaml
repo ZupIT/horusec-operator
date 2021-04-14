@@ -72,8 +72,12 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           resources: {{- toYaml .Values.components.manager.container.resources | nindent 12 }}
+          {{- if .Values.components.manager.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.manager.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.manager.pod.securityContext.enabled }}
       securityContext: {{- omit .Values.components.manager.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
       serviceAccountName: manager
       terminationGracePeriodSeconds: 30
 {{- end }}
