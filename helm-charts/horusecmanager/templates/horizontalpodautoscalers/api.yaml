@@ -11,19 +11,19 @@ spec:
     apiVersion: {{ include "deployment.apiVersion" . }}
     kind: Deployment
     name: {{ .Values.components.api.name }}
-  minReplicas: {{ .Values.components.api.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.components.api.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.components.api.pod.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.components.api.pod.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.components.api.autoscaling.targetCPU }}
+    {{- if .Values.components.api.pod.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.components.api.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.components.api.pod.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.components.api.autoscaling.targetMemory }}
+    {{- if .Values.components.api.pod.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.components.api.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.components.api.pod.autoscaling.targetMemory }}
     {{- end }}
 {{- end }}

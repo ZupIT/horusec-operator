@@ -11,19 +11,19 @@ spec:
     apiVersion: {{ include "deployment.apiVersion" . }}
     kind: Deployment
     name: {{ .Values.components.auth.name }}
-  minReplicas: {{ .Values.components.auth.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.components.auth.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.components.auth.pod.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.components.auth.pod.autoscaling.maxReplicas }}
   metrics:
-    {{- if .Values.components.auth.autoscaling.targetCPU }}
+    {{- if .Values.components.auth.pod.autoscaling.targetCPU }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.components.auth.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.components.auth.pod.autoscaling.targetCPU }}
     {{- end }}
-    {{- if .Values.components.auth.autoscaling.targetMemory }}
+    {{- if .Values.components.auth.pod.autoscaling.targetMemory }}
     - type: Resource
       resource:
         name: memory
-        targetAverageUtilization: {{ .Values.components.auth.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.components.auth.pod.autoscaling.targetMemory }}
     {{- end }}
 {{- end }}
