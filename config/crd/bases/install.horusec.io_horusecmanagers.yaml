@@ -9,61 +9,61 @@ spec:
     kind: HorusecManager
     listKind: HorusecManagerList
     plural: horusecmanagers
-    singular: horusecmanager
     shortNames:
       - hm
+    singular: horusecmanager
   scope: Namespaced
   versions:
-  - additionalPrinterColumns:
-    - description: Status defines the observed state of HorusecManager
-      jsonPath: .status.conditions[-1:].reason
-      name: Status
-      type: string
-    - jsonPath: .metadata.creationTimestamp
-      name: Age
-      type: date
-    name: v1alpha1
-    schema:
-      openAPIV3Schema:
-        description: HorusecManager is the Schema for the horusecmanagers API
-        properties:
-          apiVersion:
-            description: 'APIVersion defines the versioned schema of this representation
+    - additionalPrinterColumns:
+        - description: The status of the platform installation
+          jsonPath: .status.conditions[-1:].reason
+          name: Status
+          type: string
+        - jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1alpha1
+      schema:
+        openAPIV3Schema:
+          description: HorusecManager is the Schema for the horusecmanagers API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
               of an object. Servers should convert recognized schemas to the latest
               internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-            type: string
-          kind:
-            description: 'Kind is a string value representing the REST resource this
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
               object represents. Servers may infer this from the endpoint the client
               submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-            type: string
-          metadata:
-            type: object
-          spec:
-            description: Spec defines the desired state of HorusecManager
-            properties:
-              components:
-                properties:
-                  account:
-                    properties:
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Spec defines the desired state of HorusecManager
+              properties:
+                components:
+                  properties:
+                    account:
+                      properties:
                         container:
                           properties:
-                      image:
-                        properties:
-                          pullPolicy:
-                            type: string
-                          pullSecrets:
-                            items:
-                              type: object
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
                                     x-kubernetes-preserve-unknown-fields: true
-                            type: array
-                          registry:
-                            type: string
-                          repository:
-                            type: string
-                          tag:
-                            type: string
-                        type: object
+                                  type: array
+                                registry:
+                                  type: string
+                                repository:
+                                  type: string
+                                tag:
+                                  type: string
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -97,23 +97,23 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                           type: array
-                      ingress:
-                        properties:
-                          enabled:
-                            type: boolean
-                          host:
-                            type: string
-                          path:
-                            type: string
-                          protocols:
-                            items:
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                            host:
                               type: string
-                            type: array
-                          scheme:
-                            type: string
-                        type: object
-                      name:
-                        type: string
+                            path:
+                              type: string
+                            protocols:
+                              items:
+                                type: string
+                              type: array
+                            scheme:
+                              type: string
+                          type: object
+                        name:
+                          type: string
                         pod:
                           properties:
                             autoscaling:
@@ -142,36 +142,36 @@ spec:
                                   type: integer
                               type: object
                           type: object
-                      port:
-                        properties:
-                          http:
+                        port:
+                          properties:
+                            http:
                               format: int64
-                            type: integer
-                        type: object
+                              type: integer
+                          type: object
                         replicaCount:
                           format: int64
                           type: integer
-                    type: object
-                  analytic:
-                    properties:
+                      type: object
+                    analytic:
+                      properties:
                         container:
                           properties:
-                      image:
-                        properties:
-                          pullPolicy:
-                            type: string
-                          pullSecrets:
-                            items:
-                              type: object
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
                                     x-kubernetes-preserve-unknown-fields: true
-                            type: array
-                          registry:
-                            type: string
-                          repository:
-                            type: string
-                          tag:
-                            type: string
-                        type: object
+                                  type: array
+                                registry:
+                                  type: string
+                                repository:
+                                  type: string
+                                tag:
+                                  type: string
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -205,23 +205,23 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                           type: array
-                      ingress:
-                        properties:
-                          enabled:
-                            type: boolean
-                          host:
-                            type: string
-                          path:
-                            type: string
-                          protocols:
-                            items:
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                            host:
                               type: string
-                            type: array
-                          scheme:
-                            type: string
-                        type: object
-                      name:
-                        type: string
+                            path:
+                              type: string
+                            protocols:
+                              items:
+                                type: string
+                              type: array
+                            scheme:
+                              type: string
+                          type: object
+                        name:
+                          type: string
                         pod:
                           properties:
                             autoscaling:
@@ -250,36 +250,36 @@ spec:
                                   type: integer
                               type: object
                           type: object
-                      port:
-                        properties:
-                          http:
+                        port:
+                          properties:
+                            http:
                               format: int64
-                            type: integer
-                        type: object
+                              type: integer
+                          type: object
                         replicaCount:
                           format: int64
                           type: integer
-                    type: object
-                  api:
-                    properties:
+                      type: object
+                    api:
+                      properties:
                         container:
                           properties:
-                      image:
-                        properties:
-                          pullPolicy:
-                            type: string
-                          pullSecrets:
-                            items:
-                              type: object
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
                                     x-kubernetes-preserve-unknown-fields: true
-                            type: array
-                          registry:
-                            type: string
-                          repository:
-                            type: string
-                          tag:
-                            type: string
-                        type: object
+                                  type: array
+                                registry:
+                                  type: string
+                                repository:
+                                  type: string
+                                tag:
+                                  type: string
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -313,23 +313,23 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                           type: array
-                      ingress:
-                        properties:
-                          enabled:
-                            type: boolean
-                          host:
-                            type: string
-                          path:
-                            type: string
-                          protocols:
-                            items:
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                            host:
                               type: string
-                            type: array
-                          scheme:
-                            type: string
-                        type: object
-                      name:
-                        type: string
+                            path:
+                              type: string
+                            protocols:
+                              items:
+                                type: string
+                              type: array
+                            scheme:
+                              type: string
+                          type: object
+                        name:
+                          type: string
                         pod:
                           properties:
                             autoscaling:
@@ -358,36 +358,36 @@ spec:
                                   type: integer
                               type: object
                           type: object
-                      port:
-                        properties:
-                          http:
+                        port:
+                          properties:
+                            http:
                               format: int64
-                            type: integer
-                        type: object
+                              type: integer
+                          type: object
                         replicaCount:
                           format: int64
                           type: integer
-                    type: object
-                  auth:
-                    properties:
+                      type: object
+                    auth:
+                      properties:
                         container:
                           properties:
-                      image:
-                        properties:
-                          pullPolicy:
-                            type: string
-                          pullSecrets:
-                            items:
-                              type: object
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
                                     x-kubernetes-preserve-unknown-fields: true
-                            type: array
-                          registry:
-                            type: string
-                          repository:
-                            type: string
-                          tag:
-                            type: string
-                        type: object
+                                  type: array
+                                registry:
+                                  type: string
+                                repository:
+                                  type: string
+                                tag:
+                                  type: string
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -421,23 +421,23 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                           type: array
-                      ingress:
-                        properties:
-                          enabled:
-                            type: boolean
-                          host:
-                            type: string
-                          path:
-                            type: string
-                          protocols:
-                            items:
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                            host:
                               type: string
-                            type: array
-                          scheme:
-                            type: string
-                        type: object
-                      name:
-                        type: string
+                            path:
+                              type: string
+                            protocols:
+                              items:
+                                type: string
+                              type: array
+                            scheme:
+                              type: string
+                          type: object
+                        name:
+                          type: string
                         pod:
                           properties:
                             autoscaling:
@@ -466,45 +466,45 @@ spec:
                                   type: integer
                               type: object
                           type: object
-                      port:
-                        properties:
-                          grpc:
+                        port:
+                          properties:
+                            grpc:
                               format: int64
-                            type: integer
-                          http:
+                              type: integer
+                            http:
                               format: int64
-                            type: integer
-                        type: object
+                              type: integer
+                          type: object
                         replicaCount:
                           format: int64
                           type: integer
-                      type:
-                        enum:
-                        - horusec
-                        - ldap
-                        - keycloak
-                        type: string
-                    type: object
-                  manager:
-                    properties:
+                        type:
+                          enum:
+                            - horusec
+                            - ldap
+                            - keycloak
+                          type: string
+                      type: object
+                    manager:
+                      properties:
                         container:
                           properties:
-                      image:
-                        properties:
-                          pullPolicy:
-                            type: string
-                          pullSecrets:
-                            items:
-                              type: object
+                            image:
+                              properties:
+                                pullPolicy:
+                                  type: string
+                                pullSecrets:
+                                  items:
+                                    type: object
                                     x-kubernetes-preserve-unknown-fields: true
-                            type: array
-                          registry:
-                            type: string
-                          repository:
-                            type: string
-                          tag:
-                            type: string
-                        type: object
+                                  type: array
+                                registry:
+                                  type: string
+                                repository:
+                                  type: string
+                                tag:
+                                  type: string
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -538,23 +538,23 @@ spec:
                             type: object
                             x-kubernetes-preserve-unknown-fields: true
                           type: array
-                      ingress:
-                        properties:
-                          enabled:
-                            type: boolean
-                          host:
-                            type: string
-                          path:
-                            type: string
-                          protocols:
-                            items:
+                        ingress:
+                          properties:
+                            enabled:
+                              type: boolean
+                            host:
                               type: string
-                            type: array
-                          scheme:
-                            type: string
-                        type: object
-                      name:
-                        type: string
+                            path:
+                              type: string
+                            protocols:
+                              items:
+                                type: string
+                              type: array
+                            scheme:
+                              type: string
+                          type: object
+                        name:
+                          type: string
                         pod:
                           properties:
                             autoscaling:
@@ -583,42 +583,42 @@ spec:
                                   type: integer
                               type: object
                           type: object
-                      port:
-                        properties:
-                          http:
+                        port:
+                          properties:
+                            http:
                               format: int64
-                            type: integer
-                        type: object
+                              type: integer
+                          type: object
                         replicaCount:
                           format: int64
                           type: integer
-                    type: object
-                type: object
-              global:
-                properties:
-                  administrator:
-                    properties:
-                      email:
-                        type: string
-                      enabled:
-                        type: boolean
-                      password:
-                        type: string
-                      username:
-                        type: string
-                    type: object
-                  broker:
-                    properties:
-                      enabled:
-                        type: boolean
-                      host:
-                        type: string
-                      port:
+                      type: object
+                  type: object
+                global:
+                  properties:
+                    administrator:
+                      properties:
+                        email:
+                          type: string
+                        enabled:
+                          type: boolean
+                        password:
+                          type: string
+                        username:
+                          type: string
+                      type: object
+                    broker:
+                      properties:
+                        enabled:
+                          type: boolean
+                        host:
+                          type: string
+                        port:
                           format: int64
-                        type: integer
-                      secretName:
-                        type: string
-                    type: object
+                          type: integer
+                        secretName:
+                          type: string
+                      type: object
                     common:
                       properties:
                         container:
@@ -690,73 +690,73 @@ spec:
                               type: object
                           type: object
                       type: object
-                  database:
-                    properties:
-                      dialect:
-                        type: string
-                      host:
-                        type: string
-                      logMode:
-                        type: boolean
-                      port:
+                    database:
+                      properties:
+                        dialect:
+                          type: string
+                        host:
+                          type: string
+                        logMode:
+                          type: boolean
+                        port:
                           format: int64
-                        type: integer
-                      secretName:
-                        type: string
-                      sslMode:
-                        type: boolean
-                    type: object
-                  jwt:
-                    properties:
-                      secretName:
-                        type: string
-                    type: object
-                  keycloak:
-                    properties:
-                      clients:
-                        properties:
-                          confidential:
-                            properties:
-                              id:
-                                type: string
-                              secret:
-                                type: string
-                            required:
-                            - id
-                            - secret
-                            type: object
-                          public:
-                            properties:
-                              id:
-                                type: string
-                            required:
-                            - id
-                            type: object
-                        required:
-                        - confidential
-                        - public
-                        type: object
-                      internalURL:
-                        type: string
-                      otp:
-                        type: boolean
-                      publicURL:
-                        type: string
-                      realm:
-                        type: string
-                    required:
-                    - clients
-                    - publicURL
-                    - realm
-                    type: object
-                type: object
-            type: object
-          status:
-            description: Status defines the observed state of HorusecManager
-            type: object
-            x-kubernetes-preserve-unknown-fields: true
-        type: object
-    served: true
-    storage: true
-    subresources:
-      status: {}
+                          type: integer
+                        secretName:
+                          type: string
+                        sslMode:
+                          type: boolean
+                      type: object
+                    jwt:
+                      properties:
+                        secretName:
+                          type: string
+                      type: object
+                    keycloak:
+                      properties:
+                        clients:
+                          properties:
+                            confidential:
+                              properties:
+                                id:
+                                  type: string
+                                secret:
+                                  type: string
+                              required:
+                                - id
+                                - secret
+                              type: object
+                            public:
+                              properties:
+                                id:
+                                  type: string
+                              required:
+                                - id
+                              type: object
+                          required:
+                            - confidential
+                            - public
+                          type: object
+                        internalURL:
+                          type: string
+                        otp:
+                          type: boolean
+                        publicURL:
+                          type: string
+                        realm:
+                          type: string
+                      required:
+                        - clients
+                        - publicURL
+                        - realm
+                      type: object
+                  type: object
+              type: object
+            status:
+              description: Status defines the observed state of HorusecManager
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
