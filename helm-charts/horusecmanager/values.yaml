@@ -96,9 +96,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   analytic:
     name: analytic
@@ -138,9 +138,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   api:
     name: api
@@ -180,9 +180,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   auth:
     name: auth
@@ -224,9 +224,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   manager:
     name: manager
@@ -266,6 +266,49 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
+
+  webhook:
+    name: webhook
+    enabled: true
+    port:
+      http: 8005
+    ingress:
+      enabled: true
+      scheme: "http"
+      host: "webhook.local"
+      path: /webhook
+      protocols:
+        - http
+    extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: false
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-webhook
+        tag: v1.2.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: false
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
+
