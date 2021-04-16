@@ -90,7 +90,7 @@ Return the proper Horusec Analytic image name
 {{- end -}}
 
 {{/*
-Return the proper Horusec Analytic image name
+Return the proper Horusec Messages image name
 */}}
 {{- define "messages.image" -}}
 {{- $registryName := .Values.components.messages.container.image.registry -}}
@@ -108,7 +108,7 @@ Return the proper Horusec Analytic image name
 {{- end -}}
 
 {{/*
-Return the proper Horusec Analytic image name
+Return the proper Horusec Webhook image name
 */}}
 {{- define "webhook.image" -}}
 {{- $registryName := .Values.components.webhook.container.image.registry -}}
