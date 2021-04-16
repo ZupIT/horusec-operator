@@ -1,0 +1,20 @@
+{{- if .Values.components.messages.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: horusec-messages
+  name: {{ .Values.components.messages.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  ports:
+  {{- range $key, $value := .Values.components.messages.port }}
+    - name: {{ $key }}
+      port: {{ $value }}
+      protocol: TCP
+      targetPort: {{ $key }}
+  {{- end }}
+  selector:
+    app: horusec-messages
+  type: ClusterIP
+{{- end }}

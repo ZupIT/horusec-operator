@@ -1,0 +1,93 @@
+{{- if .Values.components.messages.enabled }}
+apiVersion: {{ include "deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels:
+    app: horusec-messages
+  name: {{ .Values.components.messages.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- if not .Values.components.messages.pod.autoscaling.enabled }}
+  replicas: {{ .Values.components.messages.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: horusec-messages
+  template:
+    metadata:
+      labels:
+        app: horusec-messages
+    spec:
+      {{- include "messages.imagePullSecrets" . | nindent 6 -}}
+      containers:
+        - env:
+            - name: HORUSEC_PORT
+              value: {{ .Values.components.messages.port | quote }}
+            - name: HORUSEC_SWAGGER_HOST
+              value: 0.0.0.0
+            - name: HORUSEC_MANAGER_URL
+              value: {{ .Values.components.manager.ingress.scheme -}}://{{- .Values.components.manager.ingress.host }}
+            - name: HORUSEC_BROKER_HOST
+              value: rabbitmq.queue
+            - name: HORUSEC_BROKER_PORT
+              value: {{ .Values.global.broker.port | quote }}
+            - name: HORUSEC_DATABASE_SQL_LOG_MODE
+              value: {{ .Values.global.database.logMode | quote }}
+            - name: HORUSEC_DATABASE_SQL_DIALECT
+              value: {{ .Values.global.database.dialect }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
+            - name: HORUSEC_GRPC_AUTH_URL
+              value: "auth.{{- .Release.Namespace -}}.svc.cluster.local:{{- .Values.components.auth.port.grpc }}"
+            - name: HORUSEC_GRPC_USE_CERTS
+              value: "false"
+            - name: HORUSEC_BROKER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ .Values.global.database.secretName }}
+            - name: HORUSEC_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ .Values.global.database.secretName }}
+            - name: HORUSEC_DATABASE_SQL_URI
+              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/horusec_db{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
+            - name: HORUSEC_JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret-key
+                  name: {{ .Values.global.jwt.secretName }}
+            {{- if .Values.components.messages.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.messages.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "messages.image" . }}"
+          imagePullPolicy: {{ .Values.components.messages.container.image.pullPolicy | quote }}
+          name: horusec-messages
+          ports:
+          {{- range $key, $value := .Values.components.messages.port }}
+            - containerPort: {{ $value }}
+              name: {{ $key }}
+              protocol: TCP
+          {{- end }}
+          resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
+          {{- if .Values.components.messages.container.securityContext.enabled }}
+          securityContext: {{- omit .Values.components.messages.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.messages.pod.securityContext.enabled }}
+      securityContext: {{- omit .Values.components.messages.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      serviceAccountName: messages
+      terminationGracePeriodSeconds: 30
+{{- end }}
