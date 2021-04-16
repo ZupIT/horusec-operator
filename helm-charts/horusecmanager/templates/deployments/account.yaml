@@ -22,7 +22,7 @@ spec:
       containers:
         - env:
             - name: HORUSEC_PORT
-              value: "8003"
+              value: {{ .Values.components.account.port.http | quote }}
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
             - name: HORUSEC_MANAGER_URL
