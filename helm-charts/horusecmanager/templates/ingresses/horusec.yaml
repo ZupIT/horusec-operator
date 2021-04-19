@@ -10,9 +10,11 @@ spec:
 {{- $hosts := list }}
 {{- $rules := dict }}
   {{- range $key, $val := .Values.components }}
+    {{- if $val.ingress }}
     {{- if $val.ingress.enabled }}
       {{- $hosts = append $hosts $val.ingress.host | uniq }}
       {{- $_ := set $rules $key $val }}
+    {{- end }}
     {{- end }}
   {{- end }}
   rules:
