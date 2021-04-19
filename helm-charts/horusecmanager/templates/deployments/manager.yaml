@@ -28,7 +28,7 @@ spec:
             - name: REACT_APP_HORUSEC_ENDPOINT_ACCOUNT
               value: {{ .Values.components.account.ingress.scheme -}}:\/\/{{- .Values.components.account.ingress.host }}
             - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
-              value: {{ .Values.components.manager.ingress.scheme -}}:\/\/{{- .Values.components.manager.ingress.host }}
+              value: {{ .Values.components.manager.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
             - name: REACT_APP_HORUSEC_MANAGER_PATH
               value: \{{ .Values.components.manager.ingress.path }}
 {{- if eq .Values.components.auth.type "keycloak" }}
