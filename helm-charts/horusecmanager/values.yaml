@@ -275,13 +275,6 @@ components:
     enabled: true
     port:
       http: 8005
-    ingress:
-      enabled: true
-      scheme: "http"
-      host: "webhook.local"
-      path: /webhook
-      protocols:
-        - http
     extraEnv: []
     replicaCount: 1
     pod:
@@ -317,13 +310,6 @@ components:
     enabled: true
     port:
       http: 8004
-    ingress:
-      enabled: true
-      scheme: "http"
-      host: "messages.local"
-      path: /messages
-      protocols:
-        - http
     extraEnv: []
     replicaCount: 1
     pod:
