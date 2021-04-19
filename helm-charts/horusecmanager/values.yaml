@@ -57,6 +57,11 @@ global:
         id: auth
         secret: c4f2f7b1-478b-4b52-9758-c272b936da8c
 
+  mailServer:
+    host: "smtp.mailtrap.io"
+    port: 25
+    secretName: "horusec-smtp"
+
 components:
   account:
     name: account
