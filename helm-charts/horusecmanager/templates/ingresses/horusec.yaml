@@ -25,13 +25,17 @@ spec:
     {{- range $key, $val := $rules }}
       {{- if and (eq $host $val.ingress.host) (ne $key "manager") }}
           - path: {{ $val.ingress.path }}
+            {{- if eq "true" (include "ingress.supportsPathType" $) }}
             pathType: Prefix
+            {{- end }}
             backend:
               serviceName: {{ $val.name }}
               servicePort: {{ $val.port.http }}
       {{- else if and (eq $host $val.ingress.host) (eq $key "manager") }}
           - path: / # always expose manager on base path
+            {{- if eq "true" (include "ingress.supportsPathType" $) }}
             pathType: Prefix
+            {{- end }}
             backend:
               serviceName: {{ $val.name }}
               servicePort: {{ $val.port.http }}
