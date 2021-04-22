@@ -885,6 +885,8 @@ spec:
                           type: string
                         logMode:
                           type: boolean
+                        name:
+                          type: string
                         port:
                           format: int64
                           type: integer

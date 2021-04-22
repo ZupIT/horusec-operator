@@ -38,6 +38,7 @@ global:
     secretName: "horusec-broker"
 
   database:
+    name: "horusec_db"
     host: "postgresql.database"
     port: 5432
     dialect: "postgres"
@@ -46,7 +47,7 @@ global:
     secretName: "horusec-database"
 
   keycloak:
-    publicURL: http://keycloak.local/auth
+    publicURL: https://keycloak.local/auth
     internalURL: "" # This field is optional. If not filled, the publicURL will be used.
     realm: zup
     otp: false
