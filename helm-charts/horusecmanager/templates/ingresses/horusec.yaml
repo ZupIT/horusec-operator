@@ -7,40 +7,6 @@ metadata:
   name: horusec
   namespace: {{ .Release.Namespace }}
 spec:
-{{- $hosts := list }}
-{{- $rules := dict }}
-  {{- range $key, $val := .Values.components }}
-    {{- if $val.ingress }}
-    {{- if $val.ingress.enabled }}
-      {{- $hosts = append $hosts $val.ingress.host | uniq }}
-      {{- $_ := set $rules $key $val }}
-    {{- end }}
-    {{- end }}
-  {{- end }}
-  rules:
-  {{- range $host := $hosts }}
-    - host: {{ $host }}
-      http:
-        paths:
-    {{- range $key, $val := $rules }}
-      {{- if and (eq $host $val.ingress.host) (ne $key "manager") }}
-          - path: {{ $val.ingress.path }}
-            {{- if eq "true" (include "ingress.supportsPathType" $) }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              serviceName: {{ $val.name }}
-              servicePort: {{ $val.port.http }}
-      {{- else if and (eq $host $val.ingress.host) (eq $key "manager") }}
-          - path: / # always expose manager on base path
-            {{- if eq "true" (include "ingress.supportsPathType" $) }}
-            pathType: Prefix
-            {{- end }}
-            backend:
-              serviceName: {{ $val.name }}
-              servicePort: {{ $val.port.http }}
-      {{- end }}
-  {{- end }}
-  {{- end }}
-
+{{- include "ingress.rules" . | nindent 2 }}
+{{- include "ingress.tls" . | nindent 2 }}
 {{- end }}

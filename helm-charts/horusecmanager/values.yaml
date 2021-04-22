@@ -4,7 +4,7 @@ global:
   common:
     ingress:
       tls:
-        secretName: "horusec-tls"
+        # secretName: ""
 
     pod:
       autoscaling:
@@ -79,7 +79,7 @@ components:
       host: "account.local"
       path: /account
       tls:
-        # secretName: "horusec-tls"
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -121,7 +121,7 @@ components:
       host: "analytic.local"
       path: /analytic
       tls:
-      # secretName: "horusec-tls"
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -163,7 +163,7 @@ components:
       host: "api.local"
       path: /api
       tls:
-      # secretName: "horusec-tls"
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -207,7 +207,7 @@ components:
       host: "auth.local"
       path: /auth
       tls:
-      # secretName: "horusec-tls"
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -249,7 +249,7 @@ components:
       host: "manager.local"
       path: /horusec
       tls:
-      # secretName: "horusec-tls"
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
