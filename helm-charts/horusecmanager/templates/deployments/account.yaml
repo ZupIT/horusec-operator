@@ -22,13 +22,13 @@ spec:
       containers:
         - env:
             - name: HORUSEC_PORT
-              value: "8003"
+              value: {{ .Values.components.account.port.http | quote }}
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
             - name: HORUSEC_MANAGER_URL
               value: {{ .Values.components.manager.ingress.scheme -}}://{{- .Values.components.manager.ingress.host }}
             - name: HORUSEC_BROKER_HOST
-              value: rabbitmq.queue
+              value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
             - name: HORUSEC_DATABASE_SQL_LOG_MODE
@@ -62,7 +62,7 @@ spec:
                   key: password
                   name: {{ .Values.global.database.secretName }}
             - name: HORUSEC_DATABASE_SQL_URI
-              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/horusec_db{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
+              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/{{- .Values.global.database.name -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:

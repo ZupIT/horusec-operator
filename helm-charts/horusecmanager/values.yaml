@@ -15,8 +15,8 @@ global:
 
     container:
       image:
-        registry: docker.io
-        pullPolicy: IfNotPresent
+        # registry: docker.io
+        # pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
         enabled: false
@@ -38,6 +38,7 @@ global:
     secretName: "horusec-broker"
 
   database:
+    name: "horusec_db"
     host: "postgresql.database"
     port: 5432
     dialect: "postgres"
@@ -46,7 +47,7 @@ global:
     secretName: "horusec-database"
 
   keycloak:
-    publicURL: http://keycloak.local/auth
+    publicURL: https://keycloak.local/auth
     internalURL: "" # This field is optional. If not filled, the publicURL will be used.
     realm: zup
     otp: false
@@ -56,6 +57,11 @@ global:
       confidential:
         id: auth
         secret: c4f2f7b1-478b-4b52-9758-c272b936da8c
+
+  mailServer:
+    host: "smtp.mailtrap.io"
+    port: 25
+    secretName: "horusec-smtp"
 
 components:
   account:
@@ -96,9 +102,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   analytic:
     name: analytic
@@ -138,9 +144,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   api:
     name: api
@@ -180,9 +186,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   auth:
     name: auth
@@ -224,9 +230,9 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
 
   manager:
     name: manager
@@ -266,6 +272,76 @@ components:
         limits: {}
         #   cpu: 500m
         #   memory: 1Gi
-        requests:
-          cpu: 300m
-          memory: 512Mi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
+
+  webhook:
+    name: webhook
+    enabled: true
+    port:
+      http: 8005
+    extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: false
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-webhook
+        tag: v1.2.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: false
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi
+
+  messages:
+    name: messages
+    enabled: true
+    port:
+      http: 8004
+    extraEnv: []
+    replicaCount: 1
+    pod:
+      autoscaling:
+        enabled: false
+        minReplicas: 1
+        maxReplicas: 11
+        # targetCPU: 50
+        # targetMemory: 50
+      securityContext:
+        enabled: false
+        fsGroup: 1001
+    container:
+      image:
+        registry: docker.io
+        repository: horuszup/horusec-messages
+        tag: v1.8.1
+        pullPolicy: IfNotPresent
+        pullSecrets: [ ]
+      securityContext:
+        enabled: false
+        runAsUser: 1001
+      resources:
+        limits: {}
+        #   cpu: 500m
+        #   memory: 1Gi
+        requests: {}
+        #   cpu: 300m
+        #   memory: 512Mi

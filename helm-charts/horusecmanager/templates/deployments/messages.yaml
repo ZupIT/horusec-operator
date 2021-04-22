@@ -1,0 +1,78 @@
+{{- if .Values.components.messages.enabled }}
+apiVersion: {{ include "deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  labels:
+    app: horusec-messages
+  name: {{ .Values.components.messages.name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  {{- if not .Values.components.messages.pod.autoscaling.enabled }}
+  replicas: {{ .Values.components.messages.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: horusec-messages
+  template:
+    metadata:
+      labels:
+        app: horusec-messages
+    spec:
+      {{- include "messages.imagePullSecrets" . | nindent 6 -}}
+      containers:
+        - env:
+            - name: HORUSEC_PORT
+              value: {{ .Values.components.messages.port.http | quote }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ .Values.global.broker.host }}
+            - name: HORUSEC_BROKER_PORT
+              value: {{ .Values.global.broker.port | quote }}
+            - name: HORUSEC_BROKER_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_SMTP_ADDRESS
+              value: {{ .Values.global.mailServer.host }}
+            - name: HORUSEC_SMTP_HOST
+              value: {{ .Values.global.mailServer.host }}
+            - name: HORUSEC_SMTP_PORT
+              value: {{ .Values.global.mailServer.port | quote }}
+            - name: HORUSEC_SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: username
+                  name: {{ .Values.global.mailServer.secretName }}
+            - name: HORUSEC_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: password
+                  name: {{ .Values.global.mailServer.secretName }}
+            {{- if .Values.components.messages.extraEnv }}
+            # Extra environment variables
+            {{- toYaml .Values.components.messages.extraEnv | nindent 12 }}
+            {{- end }}
+          image: "{{ template "messages.image" . }}"
+          imagePullPolicy: {{ .Values.components.messages.container.image.pullPolicy | quote }}
+          name: horusec-messages
+          ports:
+          {{- range $key, $value := .Values.components.messages.port }}
+            - containerPort: {{ $value }}
+              name: {{ $key }}
+              protocol: TCP
+          {{- end }}
+          resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
+          {{- if .Values.components.messages.container.securityContext.enabled }}
+          securityContext: {{- omit .Values.components.messages.container.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- if .Values.components.messages.pod.securityContext.enabled }}
+      securityContext: {{- omit .Values.components.messages.pod.securityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      serviceAccountName: messages
+      terminationGracePeriodSeconds: 30
+{{- end }}
