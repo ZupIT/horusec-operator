@@ -35,7 +35,7 @@ spec:
             - name: HORUSEC_GRPC_USE_CERTS
               value: "false"
             - name: HORUSEC_BROKER_HOST
-              value: rabbitmq.queue
+              value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
             - name: HORUSEC_DISABLED_BROKER

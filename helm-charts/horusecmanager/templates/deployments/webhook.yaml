@@ -26,7 +26,7 @@ spec:
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
             - name: HORUSEC_BROKER_HOST
-              value: rabbitmq.queue
+              value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
             - name: HORUSEC_DATABASE_SQL_LOG_MODE

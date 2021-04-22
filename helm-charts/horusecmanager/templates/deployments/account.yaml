@@ -28,7 +28,7 @@ spec:
             - name: HORUSEC_MANAGER_URL
               value: {{ .Values.components.manager.ingress.scheme -}}://{{- .Values.components.manager.ingress.host }}
             - name: HORUSEC_BROKER_HOST
-              value: rabbitmq.queue
+              value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
             - name: HORUSEC_DATABASE_SQL_LOG_MODE
