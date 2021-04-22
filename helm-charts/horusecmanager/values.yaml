@@ -15,8 +15,8 @@ global:
 
     container:
       image:
-        registry: docker.io
-        pullPolicy: IfNotPresent
+        # registry: docker.io
+        # pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
         enabled: false
