@@ -328,9 +328,96 @@ True if Ingress is enabled for any of the components.
 Print "true" if the API pathType field is supported.
 */}}
 {{- define "ingress.supportsPathType" -}}
-{{- if semverCompare "<1.18-0" .Capabilities.KubeVersion.Version -}}
+{{- if not .Capabilities -}}
+{{- print "false" -}}
+{{- else if semverCompare "<1.18-0" .Capabilities.KubeVersion.Version -}}
 {{- print "false" -}}
 {{- else -}}
 {{- print "true" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+If enabled, return Ingress Rules.
+*/}}
+{{- define "ingress.rules" -}}
+{{- $components := list -}}
+{{- range $_, $component := .Values.components -}}
+    {{- if $component.ingress -}}
+        {{- $components = append $components $component -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $hosts := dict -}}
+{{- range $_, $component := $components -}}
+    {{- if $component.ingress -}}
+    {{ if not (hasKey $hosts $component.ingress.host) }}
+        {{- $ingresses := list -}}
+        {{- range $_, $otherComponent := $components -}}
+            {{- if eq $component.ingress.host $otherComponent.ingress.host -}}
+                {{- $ingresses = append $ingresses $otherComponent -}}
+            {{- end -}}
+        {{- end -}}
+        {{- $_ := set $hosts $component.ingress.host (compact $ingresses) -}}
+    {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+rules:
+{{- range $host, $components := $hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+        {{- range $component := $components }}
+        - path: {{ $component.ingress.path }}
+          {{- if eq "true" (include "ingress.supportsPathType" .) }}
+          pathType: Prefix
+          {{- end }}
+          backend:
+            serviceName: {{ $component.name }}
+            servicePort: {{ $component.port.http }}
+        {{- end }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+If enabled, return SSL/TLS Ingress YAML configuration.
+*/}}
+{{- define "ingress.tls" -}}
+{{- $ingresses := list -}}
+{{- range $_, $component := .Values.components -}}
+    {{- if $component.ingress -}}
+        {{- $ingresses = append $ingresses $component.ingress -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $secrets := dict -}}
+{{- range $_, $ingress := $ingresses -}}
+    {{- if and (eq "https" $ingress.scheme) $ingress.tls -}}
+        {{ if not (hasKey $secrets $ingress.tls.secretName) }}
+            {{- $hosts := list -}}
+            {{- range $_, $otherIngress := $ingresses -}}
+                {{- if $otherIngress.tls -}}
+                {{- if eq $ingress.tls.secretName $otherIngress.tls.secretName -}}
+                    {{- $hosts = append $hosts $otherIngress.host -}}
+                {{- end -}}
+                {{- end -}}
+            {{- end -}}
+            {{- $_ := set $secrets $ingress.tls.secretName (compact $hosts) -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- if $secrets -}}
+tls:
+  {{- range $secret, $hosts := $secrets }}
+  {{- if $secret }}
+  - hosts:
+      {{- range $host := $hosts }}
+      - {{ $host }}
+      {{- end }}
+    secretName: {{ $secret }}
+  {{- end -}}
+  {{- end -}}
 {{- end -}}
 {{- end -}}

@@ -2,6 +2,10 @@ profile: demo
 
 global:
   common:
+    ingress:
+      tls:
+        # secretName: ""
+
     pod:
       autoscaling:
         enabled: false
@@ -74,8 +78,8 @@ components:
       scheme: "http"
       host: "account.local"
       path: /account
-      protocols:
-        - http
+      tls:
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -116,8 +120,8 @@ components:
       scheme: "http"
       host: "analytic.local"
       path: /analytic
-      protocols:
-        - http
+      tls:
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -158,8 +162,8 @@ components:
       scheme: "http"
       host: "api.local"
       path: /api
-      protocols:
-        - http
+      tls:
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -202,8 +206,8 @@ components:
       scheme: "http"
       host: "auth.local"
       path: /auth
-      protocols:
-        - http
+      tls:
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
@@ -244,8 +248,8 @@ components:
       scheme: "http"
       host: "manager.local"
       path: /horusec
-      protocols:
-        - http
+      tls:
+        # secretName: ""
     extraEnv: []
     replicaCount: 1
     pod:
