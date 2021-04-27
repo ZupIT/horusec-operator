@@ -106,6 +106,20 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /auth/health
+              port: {{ .Values.components.auth.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /auth/health
+              port: {{ .Values.components.auth.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
           resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
           {{- if .Values.components.auth.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.auth.container.securityContext "enabled" | toYaml | nindent 12 }}

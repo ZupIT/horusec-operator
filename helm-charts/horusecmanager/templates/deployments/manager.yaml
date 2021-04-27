@@ -47,14 +47,10 @@ spec:
           image: "{{ template "manager.image" . }}"
           imagePullPolicy: {{ .Values.components.manager.container.image.pullPolicy | quote }}
           livenessProbe:
-            failureThreshold: 3
             httpGet:
               path: /
               port: http
               scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
           name: horusec-manager
           ports:
           {{- range $key, $value := .Values.components.manager.port }}
@@ -63,7 +59,6 @@ spec:
               protocol: TCP
           {{- end }}
           readinessProbe:
-            failureThreshold: 3
             httpGet:
               path: /
               port: http
