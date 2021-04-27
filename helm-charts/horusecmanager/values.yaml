@@ -19,7 +19,7 @@ global:
 
     container:
       image:
-        # registry: docker.io
+        # registry: docker.io/horuszup
         # pullPolicy: IfNotPresent
         pullSecrets: [ ]
       securityContext:
@@ -94,8 +94,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-account
+        registry: docker.io/horuszup
+        repository: horusec-account
         tag: v1.2.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -136,8 +136,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-analytic
+        registry: docker.io/horuszup
+        repository: horusec-analytic
         tag: v1.2.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -178,8 +178,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-api
+        registry: docker.io/horuszup
+        repository: horusec-api
         tag: v2.10.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -222,8 +222,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-auth
+        registry: docker.io/horuszup
+        repository: horusec-auth
         tag: v1.7.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -264,8 +264,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-manager
+        registry: docker.io/horuszup
+        repository: horusec-manager
         tag: v1.9.0
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -299,8 +299,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-webhook
+        registry: docker.io/horuszup
+        repository: horusec-webhook
         tag: v1.2.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
@@ -334,8 +334,8 @@ components:
         fsGroup: 1001
     container:
       image:
-        registry: docker.io
-        repository: horuszup/horusec-messages
+        registry: docker.io/horuszup
+        repository: horusec-messages
         tag: v1.8.1
         pullPolicy: IfNotPresent
         pullSecrets: [ ]
