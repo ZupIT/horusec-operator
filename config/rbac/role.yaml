@@ -70,5 +70,11 @@ rules:
     - "batch"
   resources:
     - "jobs"
+- verbs:
+    - "*"
+  apiGroups:
+    - "autoscaling"
+  resources:
+    - "horizontalpodautoscalers"
 
 # +kubebuilder:scaffold:rules
