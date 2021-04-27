@@ -34,7 +34,7 @@ spec:
             - name: HORUSEC_DATABASE_SQL_DIALECT
               value: {{ .Values.global.database.dialect }}
             - name: HORUSEC_GRPC_AUTH_URL
-              value: auth.horusec.svc.cluster.local:8007
+              value: "auth.{{- .Release.Namespace -}}.svc.cluster.local:{{- .Values.components.auth.port.grpc }}"
             - name: HORUSEC_GRPC_USE_CERTS
               value: "false"
             - name: HORUSEC_GRPC_CERT_PATH
@@ -80,6 +80,20 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.components.api.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: {{ .Values.components.api.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
           resources: {{- toYaml .Values.components.api.container.resources | nindent 12 }}
           {{- if .Values.components.api.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.api.container.securityContext "enabled" | toYaml | nindent 12 }}
