@@ -78,7 +78,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 3
+          {{- if .Values.components.analytic.container.resources }}
           resources: {{- toYaml .Values.components.analytic.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.analytic.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.analytic.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

@@ -87,7 +87,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 3
-          resources: {{- toYaml .Values.components.webhook.container.resources | nindent 12 }}
+          {{- if .Values.components.messages.container.resources }}
+          resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.webhook.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.webhook.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

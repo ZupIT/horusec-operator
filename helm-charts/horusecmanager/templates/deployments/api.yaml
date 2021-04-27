@@ -94,7 +94,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 3
+          {{- if .Values.components.api.container.resources }}
           resources: {{- toYaml .Values.components.api.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.api.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.api.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

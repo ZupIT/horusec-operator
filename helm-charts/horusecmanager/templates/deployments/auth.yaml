@@ -120,7 +120,9 @@ spec:
               scheme: HTTP
             initialDelaySeconds: 3
             periodSeconds: 3
+          {{- if .Values.components.auth.container.resources }}
           resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.auth.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.auth.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
