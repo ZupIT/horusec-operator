@@ -81,7 +81,23 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /account/health
+              port: {{ .Values.components.account.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /account/health
+              port: {{ .Values.components.account.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          {{- if .Values.components.account.container.resources }}
           resources: {{- toYaml .Values.components.account.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.account.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.account.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}

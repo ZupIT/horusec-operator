@@ -73,7 +73,23 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
-          resources: {{- toYaml .Values.components.webhook.container.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /webhook/health
+              port: {{ .Values.components.webhook.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /webhook/health
+              port: {{ .Values.components.webhook.port.http }}
+              scheme: HTTP
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          {{- if .Values.components.messages.container.resources }}
+          resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
+          {{- end }}
           {{- if .Values.components.webhook.container.securityContext.enabled }}
           securityContext: {{- omit .Values.components.webhook.container.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
