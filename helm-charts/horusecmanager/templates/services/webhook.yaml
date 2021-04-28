@@ -1,20 +1,20 @@
-{{- if .Values.components.analytic.enabled }}
+{{- if .Values.components.webhook.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: horusec-analytic
-  name: {{ .Values.components.analytic.name }}
+    app: horusec-webhook
+  name: {{ .Values.components.webhook.name }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
-  {{- range $key, $value := .Values.components.analytic.port }}
+  {{- range $key, $value := .Values.components.webhook.port }}
     - name: {{ $key }}
       port: {{ $value }}
       protocol: TCP
       targetPort: {{ $key }}
   {{- end }}
   selector:
-    app: horusec-analytic
+    app: horusec-webhook
   type: ClusterIP
 {{- end }}
