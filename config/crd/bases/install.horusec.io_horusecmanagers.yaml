@@ -250,12 +250,13 @@ spec:
                               type: string
                             path:
                               type: string
-                            protocols:
-                              items:
-                                type: string
-                              type: array
                             scheme:
                               type: string
+                            tls:
+                              properties:
+                                secretName:
+                                  type: string
+                              type: object
                           type: object
                         name:
                           type: string
@@ -654,12 +655,13 @@ spec:
                               type: string
                             path:
                               type: string
-                            protocols:
-                              items:
-                                type: string
-                              type: array
                             scheme:
                               type: string
+                            tls:
+                              properties:
+                                secretName:
+                                  type: string
+                              type: object
                           type: object
                         name:
                           type: string
@@ -1058,12 +1060,13 @@ spec:
                               type: string
                             path:
                               type: string
-                            protocols:
-                              items:
-                                type: string
-                              type: array
                             scheme:
                               type: string
+                            tls:
+                              properties:
+                                secretName:
+                                  type: string
+                              type: object
                           type: object
                         name:
                           type: string
@@ -1462,12 +1465,13 @@ spec:
                               type: string
                             path:
                               type: string
-                            protocols:
-                              items:
-                                type: string
-                              type: array
                             scheme:
                               type: string
+                            tls:
+                              properties:
+                                secretName:
+                                  type: string
+                              type: object
                           type: object
                         name:
                           type: string
@@ -1875,12 +1879,13 @@ spec:
                               type: string
                             path:
                               type: string
-                            protocols:
-                              items:
-                                type: string
-                              type: array
                             scheme:
                               type: string
+                            tls:
+                              properties:
+                                secretName:
+                                  type: string
+                              type: object
                           type: object
                         name:
                           type: string
