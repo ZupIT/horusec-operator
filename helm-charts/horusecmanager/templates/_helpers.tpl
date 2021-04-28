@@ -229,13 +229,15 @@ rules:
     http:
       paths:
         {{- range $component := $components }}
-        - path: {{ $component.ingress.path }}
+        - backend:
+            serviceName: {{ $component.name }}
+            servicePort: {{ $component.port.http }}
+          {{- if not (eq "manager" $component.name) }}
+          path: {{ $component.ingress.path }}
           {{- if eq "true" (include "ingress.supportsPathType" .) }}
           pathType: Prefix
           {{- end }}
-          backend:
-            serviceName: {{ $component.name }}
-            servicePort: {{ $component.port.http }}
+          {{- end }}
         {{- end }}
 {{- end -}}
 {{- end -}}
