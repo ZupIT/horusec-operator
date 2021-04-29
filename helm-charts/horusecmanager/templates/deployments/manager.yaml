@@ -58,14 +58,26 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            failureThreshold: {{ .Values.components.manager.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.manager.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.manager.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.manager.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.manager.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /
               port: http
               scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+            failureThreshold: {{ .Values.components.manager.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.manager.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.manager.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.manager.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.manager.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.manager.container.resources }}
           resources: {{- toYaml .Values.components.manager.container.resources | nindent 12 }}
           {{- end }}

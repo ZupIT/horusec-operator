@@ -109,17 +109,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /auth/health
-              port: {{ .Values.components.auth.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.auth.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.auth.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.auth.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.auth.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.auth.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /auth/health
-              port: {{ .Values.components.auth.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.auth.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.auth.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.auth.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.auth.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.auth.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.auth.container.resources }}
           resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
           {{- end }}

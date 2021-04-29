@@ -83,17 +83,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health
-              port: {{ .Values.components.api.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.api.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.api.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.api.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.api.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.api.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /api/health
-              port: {{ .Values.components.api.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.api.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.api.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.api.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.api.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.api.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.api.container.resources }}
           resources: {{- toYaml .Values.components.api.container.resources | nindent 12 }}
           {{- end }}

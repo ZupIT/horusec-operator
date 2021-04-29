@@ -67,17 +67,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /analytic/health
-              port: {{ .Values.components.analytic.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.analytic.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.analytic.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.analytic.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.analytic.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.analytic.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /analytic/health
-              port: {{ .Values.components.analytic.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.analytic.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.analytic.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.analytic.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.analytic.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.analytic.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.analytic.container.resources }}
           resources: {{- toYaml .Values.components.analytic.container.resources | nindent 12 }}
           {{- end }}
