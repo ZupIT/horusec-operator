@@ -76,17 +76,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /webhook/health
-              port: {{ .Values.components.webhook.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.webhook.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.webhook.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.webhook.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.webhook.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.webhook.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /webhook/health
-              port: {{ .Values.components.webhook.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.webhook.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.webhook.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.webhook.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.webhook.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.webhook.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.messages.container.resources }}
           resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
           {{- end }}
