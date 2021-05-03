@@ -45,36 +45,22 @@ rules:
   - patch
   - update
   - watch
-- verbs:
-  - "*"
-  apiGroups:
-  - "apps"
-  resources:
-  - "deployments"
-- verbs:
-  - "*"
-  apiGroups:
+- apiGroups:
   - ""
+  - apps
+  - autoscaling
+  - batch
+  - networking.k8s.io
+  - statefulsets.apps
   resources:
-  - "serviceaccounts"
-  - "services"
-- verbs:
-    - "*"
-  apiGroups:
-    - "networking.k8s.io"
-  resources:
-    - "ingresses"
-- verbs:
-    - "*"
-  apiGroups:
-    - "batch"
-  resources:
-    - "jobs"
-- verbs:
-    - "*"
-  apiGroups:
-    - "autoscaling"
-  resources:
-    - "horizontalpodautoscalers"
+  - deployments
+  - horizontalpodautoscalers
+  - ingresses
+  - jobs
+  - serviceaccounts
+  - services
+  - statefulsets
+  verbs:
+  - "*"
 
 # +kubebuilder:scaffold:rules
