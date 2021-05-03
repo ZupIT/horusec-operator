@@ -182,7 +182,7 @@ Return the appropriate database address.
 {{- if .Values.demo.enabled -}}
 {{- printf "%s-postgresql:5432/%s" .Release.Name .Values.postgresql.postgresqlDatabase -}}
 {{- else -}}
-{{- printf "%s:%s/%s" .Values.global.database.host .Values.global.database.port .Values.global.database.name -}}
+{{- printf "%s:%g/%s" .Values.global.database.host .Values.global.database.port .Values.global.database.name -}}
 {{- end -}}
 {{- end -}}
 
