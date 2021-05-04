@@ -54,7 +54,7 @@ spec:
                   key: password
                   name: {{ .Values.global.database.secretName }}
             - name: HORUSEC_DATABASE_SQL_URI
-              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/{{- .Values.global.database.name -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
+              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- include "database.address" . -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:

@@ -3,3 +3,10 @@ description: Helm Charts for Horusec backend
 name: horusecmanager
 type: application
 version: 1.1.0-SNAPSHOT
+dependencies:
+  - condition: demo.enabled
+    name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 10.x.x
+    tags:
+      - demo

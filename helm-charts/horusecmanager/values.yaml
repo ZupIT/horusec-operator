@@ -1,3 +1,6 @@
+demo:
+  enabled: false
+
 global:
   administrator:
     enabled: false
@@ -406,3 +409,15 @@ components:
         periodSeconds: 3
         successThreshold: 1
         timeoutSeconds: 1
+
+##
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+##
+postgresql:
+  postgresqlUsername: postgres
+  postgresqlPassword: some-password
+  postgresqlDatabase: horusec_db
+  existingSecret: horusec-database
+  persistence:
+    enabled: true
