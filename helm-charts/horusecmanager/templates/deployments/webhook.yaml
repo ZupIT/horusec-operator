@@ -25,14 +25,32 @@ spec:
               value: {{ .Values.components.webhook.port.http | quote }}
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
+            {{- if .Values.demo }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
+            - name: HORUSEC_BROKER_USERNAME
+              value: user
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                key: rabbitmq-password
+                name: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
+            - name: HORUSEC_DATABASE_USERNAME
+              value: {{ .Values.postgresql.postgresqlUsername }}
+            - name: HORUSEC_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: {{ printf "%s-postgresql" .Release.Name }}
+            {{- else }}
             - name: HORUSEC_BROKER_HOST
               value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
-            - name: HORUSEC_DATABASE_SQL_LOG_MODE
-              value: {{ .Values.global.database.logMode | quote }}
-            - name: HORUSEC_DATABASE_SQL_DIALECT
-              value: {{ .Values.global.database.dialect }}
             - name: HORUSEC_BROKER_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -43,15 +61,8 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.broker.secretName }}
-            {{- if .Values.demo }}
-            - name: HORUSEC_DATABASE_USERNAME
-              value: {{ .Values.postgresql.postgresqlUsername }}
-            - name: HORUSEC_DATABASE_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: postgresql-password
-                  name: {{ printf "%s-postgresql" .Release.Name }}
-            {{- else }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:

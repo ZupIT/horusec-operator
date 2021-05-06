@@ -36,6 +36,19 @@ spec:
             - name: HORUSEC_GRPC_USE_CERTS
               value: "false"
             {{- if .Values.demo }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
+            - name: HORUSEC_BROKER_USERNAME
+              value: user
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                key: rabbitmq-password
+                name: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               value: {{ .Values.postgresql.postgresqlUsername }}
             - name: HORUSEC_DATABASE_PASSWORD

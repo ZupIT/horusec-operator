@@ -44,21 +44,24 @@ spec:
               value: {{ .Values.components.auth.type }}
             - name: HORUSEC_ENABLE_APPLICATION_ADMIN
               value: {{ .Values.global.administrator.enabled | quote }}
-{{- if .Values.global.administrator.enabled }}
+            {{- if .Values.global.administrator.enabled }}
             - name: HORUSEC_APPLICATION_ADMIN_DATA
               value: '{"username":{{ .Values.global.administrator.username | quote }},"email":{{ .Values.global.administrator.email | quote }},"password":{{ .Values.global.administrator.password | quote }}}'
-{{- end }}
+            {{- end }}
+            {{- if .Values.demo }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
             - name: HORUSEC_BROKER_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: username
-                  name: {{ .Values.global.broker.secretName }}
+              value: user
             - name: HORUSEC_BROKER_PASSWORD
               valueFrom:
-                secretKeyRef:
-                  key: password
-                  name: {{ .Values.global.broker.secretName }}
-            {{- if .Values.demo }}
+               secretKeyRef:
+                key: rabbitmq-password
+                name: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               value: {{ .Values.postgresql.postgresqlUsername }}
             - name: HORUSEC_DATABASE_PASSWORD
@@ -67,6 +70,22 @@ spec:
                   key: postgresql-password
                   name: {{ printf "%s-postgresql" .Release.Name }}
             {{- else }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ .Values.global.broker.host }}
+            - name: HORUSEC_BROKER_PORT
+              value: {{ .Values.global.broker.port | quote }}
+            - name: HORUSEC_BROKER_USERNAME
+              valueFrom:
+               secretKeyRef:
+                key: username
+                name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                key: password
+                name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:

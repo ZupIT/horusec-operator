@@ -31,15 +31,15 @@ spec:
               value: {{ .Values.components.manager.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
             - name: REACT_APP_HORUSEC_MANAGER_PATH
               value: \{{ .Values.components.manager.ingress.path }}
-{{- if eq .Values.components.auth.type "keycloak" }}
-{{- $parsed := urlParse .Values.global.keycloak.publicURL }}
+            {{- if eq .Values.components.auth.type "keycloak" }}
+            {{- $parsed := urlParse .Values.global.keycloak.publicURL }}
             - name: REACT_APP_KEYCLOAK_BASE_PATH
               value: {{ $parsed.scheme -}}:\/\/{{- $parsed.host -}}\{{- $parsed.path }}
             - name: REACT_APP_KEYCLOAK_CLIENT_ID
               value: {{ .Values.global.keycloak.clients.public.id }}
             - name: REACT_APP_KEYCLOAK_REALM
               value: {{ .Values.global.keycloak.realm }}
-{{- end }}
+            {{- end }}
             {{- if .Values.components.manager.extraEnv }}
             # Extra environment variables
             {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
