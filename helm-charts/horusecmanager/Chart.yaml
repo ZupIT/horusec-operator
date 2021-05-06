@@ -4,9 +4,15 @@ name: horusecmanager
 type: application
 version: 1.1.0-SNAPSHOT
 dependencies:
-  - condition: demo.enabled
+  - condition: demo
     name: postgresql
     repository: https://charts.bitnami.com/bitnami
     version: 10.x.x
+    tags:
+      - demo
+  - condition: demo
+    name: rabbitmq
+    repository: https://charts.bitnami.com/bitnami
+    version: 8.x.x
     tags:
       - demo

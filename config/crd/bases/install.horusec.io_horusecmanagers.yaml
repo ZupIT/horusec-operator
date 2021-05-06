@@ -3110,10 +3110,7 @@ spec:
                       type: object
                   type: object
                 demo:
-                  properties:
-                    enabled:
-                      type: boolean
-                  type: object
+                  type: boolean
                 global:
                   properties:
                     administrator:
