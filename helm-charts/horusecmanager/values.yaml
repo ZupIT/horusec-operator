@@ -1,5 +1,4 @@
-demo:
-  enabled: false
+demo: false
 
 global:
   administrator:
@@ -415,9 +414,18 @@ components:
 ## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
 ##
 postgresql:
-  postgresqlUsername: postgres
+  postgresqlUsername: horus
   postgresqlPassword: some-password
   postgresqlDatabase: horusec_db
-  existingSecret: horusec-database
+  existingSecret:
   persistence:
     enabled: true
+
+##
+## RabbitMQ chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+##
+rabbitmq:
+  auth:
+    password: qQAUEGhQ6R
+    erlangCookie: DX5NKjaLajEYC9t6hJujJa25PqpbFXF4

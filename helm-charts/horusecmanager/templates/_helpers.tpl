@@ -179,7 +179,7 @@ Return the appropriate apiVersion for Ingress.
 Return the appropriate database address.
 */}}
 {{- define "database.address" -}}
-{{- if .Values.demo.enabled -}}
+{{- if .Values.demo -}}
 {{- printf "%s-postgresql:5432/%s" .Release.Name .Values.postgresql.postgresqlDatabase -}}
 {{- else -}}
 {{- printf "%s:%g/%s" .Values.global.database.host .Values.global.database.port .Values.global.database.name -}}

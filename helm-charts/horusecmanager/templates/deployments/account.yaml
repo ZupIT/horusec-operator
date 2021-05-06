@@ -51,14 +51,14 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.broker.secretName }}
-            {{- if .Values.demo.enabled }}
+            {{- if .Values.demo }}
             - name: HORUSEC_DATABASE_USERNAME
               value: {{ .Values.postgresql.postgresqlUsername }}
             - name: HORUSEC_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   key: postgresql-password
-                  name: {{ printf "%s-%s" .Release.Name .Values.postgresql.postgresqlDatabase }}
+                  name: {{ printf "%s-postgresql" .Release.Name }}
             {{- else }}
             - name: HORUSEC_DATABASE_USERNAME
               valueFrom:
