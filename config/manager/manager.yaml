@@ -28,7 +28,7 @@ spec:
       - args:
         - --leader-elect
         - --leader-election-id=horusec-operator
-        image: controller:latest
+        image: horuszup/horusec-operator:v1.1.0-SNAPSHOT
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
