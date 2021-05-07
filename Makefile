@@ -28,8 +28,8 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 # This variable is used to construct full image tags for bundle and catalog images.
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
-# horusec.io/horusec-operator-bundle:$VERSION and horusec.io/horusec-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= horusec.io/horusec-operator
+# horuszup/horusec-operator-bundle:$VERSION and horuszup/horusec-operator-catalog:$VERSION.
+IMAGE_TAG_BASE ?= horuszup/horusec-operator
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
