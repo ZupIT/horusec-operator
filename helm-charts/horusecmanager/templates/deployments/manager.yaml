@@ -31,15 +31,15 @@ spec:
               value: {{ .Values.components.manager.ingress.scheme -}}:\/\/{{- .Values.components.auth.ingress.host }}
             - name: REACT_APP_HORUSEC_MANAGER_PATH
               value: \{{ .Values.components.manager.ingress.path }}
-{{- if eq .Values.components.auth.type "keycloak" }}
-{{- $parsed := urlParse .Values.global.keycloak.publicURL }}
+            {{- if eq .Values.components.auth.type "keycloak" }}
+            {{- $parsed := urlParse .Values.global.keycloak.publicURL }}
             - name: REACT_APP_KEYCLOAK_BASE_PATH
               value: {{ $parsed.scheme -}}:\/\/{{- $parsed.host -}}\{{- $parsed.path }}
             - name: REACT_APP_KEYCLOAK_CLIENT_ID
               value: {{ .Values.global.keycloak.clients.public.id }}
             - name: REACT_APP_KEYCLOAK_REALM
               value: {{ .Values.global.keycloak.realm }}
-{{- end }}
+            {{- end }}
             {{- if .Values.components.manager.extraEnv }}
             # Extra environment variables
             {{- toYaml .Values.components.manager.extraEnv | nindent 12 }}
@@ -58,14 +58,26 @@ spec:
               name: {{ $key }}
               protocol: TCP
           {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            failureThreshold: {{ .Values.components.manager.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.manager.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.manager.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.manager.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.manager.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /
               port: http
               scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
+            failureThreshold: {{ .Values.components.manager.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.manager.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.manager.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.manager.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.manager.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.manager.container.resources }}
           resources: {{- toYaml .Values.components.manager.container.resources | nindent 12 }}
           {{- end }}

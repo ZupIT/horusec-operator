@@ -1,3 +1,5 @@
+demo: false
+
 global:
   administrator:
     enabled: false
@@ -75,13 +77,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
+      resources: {}
         # limits:
         #   cpu: 500m
         #   memory: 1Gi
         # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   analytic:
     name: analytic
@@ -117,13 +131,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   api:
     name: api
@@ -159,13 +185,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   auth:
     name: auth
@@ -203,13 +241,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   manager:
     name: manager
@@ -245,13 +295,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   webhook:
     name: webhook
@@ -280,13 +342,25 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
 
   messages:
     name: messages
@@ -315,10 +389,43 @@ components:
       securityContext:
         enabled: false
         # runAsUser: 1001
-      resources:
-        limits: {}
+      resources: {}
+        # limits:
         #   cpu: 500m
         #   memory: 1Gi
-        requests: {}
+        # requests:
         #   cpu: 300m
         #   memory: 512Mi
+      livenessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+      readinessProbe:
+        failureThreshold: 3
+        initialDelaySeconds: 3
+        periodSeconds: 3
+        successThreshold: 1
+        timeoutSeconds: 1
+
+##
+## PostgreSQL chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+##
+postgresql:
+  postgresqlUsername: horus
+  postgresqlPassword: some-password
+  postgresqlDatabase: horusec_db
+  existingSecret:
+  persistence:
+    enabled: true
+
+##
+## RabbitMQ chart configuration
+## ref: https://github.com/bitnami/charts/blob/master/bitnami/rabbitmq/values.yaml
+##
+rabbitmq:
+  auth:
+    password: qQAUEGhQ6R
+    erlangCookie: DX5NKjaLajEYC9t6hJujJa25PqpbFXF4

@@ -44,20 +44,48 @@ spec:
               value: {{ .Values.components.auth.type }}
             - name: HORUSEC_ENABLE_APPLICATION_ADMIN
               value: {{ .Values.global.administrator.enabled | quote }}
-{{- if .Values.global.administrator.enabled }}
+            {{- if .Values.global.administrator.enabled }}
             - name: HORUSEC_APPLICATION_ADMIN_DATA
               value: '{"username":{{ .Values.global.administrator.username | quote }},"email":{{ .Values.global.administrator.email | quote }},"password":{{ .Values.global.administrator.password | quote }}}'
-{{- end }}
+            {{- end }}
+            {{- if .Values.demo }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
             - name: HORUSEC_BROKER_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  key: username
-                  name: {{ .Values.global.broker.secretName }}
+              value: user
             - name: HORUSEC_BROKER_PASSWORD
               valueFrom:
+               secretKeyRef:
+                key: rabbitmq-password
+                name: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
+            - name: HORUSEC_DATABASE_USERNAME
+              value: {{ .Values.postgresql.postgresqlUsername }}
+            - name: HORUSEC_DATABASE_PASSWORD
+              valueFrom:
                 secretKeyRef:
-                  key: password
-                  name: {{ .Values.global.broker.secretName }}
+                  key: postgresql-password
+                  name: {{ printf "%s-postgresql" .Release.Name }}
+            {{- else }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ .Values.global.broker.host }}
+            - name: HORUSEC_BROKER_PORT
+              value: {{ .Values.global.broker.port | quote }}
+            - name: HORUSEC_BROKER_USERNAME
+              valueFrom:
+               secretKeyRef:
+                key: username
+                name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                key: password
+                name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -68,8 +96,9 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.database.secretName }}
+            {{- end }}
             - name: HORUSEC_DATABASE_SQL_URI
-              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/{{- .Values.global.database.name -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
+              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- include "database.address" . -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -109,17 +138,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /auth/health
-              port: {{ .Values.components.auth.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.auth.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.auth.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.auth.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.auth.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.auth.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /auth/health
-              port: {{ .Values.components.auth.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.auth.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.auth.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.auth.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.auth.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.auth.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.auth.container.resources }}
           resources: {{- toYaml .Values.components.auth.container.resources | nindent 12 }}
           {{- end }}

@@ -64,6 +64,42 @@ spec:
                                 tag:
                                   type: string
                               type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -468,6 +504,42 @@ spec:
                                   type: string
                                 tag:
                                   type: string
+                              type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
                               type: object
                             resources:
                               properties:
@@ -874,6 +946,42 @@ spec:
                                 tag:
                                   type: string
                               type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -1278,6 +1386,42 @@ spec:
                                   type: string
                                 tag:
                                   type: string
+                              type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
                               type: object
                             resources:
                               properties:
@@ -1693,6 +1837,42 @@ spec:
                                 tag:
                                   type: string
                               type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -2098,6 +2278,42 @@ spec:
                                 tag:
                                   type: string
                               type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -2487,6 +2703,42 @@ spec:
                                 tag:
                                   type: string
                               type: object
+                            livenessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
+                            readinessProbe:
+                              properties:
+                                failureThreshold:
+                                  format: int64
+                                  type: integer
+                                initialDelaySeconds:
+                                  format: int64
+                                  type: integer
+                                periodSeconds:
+                                  format: int64
+                                  type: integer
+                                successThreshold:
+                                  format: int64
+                                  type: integer
+                                timeoutSeconds:
+                                  format: int64
+                                  type: integer
+                              type: object
                             resources:
                               properties:
                                 limits:
@@ -2857,6 +3109,8 @@ spec:
                           type: integer
                       type: object
                   type: object
+                demo:
+                  type: boolean
                 global:
                   properties:
                     administrator:

@@ -25,14 +25,32 @@ spec:
               value: {{ .Values.components.webhook.port.http | quote }}
             - name: HORUSEC_SWAGGER_HOST
               value: 0.0.0.0
+            {{- if .Values.demo }}
+            - name: HORUSEC_BROKER_HOST
+              value: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_BROKER_PORT
+              value: "5672"
+            - name: HORUSEC_BROKER_USERNAME
+              value: user
+            - name: HORUSEC_BROKER_PASSWORD
+              valueFrom:
+               secretKeyRef:
+                key: rabbitmq-password
+                name: {{ printf "%s-rabbitmq" .Release.Name }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
+            - name: HORUSEC_DATABASE_USERNAME
+              value: {{ .Values.postgresql.postgresqlUsername }}
+            - name: HORUSEC_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresql-password
+                  name: {{ printf "%s-postgresql" .Release.Name }}
+            {{- else }}
             - name: HORUSEC_BROKER_HOST
               value: {{ .Values.global.broker.host }}
             - name: HORUSEC_BROKER_PORT
               value: {{ .Values.global.broker.port | quote }}
-            - name: HORUSEC_DATABASE_SQL_LOG_MODE
-              value: {{ .Values.global.database.logMode | quote }}
-            - name: HORUSEC_DATABASE_SQL_DIALECT
-              value: {{ .Values.global.database.dialect }}
             - name: HORUSEC_BROKER_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -43,6 +61,8 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.broker.secretName }}
+            - name: HORUSEC_DISABLED_BROKER
+              value: {{ not .Values.global.broker.enabled | quote }}
             - name: HORUSEC_DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -53,8 +73,9 @@ spec:
                 secretKeyRef:
                   key: password
                   name: {{ .Values.global.database.secretName }}
+            {{- end }}
             - name: HORUSEC_DATABASE_SQL_URI
-              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- .Values.global.database.host -}}:{{- .Values.global.database.port -}}/{{- .Values.global.database.name -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
+              value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@{{- include "database.address" . -}}{{- if not .Values.global.database.sslMode -}}?sslmode=disable{{- end -}}"
             - name: HORUSEC_JWT_SECRET_KEY
               valueFrom:
                 secretKeyRef:
@@ -76,17 +97,23 @@ spec:
           livenessProbe:
             httpGet:
               path: /webhook/health
-              port: {{ .Values.components.webhook.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.webhook.container.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.webhook.container.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.webhook.container.livenessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.webhook.container.livenessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.webhook.container.livenessProbe.timeoutSeconds }}
           readinessProbe:
             httpGet:
               path: /webhook/health
-              port: {{ .Values.components.webhook.port.http }}
+              port: http
               scheme: HTTP
-            initialDelaySeconds: 3
-            periodSeconds: 3
+            failureThreshold: {{ .Values.components.webhook.container.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.components.webhook.container.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.components.webhook.container.readinessProbe.periodSeconds }}
+            successThreshold: {{ .Values.components.webhook.container.readinessProbe.successThreshold }}
+            timeoutSeconds: {{ .Values.components.webhook.container.readinessProbe.timeoutSeconds }}
           {{- if .Values.components.messages.container.resources }}
           resources: {{- toYaml .Values.components.messages.container.resources | nindent 12 }}
           {{- end }}
