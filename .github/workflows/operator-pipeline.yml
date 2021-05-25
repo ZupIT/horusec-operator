@@ -1,12 +1,9 @@
-name: Auth
+name: Operator
 on: ["push"]
 
 jobs:
   lint-coverage-build-security:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: auth
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
