@@ -1,0 +1,7 @@
+apiVersion: install.zup.com/v2
+kind: HorusecWebhook
+metadata:
+  name: horusecwebhook-sample
+spec:
+  # Add fields here
+  foo: bar

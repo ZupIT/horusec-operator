@@ -5,7 +5,7 @@ metadata:
   name: horusecmanager-viewer-role
 rules:
 - apiGroups:
-  - install.horusec.io
+  - install.zup.com
   resources:
   - horusecmanagers
   verbs:
@@ -13,7 +13,7 @@ rules:
   - list
   - watch
 - apiGroups:
-  - install.horusec.io
+  - install.zup.com
   resources:
   - horusecmanagers/status
   verbs:

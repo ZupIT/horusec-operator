@@ -1,0 +1,24 @@
+name: Auth
+on: ["push"]
+
+jobs:
+  lint-coverage-build-security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: auth
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16.4'
+      - name: lint
+        run: make lint
+      - name: test
+        run: make test
+      - name: coverage
+        run: make coverage
+      - name: build
+        run: make build
+      - name: security
+        run: make security

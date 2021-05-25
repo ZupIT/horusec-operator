@@ -1,0 +1,7 @@
+apiVersion: install.zup.com/v2
+kind: HorusecManager
+metadata:
+  name: horusecmanager-sample
+spec:
+  # Add fields here
+  foo: bar

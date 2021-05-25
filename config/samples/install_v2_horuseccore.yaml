@@ -1,0 +1,7 @@
+apiVersion: install.zup.com/v2
+kind: HorusecCore
+metadata:
+  name: horuseccore-sample
+spec:
+  # Add fields here
+  foo: bar

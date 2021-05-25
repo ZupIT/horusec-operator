@@ -1,0 +1,24 @@
+# permissions for end users to edit horusecanalytics.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: horusecanalytic-editor-role
+rules:
+- apiGroups:
+  - install.zup.com
+  resources:
+  - horusecanalytics
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - install.zup.com
+  resources:
+  - horusecanalytics/status
+  verbs:
+  - get

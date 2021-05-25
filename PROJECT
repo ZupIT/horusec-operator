@@ -1,16 +1,82 @@
-domain: horusec.io
+domain: zup.com
 layout:
-- helm.sdk.operatorframework.io/v1
+- go.kubebuilder.io/v3
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
-projectName: horusec-operator
+projectName: tmp
+repo: github.com/ZupIT/horusec-operator
 resources:
 - api:
     crdVersion: v1
     namespaced: true
-  domain: horusec.io
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecAuth
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecCore
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecAnalytic
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecWebhook
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecVulnerability
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecAPI
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
+  group: install
+  kind: HorusecMessages
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: zup.com
   group: install
   kind: HorusecManager
-  version: v1alpha1
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2
 version: "3"

@@ -5,7 +5,7 @@ metadata:
   name: horusecmanager-editor-role
 rules:
 - apiGroups:
-  - install.horusec.io
+  - install.zup.com
   resources:
   - horusecmanagers
   verbs:
@@ -17,7 +17,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - install.horusec.io
+  - install.zup.com
   resources:
   - horusecmanagers/status
   verbs:

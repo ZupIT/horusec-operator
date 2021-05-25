@@ -1,0 +1,7 @@
+apiVersion: install.zup.com/v2
+kind: HorusecMessages
+metadata:
+  name: horusecmessages-sample
+spec:
+  # Add fields here
+  foo: bar

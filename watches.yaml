@@ -1,6 +1,0 @@
-# Use the 'create api' subcommand to add watches to this file.
-- group: install.horusec.io
-  version: v1alpha1
-  kind: HorusecManager
-  chart: helm-charts/horusecmanager
-# +kubebuilder:scaffold:watch

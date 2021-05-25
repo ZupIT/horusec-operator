@@ -1,5 +1,0 @@
-apiVersion: install.horusec.io/v1alpha1
-kind: HorusecManager
-metadata:
-  name: sample
-spec: {}

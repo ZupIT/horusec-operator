@@ -1,13 +1,21 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-bin
-
-# editor and IDE paraphernalia
 .idea
-*.swp
-*.swo
-*~
+.vscode
+coverage.out
+charts/
+bin
+*tmp*
+tmp/
+tmp-analysis/
+.env
+.aws/
+*.pem
+deployments/certs
+./images
+*.srl
+.horusec/
+horusec-analysis-*.json
+e2e/**analysis
+horusec-cli/cmd/horusec/start/examples/
+vendor
+**/e2e/cypress/src/screenshots/**
+**/e2e/cypress/src/videos/**

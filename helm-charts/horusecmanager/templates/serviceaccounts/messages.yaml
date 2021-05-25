@@ -1,9 +1,0 @@
-{{- if .Values.components.messages.enabled }}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: horusec-messages
-  name: messages
-  namespace: {{ .Release.Namespace }}
-{{- end }}
