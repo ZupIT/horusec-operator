@@ -2,7 +2,7 @@
 .vscode
 coverage.out
 charts/
-bin/
+*bin*
 *tmp*
 tmp/
 tmp-analysis/
@@ -13,9 +13,5 @@ deployments/certs
 ./images
 *.srl
 .horusec/
-horusec-analysis-*.json
 e2e/**analysis
-horusec-cli/cmd/horusec/start/examples/
 vendor
-**/e2e/cypress/src/screenshots/**
-**/e2e/cypress/src/videos/**
