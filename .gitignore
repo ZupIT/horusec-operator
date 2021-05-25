@@ -2,7 +2,7 @@
 .vscode
 coverage.out
 charts/
-bin
+bin/
 *tmp*
 tmp/
 tmp-analysis/
