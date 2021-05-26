@@ -6,20 +6,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: horusecs.install.zup.com
+  name: horusecplatforms.install.zup.com
 spec:
   group: install.zup.com
   names:
-    kind: Horusec
-    listKind: HorusecList
-    plural: horusecs
-    singular: horusec
+    kind: HorusecPlatform
+    listKind: HorusecPlatformList
+    plural: horusecplatforms
+    singular: horusecplatform
   scope: Namespaced
   versions:
   - name: v2
     schema:
       openAPIV3Schema:
-        description: Horusec is the Schema for the horusecs API
+        description: HorusecPlatform is the Schema for the horusecs API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -34,15 +34,15 @@ spec:
           metadata:
             type: object
           spec:
-            description: HorusecSpec defines the desired state of Horusec
+            description: HorusecPlatformSpec defines the desired state of HorusecPlatform
             properties:
               foo:
-                description: Foo is an example field of Horusec. Edit horusec_types.go
+                description: Foo is an example field of HorusecPlatform. Edit horusec_types.go
                   to remove/update
                 type: string
             type: object
           status:
-            description: HorusecStatus defines the observed state of Horusec
+            description: HorusecPlatformStatus defines the observed state of HorusecPlatform
             type: object
         type: object
     served: true

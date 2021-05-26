@@ -77,20 +77,20 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.HorusecReconciler{
+	if err = (&controllers.HorusecPlatformReconciler{
 		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Horusec"),
+		Log:    ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Horusec")
+		setupLog.Error(err, "unable to create controller", "controller", "HorusecPlatform")
 		os.Exit(1)
 	}
-	if err = (&controllers.HorusecReconciler{
+	if err = (&controllers.HorusecPlatformReconciler{
 		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("Horusec"),
+		Log:    ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Horusec")
+		setupLog.Error(err, "unable to create controller", "controller", "HorusecPlatform")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder
