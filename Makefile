@@ -5,8 +5,8 @@ GOLANG_CI_LINT ?= ./bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-operator
 HORUSEC ?= horusec
-CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
-KUSTOMIZE = $(shell pwd)/bin/kustomize
+CONTROLLER_GEN ?= ./bin/controller-gen
+KUSTOMIZE ?= ./bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 
 fmt:
@@ -52,6 +52,20 @@ pipeline: fmt fix-imports lint test coverage build security
 
 
 ######### Operator commands #########
+# go-get-tool will 'go get' any package $2 and install it to $1.
+PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+define go-get-tool
+@[ -f $(1) ] || { \
+set -e ;\
+TMP_DIR=$$(mktemp -d) ;\
+cd $$TMP_DIR ;\
+go mod init tmp ;\
+echo "Downloading $(2)" ;\
+GOBIN=$(PROJECT_DIR)/bin go get $(2) ;\
+rm -rf $$TMP_DIR ;\
+}
+endef
+
 kustomize:
 	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
 

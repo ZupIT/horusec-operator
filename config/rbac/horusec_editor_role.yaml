@@ -1,0 +1,24 @@
+# permissions for end users to edit horusecs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: horusec-editor-role
+rules:
+- apiGroups:
+  - install.zup.com
+  resources:
+  - horusecs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - install.zup.com
+  resources:
+  - horusecs/status
+  verbs:
+  - get
