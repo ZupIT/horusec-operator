@@ -5,6 +5,9 @@ GOLANG_CI_LINT ?= ./bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-operator
 HORUSEC ?= horusec
+CONTROLLER_GEN = $(shell pwd)/bin/controller-gen
+KUSTOMIZE = $(shell pwd)/bin/kustomize
+CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -47,5 +50,22 @@ update-swagger:
 
 pipeline: fmt fix-imports lint test coverage build security
 
-docker-build: ## Build docker image with the api.
-	docker build -t ${IMAGE_NAME} -f ./deployments/dockerfiles/Dockerfile .
+
+######### Operator commands #########
+kustomize:
+	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
+
+controller-gen:
+	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.4.1)
+
+manifests: controller-gen
+	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config="./config/crd/bases"
+
+generate: controller-gen
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
+
+install: manifests kustomize
+	$(KUSTOMIZE) build config/crd | kubectl apply -f -
+
+uninstall: manifests kustomize
+	$(KUSTOMIZE) build config/crd | kubectl delete -f -
