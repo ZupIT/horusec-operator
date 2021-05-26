@@ -18,13 +18,14 @@ import (
 	"context"
 	"time"
 
-	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
@@ -71,10 +72,10 @@ func (r *HorusecPlatformReconciler) SetupWithManager(mgr ctrl.Manager) error {
 func (r *HorusecPlatformReconciler) handle(ctx context.Context, operations ...operation.Func) (reconcile.Result, error) {
 	for _, op := range operations {
 		result, err := op(ctx)
-		if err != nil && result == nil {
+		if err != nil {
 			return r.requeueOnErr(err)
 		}
-		if err != nil || (result != nil && result.RequeueRequest) {
+		if result != nil && result.RequeueRequest {
 			return r.requeueAfter(result.RequeueDelay, err)
 		}
 		if result.CancelRequest {

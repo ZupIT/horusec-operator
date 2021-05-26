@@ -16,6 +16,7 @@ package controllers
 
 import (
 	"context"
+
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
