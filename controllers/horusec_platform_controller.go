@@ -75,11 +75,11 @@ func (r *HorusecPlatformReconciler) handle(ctx context.Context, operations ...op
 		if err != nil {
 			return r.requeueOnErr(err)
 		}
-		if result != nil && result.RequeueRequest {
-			return r.requeueAfter(result.RequeueDelay, err)
-		}
-		if result.CancelRequest {
+		if result == nil || result.CancelRequest {
 			return r.doNotRequeue()
+		}
+		if result.RequeueRequest {
+			return r.requeueAfter(result.RequeueDelay, err)
 		}
 	}
 	return r.doNotRequeue()
