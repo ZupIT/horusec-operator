@@ -16,15 +16,15 @@ package controllers
 
 import (
 	"context"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"time"
 
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
@@ -48,11 +48,17 @@ type HorusecPlatformReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = r.Log.WithValues("horusec", req.NamespacedName)
+	log := r.Log.WithValues("horusec", req.NamespacedName)
+	log.Info("reconciling")
 
 	// your logic here
 
-	return ctrl.Result{}, nil
+	result, err := r.handle(ctx)
+
+	log.V(1).
+		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
+		Info("finished reconcile")
+	return result, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
@@ -60,6 +66,22 @@ func (r *HorusecPlatformReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&installv2.HorusecPlatform{}).
 		Complete(r)
+}
+
+func (r *HorusecPlatformReconciler) handle(ctx context.Context, operations ...operation.Func) (reconcile.Result, error) {
+	for _, op := range operations {
+		result, err := op(ctx)
+		if err != nil && result == nil {
+			return r.requeueOnErr(err)
+		}
+		if err != nil || (result != nil && result.RequeueRequest) {
+			return r.requeueAfter(result.RequeueDelay, err)
+		}
+		if result.CancelRequest {
+			return r.doNotRequeue()
+		}
+	}
+	return r.doNotRequeue()
 }
 
 func (r *HorusecPlatformReconciler) doNotRequeue() (reconcile.Result, error) {
