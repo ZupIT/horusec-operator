@@ -1,34 +1,20 @@
-
----
+# permissions for end users to view horusecs.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  creationTimestamp: null
-  name: manager-role
+  name: horusec-viewer-role
 rules:
 - apiGroups:
   - install.horusec.io
   resources:
   - horusecs
   verbs:
-  - create
-  - delete
   - get
   - list
-  - patch
-  - update
   - watch
-- apiGroups:
-  - install.horusec.io
-  resources:
-  - horusecs/finalizers
-  verbs:
-  - update
 - apiGroups:
   - install.horusec.io
   resources:
   - horusecs/status
   verbs:
   - get
-  - patch
-  - update

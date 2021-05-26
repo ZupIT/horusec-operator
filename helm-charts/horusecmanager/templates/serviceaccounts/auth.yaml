@@ -1,9 +1,0 @@
-{{- if .Values.components.auth.enabled }}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: horusec-auth
-  name: auth
-  namespace: {{ .Release.Namespace }}
-{{- end }}
