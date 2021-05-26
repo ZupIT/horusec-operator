@@ -16,6 +16,8 @@ package controllers
 
 import (
 	"context"
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"time"
 
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -58,4 +60,16 @@ func (r *HorusecPlatformReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&installv2.HorusecPlatform{}).
 		Complete(r)
+}
+
+func (r *HorusecPlatformReconciler) doNotRequeue() (reconcile.Result, error) {
+	return reconcile.Result{}, nil
+}
+
+func (r *HorusecPlatformReconciler) requeueOnErr(err error) (reconcile.Result, error) {
+	return reconcile.Result{}, err
+}
+
+func (r *HorusecPlatformReconciler) requeueAfter(duration time.Duration, err error) (reconcile.Result, error) {
+	return reconcile.Result{RequeueAfter: duration}, err
 }
