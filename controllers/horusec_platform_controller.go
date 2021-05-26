@@ -22,7 +22,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	installv2 "github.com/ZupIT/horusec-operator/api/v2"
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object

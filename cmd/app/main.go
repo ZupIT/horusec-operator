@@ -30,7 +30,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	installv2 "github.com/ZupIT/horusec-operator/api/v2"
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/controllers"
 	//+kubebuilder:scaffold:imports
 )

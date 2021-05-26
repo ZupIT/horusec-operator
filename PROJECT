@@ -15,5 +15,5 @@ resources:
   group: install
   kind: Horusec
   path: github.com/ZupIT/horusec-operator/api/v2
-  version: v2
+  version: v2alpha1
 version: "3"
