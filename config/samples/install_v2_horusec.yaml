@@ -1,4 +1,4 @@
-apiVersion: install.zup.com/v2
+apiVersion: install.horusec.io/v2
 kind: Horusec
 metadata:
   name: horusec-sample

@@ -6,9 +6,9 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: horusecplatforms.install.zup.com
+  name: horusecplatforms.install.horusec.io
 spec:
-  group: install.zup.com
+  group: install.horusec.io
   names:
     kind: HorusecPlatform
     listKind: HorusecPlatformList

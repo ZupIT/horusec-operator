@@ -32,9 +32,9 @@ type HorusecPlatformReconciler struct {
 	Scheme *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=install.zup.com,resources=horusecs,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=install.zup.com,resources=horusecs/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=install.zup.com,resources=horusecs/finalizers,verbs=update
+//+kubebuilder:rbac:groups=install.horusec.io,resources=horusecs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=install.horusec.io,resources=horusecs/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=install.horusec.io,resources=horusecs/finalizers,verbs=update
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.

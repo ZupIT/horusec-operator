@@ -70,7 +70,7 @@ func main() {
 		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
-		LeaderElectionID:       "719835f9.zup.com",
+		LeaderElectionID:       "719835f9.horusec.io",
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")

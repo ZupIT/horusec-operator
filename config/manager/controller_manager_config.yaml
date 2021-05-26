@@ -8,4 +8,4 @@ webhook:
   port: 9443
 leaderElection:
   leaderElect: true
-  resourceName: 719835f9.zup.com
+  resourceName: 719835f9.horusec.io
