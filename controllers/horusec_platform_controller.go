@@ -16,13 +16,11 @@ package controllers
 
 import (
 	"context"
-	"time"
 
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
@@ -53,9 +51,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log.Info("reconciling")
 
 	// your logic here
-
-	result, err := r.handle(ctx)
-
+	result, err := operation.NewHandler().Handle(ctx)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
 		Info("finished reconcile")
@@ -67,33 +63,4 @@ func (r *HorusecPlatformReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&installv2.HorusecPlatform{}).
 		Complete(r)
-}
-
-func (r *HorusecPlatformReconciler) handle(
-	ctx context.Context, operations ...operation.Func) (reconcile.Result, error) {
-	for _, op := range operations {
-		result, err := op(ctx)
-		if err != nil {
-			return r.requeueOnErr(err)
-		}
-		if result == nil || result.CancelRequest {
-			return r.doNotRequeue()
-		}
-		if result.RequeueRequest {
-			return r.requeueAfter(result.RequeueDelay, err)
-		}
-	}
-	return r.doNotRequeue()
-}
-
-func (r *HorusecPlatformReconciler) doNotRequeue() (reconcile.Result, error) {
-	return reconcile.Result{}, nil
-}
-
-func (r *HorusecPlatformReconciler) requeueOnErr(err error) (reconcile.Result, error) {
-	return reconcile.Result{}, err
-}
-
-func (r *HorusecPlatformReconciler) requeueAfter(duration time.Duration, err error) (reconcile.Result, error) {
-	return reconcile.Result{RequeueAfter: duration}, err
 }
