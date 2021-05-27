@@ -2,9 +2,10 @@ package operation
 
 import (
 	"context"
-	"time"
 
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+
+	"github.com/ZupIT/horusec-operator/internal/requeue"
 )
 
 type Handler struct {
@@ -19,26 +20,14 @@ func (h *Handler) Handle(ctx context.Context) (reconcile.Result, error) {
 	for _, op := range h.operations {
 		result, err := op(ctx)
 		if err != nil {
-			return h.requeueOnErr(err)
+			return requeue.OnErr(err)
 		}
 		if result == nil || result.CancelRequest {
-			return h.doNotRequeue()
+			return requeue.Not()
 		}
 		if result.RequeueRequest {
-			return h.requeueAfter(result.RequeueDelay, err)
+			return requeue.After(result.RequeueDelay, err)
 		}
 	}
-	return h.doNotRequeue()
-}
-
-func (h *Handler) doNotRequeue() (reconcile.Result, error) {
-	return reconcile.Result{}, nil
-}
-
-func (h *Handler) requeueOnErr(err error) (reconcile.Result, error) {
-	return reconcile.Result{}, err
-}
-
-func (h *Handler) requeueAfter(duration time.Duration, err error) (reconcile.Result, error) {
-	return reconcile.Result{RequeueAfter: duration}, err
+	return requeue.Not()
 }
