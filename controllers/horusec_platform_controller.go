@@ -23,6 +23,7 @@ import (
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	"github.com/ZupIT/horusec-operator/internal/requeue"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
@@ -55,7 +56,13 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log := r.log.WithValues("horusec", req.NamespacedName)
 	log.Info("reconciling")
 
-	// your logic here
+	adapter, err := r.svc.LookupResourceAdapter(ctx, req.NamespacedName)
+	if err != nil {
+		return requeue.OnErr(err)
+	} else if adapter == nil {
+		return requeue.Not()
+	}
+
 	result, err := operation.NewHandler().Handle(ctx)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
