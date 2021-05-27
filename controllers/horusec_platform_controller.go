@@ -69,7 +69,8 @@ func (r *HorusecPlatformReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-func (r *HorusecPlatformReconciler) handle(ctx context.Context, operations ...operation.Func) (reconcile.Result, error) {
+func (r *HorusecPlatformReconciler) handle(
+	ctx context.Context, operations ...operation.Func) (reconcile.Result, error) {
 	for _, op := range operations {
 		result, err := op(ctx)
 		if err != nil {
