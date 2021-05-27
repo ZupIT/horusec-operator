@@ -28,7 +28,7 @@ linters-settings:
       - evalOrder
       - unnamedResult
   gocyclo:
-    min-complexity: 5
+    min-complexity: 10
   goimports:
     local-prefixes: github.com/ZupIT/horusec-operator
   golint:
