@@ -23,6 +23,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
@@ -46,11 +47,15 @@ type HorusecPlatformReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	_ = r.Log.WithValues("horusec", req.NamespacedName)
+	log := r.Log.WithValues("horusec", req.NamespacedName)
+	log.Info("reconciling")
 
 	// your logic here
-
-	return ctrl.Result{}, nil
+	result, err := operation.NewHandler().Handle(ctx)
+	log.V(1).
+		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
+		Info("finished reconcile")
+	return result, err
 }
 
 // SetupWithManager sets up the controller with the Manager.
