@@ -18,19 +18,24 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
-	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
-	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/horusec"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
 type HorusecPlatformReconciler struct {
-	client.Client
-	Log    logr.Logger
-	Scheme *runtime.Scheme
+	svc *horusec.Service
+	log logr.Logger
+}
+
+func NewHorusecPlatformReconciler(svc *horusec.Service) *HorusecPlatformReconciler {
+	return &HorusecPlatformReconciler{
+		svc: svc,
+		log: ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
+	}
 }
 
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecs,verbs=get;list;watch;create;update;patch;delete
@@ -47,7 +52,7 @@ type HorusecPlatformReconciler struct {
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := r.Log.WithValues("horusec", req.NamespacedName)
+	log := r.log.WithValues("horusec", req.NamespacedName)
 	log.Info("reconciling")
 
 	// your logic here
