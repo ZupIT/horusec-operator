@@ -8,6 +8,7 @@ import (
 
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
+	core "k8s.io/api/core/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -71,6 +72,18 @@ func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, fmt.Errorf("failed to list Auth deployments: %w", err)
+	}
+	return list, nil
+}
+
+func (s *Service) ListAuthServiceAccounts(ctx context.Context, namespace string) (*core.ServiceAccountList, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(auth.Labels),
+	}
+	list := &core.ServiceAccountList{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list Auth service accounts: %w", err)
 	}
 	return list, nil
 }
