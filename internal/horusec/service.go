@@ -64,14 +64,15 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	return nil
 }
 
-func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v1.DeploymentList, error) {
+func (s *Service) ListDeployments(ctx context.Context,
+	namespace string, matchingLabels map[string]string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(auth.Labels),
+		k8s.MatchingLabels(matchingLabels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list Auth deployments: %w", err)
+		return nil, fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err)
 	}
 	return list, nil
 }

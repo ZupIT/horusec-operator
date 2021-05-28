@@ -3,8 +3,15 @@ package horusec
 import (
 	"context"
 	"fmt"
+	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
+	"github.com/ZupIT/horusec-operator/internal/horusec/api"
+	"github.com/ZupIT/horusec-operator/internal/horusec/core"
+	"github.com/ZupIT/horusec-operator/internal/horusec/manager"
+	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
+	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
+	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 
-	core "k8s.io/api/core/v1"
+	coreV1 "k8s.io/api/core/v1"
 
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -31,7 +38,176 @@ func (a *Adapter) EnsureAuthDeployments(ctx context.Context) (*operation.Result,
 		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
 	}
 
-	deps, err := a.svc.ListAuthDeployments(ctx, r.Namespace)
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, auth.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureCoreDeployments(ctx context.Context) (*operation.Result, error) {
+	r := a.resource
+	desired := core.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, core.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureApiDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := api.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, api.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureMessagesDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := messages.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, messages.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureAnalyticDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := analytic.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, analytic.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureManagerDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := manager.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, manager.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureVulnerabilityDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := vulnerability.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, vulnerability.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureWebhookDeployments(ctx context.Context) (*operation.Result, error) {
+		r := a.resource
+	desired := webhook.NewDeployment(r)
+	if err := controllerutil.SetControllerReference(r, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, webhook.Labels)
+	if err != nil {
+		return nil, err
+	}
+
+	inv := inventory.ForDeployments(deps.Items, []appsv1.Deployment{*desired})
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
+	r := a.resource
+
+	desired := webhook.NewDeployment(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
+	}
+
+	deps, err := a.svc.ListDeployments(ctx, r.Namespace, webhook.Labels)
 	if err != nil {
 		return nil, err
 	}
@@ -61,10 +237,6 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 	panic("implement me") // TODO
 }
 
-func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
@@ -80,7 +252,7 @@ func (a *Adapter) EnsureServicesAccounts(ctx context.Context) (*operation.Result
 		return nil, fmt.Errorf("failed to set Service Account %q owner reference: %v", desired.GetName(), err)
 	}
 
-	inv := inventory.ForServiceAccount(servicesAccounts.Items, []core.ServiceAccount{*desired})
+	inv := inventory.ForServiceAccount(servicesAccounts.Items, []coreV1.ServiceAccount{*desired})
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
