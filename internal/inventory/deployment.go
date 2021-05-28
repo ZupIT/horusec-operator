@@ -14,6 +14,7 @@ type Deployment struct {
 	Delete []appsv1.Deployment
 }
 
+//nolint:funlen, gocritic // to improve in the future
 func ForDeployments(existing, desired []appsv1.Deployment) Object {
 	var update []client.Object
 	mcreate := deploymentMap(desired)
@@ -51,6 +52,7 @@ func ForDeployments(existing, desired []appsv1.Deployment) Object {
 	}
 }
 
+//nolint:gocritic // to improve in the future
 func deploymentMap(deps []appsv1.Deployment) map[string]appsv1.Deployment {
 	m := map[string]appsv1.Deployment{}
 	for _, d := range deps {
@@ -59,6 +61,7 @@ func deploymentMap(deps []appsv1.Deployment) map[string]appsv1.Deployment {
 	return m
 }
 
+//nolint:gocritic, gosec, exportloopref // to improve in the future
 func deploymentList(m map[string]appsv1.Deployment) []client.Object {
 	var l []client.Object
 	for _, v := range m {

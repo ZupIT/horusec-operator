@@ -16,6 +16,7 @@ var Labels = map[string]string{
 	"app.kubernetes.io/managed-by": "horusec",
 }
 
+//nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 	var replicas int32 = 1
 	probe := corev1.Probe{

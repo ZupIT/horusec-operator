@@ -3,6 +3,7 @@ package horusec
 import (
 	"context"
 	"fmt"
+
 	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 
 	"github.com/go-logr/logr"
@@ -36,6 +37,7 @@ func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) 
 	return r, nil
 }
 
+//nolint:funlen // to improve in the future
 func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	for _, obj := range inv.Create {
 		if err := s.client.Create(ctx, obj); err != nil {

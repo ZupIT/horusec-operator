@@ -18,7 +18,8 @@ func NewAdapterFactory(scheme *runtime.Scheme, svc *Service) *AdapterFactory {
 	return &AdapterFactory{scheme: scheme, svc: svc}
 }
 
-func (a *AdapterFactory) CreateHorusecPlatformAdapter(ctx context.Context, key client.ObjectKey) (controllers.HorusecPlatformAdapter, error) {
+func (a *AdapterFactory) CreateHorusecPlatformAdapter(
+	ctx context.Context, key client.ObjectKey) (controllers.HorusecPlatformAdapter, error) {
 	svc := a.svc
 	scheme := a.scheme
 	resource, err := svc.LookupHorusecPlatform(ctx, key)

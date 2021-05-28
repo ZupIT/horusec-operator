@@ -52,6 +52,7 @@ func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconc
 //
 // For more details, check Reconcile and its Result here:
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
+//nolint:funlen // to improve in the future
 func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := r.log.WithValues("horusec", req.NamespacedName)
 	log.Info("reconciling")

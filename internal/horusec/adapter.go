@@ -21,6 +21,7 @@ type Adapter struct {
 	resource *v2alpha1.HorusecPlatform
 }
 
+//nolint:funlen // to improve in the future
 func (a *Adapter) EnsureAuthDeployments(ctx context.Context) (*operation.Result, error) {
 	r := a.resource
 	desired := auth.NewDeployment(r)
