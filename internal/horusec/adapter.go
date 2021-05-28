@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	core "k8s.io/api/core/v1"
+
 	appsv1 "k8s.io/api/apps/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -68,7 +70,21 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 }
 
 func (a *Adapter) EnsureServicesAccounts(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	servicesAccounts, err := a.svc.ListAuthServiceAccounts(ctx, a.resource.GetNamespace())
+	if err != nil {
+		return nil, err
+	}
+
+	desired := auth.NewServiceAccount(a.resource)
+	if err = controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set Service Account %q owner reference: %v", desired.GetName(), err)
+	}
+
+	inv := inventory.ForServiceAccount(servicesAccounts.Items, []core.ServiceAccount{*desired})
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+	return operation.ContinueProcessing()
 }
 
 func (a *Adapter) EnsureAutoscalers(ctx context.Context) (*operation.Result, error) {

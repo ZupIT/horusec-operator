@@ -11,11 +11,6 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
-var Labels = map[string]string{
-	"app.kubernetes.io/name":       "auth",
-	"app.kubernetes.io/managed-by": "horusec",
-}
-
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 	var replicas int32 = 1
