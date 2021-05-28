@@ -4,8 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
-
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
@@ -67,7 +65,7 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(auth.Labels),
+		k8s.MatchingLabels(Labels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
@@ -79,7 +77,7 @@ func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v
 func (s *Service) ListAuthServiceAccounts(ctx context.Context, namespace string) (*core.ServiceAccountList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(auth.Labels),
+		k8s.MatchingLabels(Labels),
 	}
 	list := &core.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {

@@ -1,4 +1,4 @@
-package auth
+package analytic
 
 import (
 	"github.com/ZupIT/horusec-operator/internal/horusec"

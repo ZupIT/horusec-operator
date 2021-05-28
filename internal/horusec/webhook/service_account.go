@@ -1,4 +1,4 @@
-package auth
+package webhook
 
 import (
 	"github.com/ZupIT/horusec-operator/internal/horusec"

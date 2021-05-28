@@ -1,4 +1,4 @@
-package auth
+package horusec
 
 var Labels = map[string]string{
 	"app.kubernetes.io/name":       "auth",
