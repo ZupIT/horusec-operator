@@ -55,7 +55,7 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	}
 
 	for _, obj := range inv.Delete {
-		if err := s.client.Update(ctx, obj); err != nil {
+		if err := s.client.Delete(ctx, obj); err != nil {
 			return fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err)
 		}
 		s.log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
