@@ -11,12 +11,13 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
+var Labels = map[string]string{
+	"app.kubernetes.io/name":       "auth",
+	"app.kubernetes.io/managed-by": "horusec",
+}
+
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 	var replicas int32 = 1
-	labels := map[string]string{
-		"app.kubernetes.io/name":       "auth",
-		"app.kubernetes.io/managed-by": "horusec",
-	}
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -31,12 +32,13 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),
+			Labels:    Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: &replicas,
-			Selector: &metav1.LabelSelector{MatchLabels: labels},
+			Selector: &metav1.LabelSelector{MatchLabels: Labels},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  "horusec-auth",
 					Image: "docker.io/horuszup/horusec-auth:v2.12.0",

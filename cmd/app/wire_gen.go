@@ -18,9 +18,10 @@ import (
 // Injectors from wire.go:
 
 func newHorusecPlatformReconciler(mgr manager.Manager) (*controllers.HorusecPlatformReconciler, error) {
-	client := extractClient(mgr)
 	runtimeScheme := extractScheme(mgr)
-	service := horusec.NewService(client, runtimeScheme)
-	horusecPlatformReconciler := controllers.NewHorusecPlatformReconciler(service)
+	client := extractClient(mgr)
+	service := horusec.NewService(client)
+	adapterFactory := horusec.NewAdapterFactory(runtimeScheme, service)
+	horusecPlatformReconciler := controllers.NewHorusecPlatformReconciler(adapterFactory)
 	return horusecPlatformReconciler, nil
 }

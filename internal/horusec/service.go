@@ -3,11 +3,10 @@ package horusec
 import (
 	"context"
 	"fmt"
+	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -19,27 +18,22 @@ import (
 type Service struct {
 	client k8s.Client
 	log    logr.Logger
-	scheme *runtime.Scheme
 }
 
-func NewService(client k8s.Client, scheme *runtime.Scheme) *Service {
+func NewService(client k8s.Client) *Service {
 	return &Service{
 		client: client,
 		log:    ctrl.Log.WithName("services").WithName("Horusec"),
-		scheme: scheme,
 	}
 }
 
-func (s *Service) LookupResourceAdapter(ctx context.Context, key k8s.ObjectKey) (*Adapter, error) {
+func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) (*v2alpha1.HorusecPlatform, error) {
 	r := new(v2alpha1.HorusecPlatform)
 	err := s.client.Get(ctx, key, r)
 	if err != nil {
-		if apierrors.IsNotFound(err) {
-			return nil, nil
-		}
 		return nil, fmt.Errorf("failed to lookup resource: %w", err)
 	}
-	return &Adapter{resource: r, svc: s}, nil
+	return r, nil
 }
 
 func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
@@ -70,10 +64,7 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(map[string]string{
-			"app.kubernetes.io/name":       "auth",
-			"app.kubernetes.io/managed-by": "horusec",
-		}),
+		k8s.MatchingLabels(auth.Labels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {

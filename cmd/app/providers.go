@@ -18,7 +18,9 @@ var providers = wire.NewSet(
 	extractScheme,
 
 	controllers.NewHorusecPlatformReconciler,
+	horusec.NewAdapterFactory,
 	horusec.NewService,
+	wire.Bind(new(controllers.AdapterFactory), new(*horusec.AdapterFactory)),
 )
 
 func extractScheme(mgr manager.Manager) *runtime.Scheme {

@@ -18,24 +18,24 @@ import (
 	"context"
 
 	"github.com/go-logr/logr"
+	"k8s.io/apimachinery/pkg/api/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/internal/requeue"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
 type HorusecPlatformReconciler struct {
-	svc *horusec.Service
-	log logr.Logger
+	factory AdapterFactory
+	log     logr.Logger
 }
 
-func NewHorusecPlatformReconciler(svc *horusec.Service) *HorusecPlatformReconciler {
+func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconciler {
 	return &HorusecPlatformReconciler{
-		svc: svc,
-		log: ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
+		factory: factory,
+		log:     ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
 	}
 }
 
@@ -56,11 +56,12 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log := r.log.WithValues("horusec", req.NamespacedName)
 	log.Info("reconciling")
 
-	adapter, err := r.svc.LookupResourceAdapter(ctx, req.NamespacedName)
+	adapter, err := r.factory.CreateHorusecPlatformAdapter(ctx, req.NamespacedName)
 	if err != nil {
+		if errors.IsNotFound(err) {
+			return requeue.Not()
+		}
 		return requeue.OnErr(err)
-	} else if adapter == nil {
-		return requeue.Not()
 	}
 
 	result, err := operation.NewHandler(adapter.EnsureAuthDeployments).Handle(ctx)

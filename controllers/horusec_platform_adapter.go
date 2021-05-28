@@ -17,14 +17,21 @@ package controllers
 import (
 	"context"
 
+	k8s "sigs.k8s.io/controller-runtime/pkg/client"
+
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
+
+type AdapterFactory interface {
+	CreateHorusecPlatformAdapter(ctx context.Context, key k8s.ObjectKey) (HorusecPlatformAdapter, error)
+}
 
 type HorusecPlatformAdapter interface {
 	EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error)
+	EnsureAuthDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureServices(ctx context.Context) (*operation.Result, error)
 	EnsureServicesAccounts(ctx context.Context) (*operation.Result, error)
