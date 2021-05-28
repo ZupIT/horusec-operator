@@ -19,7 +19,8 @@ import (
 
 func newHorusecPlatformReconciler(mgr manager.Manager) (*controllers.HorusecPlatformReconciler, error) {
 	client := extractClient(mgr)
-	service := horusec.NewService(client)
+	runtimeScheme := extractScheme(mgr)
+	service := horusec.NewService(client, runtimeScheme)
 	horusecPlatformReconciler := controllers.NewHorusecPlatformReconciler(service)
 	return horusecPlatformReconciler, nil
 }
