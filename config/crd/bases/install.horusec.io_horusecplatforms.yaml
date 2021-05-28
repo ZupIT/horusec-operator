@@ -36,10 +36,938 @@ spec:
           spec:
             description: HorusecPlatformSpec defines the desired state of HorusecPlatform
             properties:
-              foo:
-                description: Foo is an example field of HorusecPlatform. Edit horusec_types.go
-                  to remove/update
-                type: string
+              components:
+                description: 'INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
+                  Important: Run "make" to regenerate code after modifying this file'
+                properties:
+                  analytic:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  api:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  auth:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                      type:
+                        type: string
+                    type: object
+                  core:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  manager:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  messages:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      enabled:
+                        type: boolean
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      mailServer:
+                        properties:
+                          host:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  vulnerability:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                  webhook:
+                    properties:
+                      container:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                          livenessProbe:
+                            type: string
+                          readinessProbe:
+                            type: string
+                          resources:
+                            type: string
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      extraEnv:
+                        items:
+                          type: string
+                        type: array
+                      ingress:
+                        properties:
+                          enabled:
+                            type: boolean
+                          host:
+                            type: string
+                          path:
+                            type: string
+                          tls:
+                            type: string
+                        type: object
+                      name:
+                        type: string
+                      pod:
+                        properties:
+                          autoscaling:
+                            properties:
+                              enabled:
+                                type: boolean
+                              maxReplicas:
+                                type: integer
+                              minReplicas:
+                                type: integer
+                              targetCPU:
+                                type: integer
+                              targetMemory:
+                                type: integer
+                            type: object
+                          securityContext:
+                            properties:
+                              enabled:
+                                type: boolean
+                              fsGroup:
+                                type: integer
+                              runAsNonRoot:
+                                type: boolean
+                              runAsUser:
+                                type: integer
+                            type: object
+                        type: object
+                      port:
+                        properties:
+                          grpc:
+                            type: integer
+                          http:
+                            type: integer
+                        type: object
+                      replicaCount:
+                        type: integer
+                    type: object
+                type: object
+              global:
+                properties:
+                  administrator:
+                    properties:
+                      email:
+                        type: string
+                      enabled:
+                        type: boolean
+                      password:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                      user:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                    type: object
+                  broker:
+                    properties:
+                      host:
+                        type: string
+                      password:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                      port:
+                        type: integer
+                      user:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                    type: object
+                  database:
+                    properties:
+                      dialect:
+                        type: string
+                      host:
+                        type: string
+                      logMode:
+                        type: boolean
+                      name:
+                        type: string
+                      password:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                      port:
+                        type: integer
+                      sslMode:
+                        type: boolean
+                      user:
+                        properties:
+                          secretKeyRef:
+                            properties:
+                              key:
+                                type: string
+                              name:
+                                type: string
+                            type: object
+                        type: object
+                    type: object
+                  jwt:
+                    properties:
+                      secretKeyRef:
+                        properties:
+                          key:
+                            type: string
+                          name:
+                            type: string
+                        type: object
+                    type: object
+                  keycloak:
+                    properties:
+                      clients:
+                        properties:
+                          clients:
+                            properties:
+                              id:
+                                type: string
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          public:
+                            properties:
+                              id:
+                                type: string
+                            type: object
+                        type: object
+                      internalURL:
+                        type: string
+                      otp:
+                        type: boolean
+                      publicURL:
+                        type: string
+                      realm:
+                        type: string
+                    type: object
+                type: object
             type: object
           status:
             description: HorusecPlatformStatus defines the observed state of HorusecPlatform
