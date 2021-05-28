@@ -51,12 +51,12 @@ type Clients struct {
 }
 
 type Confidential struct {
-	Id           string       `json:"id,omitempty"`
+	ID           string       `json:"id,omitempty"`
 	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
 }
 
 type Public struct {
-	Id string `json:"id,omitempty"`
+	ID string `json:"id,omitempty"`
 }
 
 type Jwt struct {
@@ -77,6 +77,7 @@ type Administrator struct {
 	User     User     `json:"user,omitempty"`
 }
 
+//nolint:golint, stylecheck // no need to be API in uppercase
 type Components struct {
 	Analytic      Analytic      `json:"analytic,omitempty"`
 	Api           Api           `json:"api,omitempty"`
@@ -99,6 +100,7 @@ type Analytic struct {
 	ReplicaCount int       `json:"replicaCount,omitempty"`
 }
 
+//nolint:golint, stylecheck // no need to be API in uppercase
 type Api struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -223,7 +225,7 @@ type Ingress struct {
 	Enabled bool    `json:"enabled,omitempty"`
 	Host    string  `json:"host,omitempty"`
 	Path    string  `json:"path,omitempty"`
-	Tls     *string `json:"tls,omitempty"`
+	TLS     *string `json:"tls,omitempty"`
 }
 
 type Pod struct {
@@ -240,7 +242,7 @@ type Autoscaling struct {
 }
 
 type Port struct {
-	Http int `json:"http,omitempty"`
+	HTTP int `json:"http,omitempty"`
 	Grpc int `json:"grpc,omitempty"`
 }
 
