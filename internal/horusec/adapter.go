@@ -77,55 +77,48 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 	panic("implement me") // TODO
 }
 
-func (a *Adapter) ensureServiceAccounts(
-	ctx context.Context, desired *corev1.ServiceAccount, labels map[string]string) (*operation.Result, error) {
-	servicesAccounts, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(), a.resource.GetName(), labels)
+func (a *Adapter) ensureServiceAccounts(desired *corev1.ServiceAccount) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service account %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
+}
+
+//nolint:funlen // to improve in the future
+func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
+	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
 	if err != nil {
 		return nil, err
 	}
 
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set Service Account %q owner reference: %v", desired.GetName(), err)
+	desired := a.listServiceAccounts()
+	for index := range desired {
+		if err := a.ensureServiceAccounts(&desired[index]); err != nil {
+			return nil, err
+		}
 	}
 
-	inv := inventory.ForServiceAccount(servicesAccounts.Items, []corev1.ServiceAccount{*desired})
+	inv := inventory.ForServiceAccount(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
+
 	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) EnsureAnalyticServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, analytic.NewServiceAccount(a.resource), analytic.Labels)
-}
-
-//nolint:golint, stylecheck // no need to be API
-func (a *Adapter) EnsureApiServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, api.NewServiceAccount(a.resource), api.Labels)
-}
-
-func (a *Adapter) EnsureAuthServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, auth.NewServiceAccount(a.resource), auth.Labels)
-}
-
-func (a *Adapter) EnsureCoreServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, core.NewServiceAccount(a.resource), core.Labels)
-}
-
-func (a *Adapter) EnsureManagerServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, manager.NewServiceAccount(a.resource), manager.Labels)
-}
-
-func (a *Adapter) EnsureMessagesServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, messages.NewServiceAccount(a.resource), messages.Labels)
-}
-
-func (a *Adapter) EnsureVulnerabilityServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, vulnerability.NewServiceAccount(a.resource), vulnerability.Labels)
-}
-
-func (a *Adapter) EnsureWebhookServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, webhook.NewServiceAccount(a.resource), webhook.Labels)
+func (a *Adapter) listServiceAccounts() []corev1.ServiceAccount {
+	return []corev1.ServiceAccount{
+		analytic.NewServiceAccount(a.resource),
+		api.NewServiceAccount(a.resource),
+		auth.NewServiceAccount(a.resource),
+		core.NewServiceAccount(a.resource),
+		manager.NewServiceAccount(a.resource),
+		messages.NewServiceAccount(a.resource),
+		vulnerability.NewServiceAccount(a.resource),
+		webhook.NewServiceAccount(a.resource),
+	}
 }
 
 func (a *Adapter) EnsureAutoscalers(ctx context.Context) (*operation.Result, error) {

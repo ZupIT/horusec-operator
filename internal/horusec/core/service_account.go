@@ -7,8 +7,8 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
-func NewServiceAccount(resource *v2alpha1.HorusecPlatform) *core.ServiceAccount {
-	return &core.ServiceAccount{
+func NewServiceAccount(resource *v2alpha1.HorusecPlatform) core.ServiceAccount {
+	return core.ServiceAccount{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),
