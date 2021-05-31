@@ -92,7 +92,6 @@ func (a *Adapter) ensureServiceAccounts(ctx context.Context, desired *corev1.Ser
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return err
 	}
-
 	return nil
 }
 
