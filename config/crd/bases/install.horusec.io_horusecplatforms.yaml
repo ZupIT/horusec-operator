@@ -13,10 +13,20 @@ spec:
     kind: HorusecPlatform
     listKind: HorusecPlatformList
     plural: horusecplatforms
+    shortNames:
+    - horus
     singular: horusecplatform
   scope: Namespaced
   versions:
-  - name: v2alpha1
+  - additionalPrinterColumns:
+    - description: The status of the platform installation
+      jsonPath: .status.state
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v2alpha1
     schema:
       openAPIV3Schema:
         description: HorusecPlatform is the Schema for the horusecs API
