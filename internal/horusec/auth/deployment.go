@@ -3,8 +3,6 @@ package auth
 import (
 	"strconv"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/labels"
-
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,13 +28,13 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    labels.Labels,
+			Labels:    Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: &replicas,
-			Selector: &metav1.LabelSelector{MatchLabels: labels.Labels},
+			Selector: &metav1.LabelSelector{MatchLabels: Labels},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: labels.Labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  "horusec-auth",
 					Image: "docker.io/horuszup/horusec-auth:v2.12.0",
