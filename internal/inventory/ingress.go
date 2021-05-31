@@ -2,10 +2,12 @@ package inventory
 
 import (
 	"fmt"
+
 	"k8s.io/api/extensions/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+//nolint:gocritic, funlen // to improve in the future
 func ForIngresses(existing, desired []v1beta1.Ingress) Object {
 	var update []client.Object
 	mcreate := ingressMap(desired)
@@ -40,6 +42,7 @@ func ForIngresses(existing, desired []v1beta1.Ingress) Object {
 	}
 }
 
+//nolint:gocritic // to improve in the future
 func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
 	m := map[string]v1beta1.Ingress{}
 	for _, d := range deps {
@@ -48,6 +51,7 @@ func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
 	return m
 }
 
+//nolint:gosec, exportloopref, gocritic // to improve in the future
 func ingressList(m map[string]v1beta1.Ingress) []client.Object {
 	var l []client.Object
 	for _, v := range m {

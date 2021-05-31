@@ -4,11 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/labels"
-
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
+	networkingV1 "k8s.io/api/networking/v1"
 	ctrl "sigs.k8s.io/controller-runtime"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -64,27 +63,44 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	return nil
 }
 
-func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v1.DeploymentList, error) {
+func (s *Service) ListAuthDeployments(
+	ctx context.Context, namespace string, labels map[string]string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels.Labels),
+		k8s.MatchingLabels(labels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list Auth deployments: %w", err)
+		return nil, fmt.Errorf("failed to list auth deployments: %w", err)
 	}
 	return list, nil
 }
 
-func (s *Service) ListServiceAccounts(ctx context.Context, namespace, name string) (*core.ServiceAccountList, error) {
+func (s *Service) ListServiceAccounts(
+	ctx context.Context, namespace, name string, labels map[string]string) (*core.ServiceAccountList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels.Labels),
+		k8s.MatchingLabels(labels),
 	}
 
 	list := &core.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, fmt.Errorf("failed to list %s service accounts: %w", name, err)
+	}
+
+	return list, nil
+}
+
+func (s *Service) ListIngress(
+	ctx context.Context, namespace, name string, labels map[string]string) (*networkingV1.Ingress, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(labels),
+	}
+
+	list := &networkingV1.Ingress{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list %s ingress: %w", name, err)
 	}
 
 	return list, nil
