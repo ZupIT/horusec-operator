@@ -10,16 +10,14 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/controllers"
 	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
 type Adapter struct {
-	conditions controllers.Conditions
-	scheme     *runtime.Scheme
-	svc        *Service
+	scheme *runtime.Scheme
+	svc    *Service
 
 	resource *v2alpha1.HorusecPlatform
 }
