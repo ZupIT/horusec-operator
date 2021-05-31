@@ -39,7 +39,7 @@ func (a *Adapter) EnsureAuthDeployments(ctx context.Context) (*operation.Result,
 		return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired.GetName(), err)
 	}
 
-	deps, err := a.svc.ListAuthDeployments(ctx, r.Namespace)
+	deps, err := a.svc.ListAuthDeployments(ctx, r.Namespace, auth.Labels)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +78,8 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 }
 
 func (a *Adapter) ensureServiceAccounts(
-	ctx context.Context, desired *corev1.ServiceAccount) (*operation.Result, error) {
-	servicesAccounts, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(), a.resource.GetName())
+	ctx context.Context, desired *corev1.ServiceAccount, labels map[string]string) (*operation.Result, error) {
+	servicesAccounts, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(), a.resource.GetName(), labels)
 	if err != nil {
 		return nil, err
 	}
@@ -96,36 +96,36 @@ func (a *Adapter) ensureServiceAccounts(
 }
 
 func (a *Adapter) EnsureAnalyticServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, analytic.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, analytic.NewServiceAccount(a.resource), analytic.Labels)
 }
 
 //nolint:golint, stylecheck // no need to be API
 func (a *Adapter) EnsureApiServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, api.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, api.NewServiceAccount(a.resource), api.Labels)
 }
 
 func (a *Adapter) EnsureAuthServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, auth.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, auth.NewServiceAccount(a.resource), auth.Labels)
 }
 
 func (a *Adapter) EnsureCoreServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, core.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, core.NewServiceAccount(a.resource), core.Labels)
 }
 
 func (a *Adapter) EnsureManagerServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, manager.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, manager.NewServiceAccount(a.resource), manager.Labels)
 }
 
 func (a *Adapter) EnsureMessagesServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, messages.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, messages.NewServiceAccount(a.resource), messages.Labels)
 }
 
 func (a *Adapter) EnsureVulnerabilityServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, vulnerability.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, vulnerability.NewServiceAccount(a.resource), vulnerability.Labels)
 }
 
 func (a *Adapter) EnsureWebhookServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	return a.ensureServiceAccounts(ctx, webhook.NewServiceAccount(a.resource))
+	return a.ensureServiceAccounts(ctx, webhook.NewServiceAccount(a.resource), webhook.Labels)
 }
 
 func (a *Adapter) EnsureAutoscalers(ctx context.Context) (*operation.Result, error) {
