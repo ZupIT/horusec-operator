@@ -4,21 +4,22 @@ import (
 	"context"
 	"fmt"
 
-	core "k8s.io/api/core/v1"
-
 	appsv1 "k8s.io/api/apps/v1"
+	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/controllers"
 	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
 type Adapter struct {
-	scheme *runtime.Scheme
-	svc    *Service
+	conditions controllers.Conditions
+	scheme     *runtime.Scheme
+	svc        *Service
 
 	resource *v2alpha1.HorusecPlatform
 }

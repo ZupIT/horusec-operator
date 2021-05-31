@@ -971,6 +971,34 @@ spec:
             type: object
           status:
             description: HorusecPlatformStatus defines the observed state of HorusecPlatform
+            properties:
+              conditions:
+                items:
+                  properties:
+                    lastProbeTime:
+                      format: date-time
+                      type: string
+                    lastTransitionTime:
+                      format: date-time
+                      type: string
+                    message:
+                      type: string
+                    reason:
+                      type: string
+                    status:
+                      type: string
+                    type:
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              state:
+                type: string
+            required:
+            - conditions
+            - state
             type: object
         type: object
     served: true
