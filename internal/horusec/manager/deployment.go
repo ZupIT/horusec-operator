@@ -8,7 +8,7 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
-//nolint:lll, funlen // to improve in the future
+//nolint:funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 	var replicas int32 = 1
 	var httpPort int32 = 8043

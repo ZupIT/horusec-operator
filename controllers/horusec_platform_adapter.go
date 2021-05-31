@@ -16,6 +16,7 @@ package controllers
 
 import (
 	"context"
+
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/ZupIT/horusec-operator/internal/operation"
@@ -32,7 +33,7 @@ type HorusecPlatformAdapter interface {
 	EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error)
 	EnsureAuthDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureCoreDeployments(ctx context.Context) (*operation.Result, error)
-	EnsureApiDeployments(ctx context.Context) (*operation.Result, error)
+	EnsureAPIDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureMessagesDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureAnalyticDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureManagerDeployments(ctx context.Context) (*operation.Result, error)
