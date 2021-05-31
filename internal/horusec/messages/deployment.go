@@ -12,7 +12,7 @@ import (
 )
 
 //nolint:lll, funlen // to improve in the future
-func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
+func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 	component := resource.GetMessagesComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
@@ -22,7 +22,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			},
 		},
 	}
-	return &appsv1.Deployment{
+	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),

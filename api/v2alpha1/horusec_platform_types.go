@@ -90,45 +90,157 @@ type Components struct {
 }
 
 type Analytic struct {
-	BaseComponent
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Analytic) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Api struct {
-	BaseComponent
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Api) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Auth struct {
-	BaseComponent
-	Type     string   `json:"type,omitempty"`
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Type         string    `json:"type,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Auth) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Core struct {
-	BaseComponent
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Core) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Manager struct {
-	BaseComponent
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Manager) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Messages struct {
-	BaseComponent
-	Enabled    bool       `json:"enabled,omitempty"`
-	MailServer MailServer `json:"mailServer,omitempty"`
+	Container    Container  `json:"container,omitempty"`
+	ExtraEnv     []string   `json:"extraEnv,omitempty"`
+	Ingress      Ingress    `json:"ingress,omitempty"`
+	Name         string     `json:"name,omitempty"`
+	Pod          Pod        `json:"pod,omitempty"`
+	Port         Port       `json:"port,omitempty"`
+	ReplicaCount *int32     `json:"replicaCount,omitempty"`
+	Enabled      bool       `json:"enabled,omitempty"`
+	MailServer   MailServer `json:"mailServer,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Messages) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Vulnerability struct {
-	BaseComponent
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Vulnerability) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Webhook struct {
-	BaseComponent
-	Database Database `json:"database,omitempty"`
+	Container    Container `json:"container,omitempty"`
+	ExtraEnv     []string  `json:"extraEnv,omitempty"`
+	Ingress      Ingress   `json:"ingress,omitempty"`
+	Name         string    `json:"name,omitempty"`
+	Pod          Pod       `json:"pod,omitempty"`
+	Port         Port      `json:"port,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Webhook) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Container struct {

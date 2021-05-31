@@ -136,12 +136,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -164,6 +168,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   api:
@@ -203,6 +208,41 @@ spec:
                                 type: integer
                             type: object
                         type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
                       extraEnv:
                         items:
                           type: string
@@ -227,12 +267,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -255,6 +299,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   auth:
@@ -294,6 +339,41 @@ spec:
                                 type: integer
                             type: object
                         type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
                       extraEnv:
                         items:
                           type: string
@@ -318,12 +398,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -346,6 +430,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                       type:
                         type: string
@@ -387,6 +472,41 @@ spec:
                                 type: integer
                             type: object
                         type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
                       extraEnv:
                         items:
                           type: string
@@ -411,12 +531,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -439,6 +563,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   manager:
@@ -502,12 +627,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -530,6 +659,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   messages:
@@ -622,12 +752,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -650,6 +784,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   vulnerability:
@@ -689,6 +824,41 @@ spec:
                                 type: integer
                             type: object
                         type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
                       extraEnv:
                         items:
                           type: string
@@ -713,12 +883,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -741,6 +915,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                   webhook:
@@ -780,6 +955,41 @@ spec:
                                 type: integer
                             type: object
                         type: object
+                      database:
+                        properties:
+                          dialect:
+                            type: string
+                          host:
+                            type: string
+                          logMode:
+                            type: boolean
+                          name:
+                            type: string
+                          password:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                          port:
+                            type: integer
+                          sslMode:
+                            type: boolean
+                          user:
+                            properties:
+                              secretKeyRef:
+                                properties:
+                                  key:
+                                    type: string
+                                  name:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
                       extraEnv:
                         items:
                           type: string
@@ -804,12 +1014,16 @@ spec:
                               enabled:
                                 type: boolean
                               maxReplicas:
+                                format: int32
                                 type: integer
                               minReplicas:
+                                format: int32
                                 type: integer
                               targetCPU:
+                                format: int32
                                 type: integer
                               targetMemory:
+                                format: int32
                                 type: integer
                             type: object
                           securityContext:
@@ -832,6 +1046,7 @@ spec:
                             type: integer
                         type: object
                       replicaCount:
+                        format: int32
                         type: integer
                     type: object
                 type: object

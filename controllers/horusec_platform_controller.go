@@ -67,30 +67,8 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 	result, err := operation.NewHandler(
 		adapter.EnsureServicesAccounts,
-
-		adapter.EnsureAuthDeployments,
-		adapter.EnsureAuthAutoscaling,
-
-		adapter.EnsureCoreDeployments,
-		adapter.EnsureCoreAutoscaling,
-
-		adapter.EnsureAPIDeployments,
-		adapter.EnsureAPIAutoscaling,
-
-		adapter.EnsureMessagesDeployments,
-		adapter.EnsureMessagesAutoscaling,
-
-		adapter.EnsureAnalyticDeployments,
-		adapter.EnsureAnalyticAutoscaling,
-
-		adapter.EnsureManagerDeployments,
-		adapter.EnsureManagerAutoscaling,
-
-		adapter.EnsureVulnerabilityDeployments,
-		adapter.EnsureVulnerabilityAutoscaling,
-
-		adapter.EnsureWebhookDeployments,
-		adapter.EnsureWebhookAutoscaling,
+		adapter.EnsureDeployments,
+		adapter.EnsureAutoscaling,
 	).Handle(ctx)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
