@@ -3,7 +3,8 @@ package inventory
 import (
 	"fmt"
 
-	"k8s.io/api/extensions/v1beta1"
+	"k8s.io/api/networking/v1beta1"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
