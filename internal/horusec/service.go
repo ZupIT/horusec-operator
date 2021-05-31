@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
+	"github.com/ZupIT/horusec-operator/internal/horusec/labels"
 
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
@@ -67,7 +67,7 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(auth.Labels),
+		k8s.MatchingLabels(labels.Labels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
@@ -76,14 +76,16 @@ func (s *Service) ListAuthDeployments(ctx context.Context, namespace string) (*v
 	return list, nil
 }
 
-func (s *Service) ListAuthServiceAccounts(ctx context.Context, namespace string) (*core.ServiceAccountList, error) {
+func (s *Service) ListServiceAccounts(ctx context.Context, namespace, name string) (*core.ServiceAccountList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(auth.Labels),
+		k8s.MatchingLabels(labels.Labels),
 	}
+
 	list := &core.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list Auth service accounts: %w", err)
+		return nil, fmt.Errorf("failed to list %s service accounts: %w", name, err)
 	}
+
 	return list, nil
 }
