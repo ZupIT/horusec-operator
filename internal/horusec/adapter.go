@@ -3,7 +3,7 @@ package horusec
 import (
 	"context"
 	"fmt"
-
+	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
 	"k8s.io/api/networking/v1beta1"
 
 	corev1 "k8s.io/api/core/v1"
@@ -139,31 +139,17 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 		return nil, err
 	}
 
-	desired := a.listIngress()
-	for index := range desired {
-		if err := a.ensureIngress(&desired[index]); err != nil {
-			return nil, err
-		}
+	desired := ingress.NewIngress(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
 	}
 
-	inv := inventory.ForIngresses(existing.Items, desired)
+	inv := inventory.ForIngresses(existing.Items, []v1beta1.Ingress{*desired})
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
 	return operation.ContinueProcessing()
-}
-
-func (a *Adapter) listIngress() []v1beta1.Ingress {
-	return []v1beta1.Ingress{}
-}
-
-func (a *Adapter) ensureIngress(desired *v1beta1.Ingress) error {
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
-	}
-
-	return nil
 }
 
 func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {

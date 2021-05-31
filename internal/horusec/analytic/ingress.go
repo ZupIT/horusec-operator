@@ -1,17 +1,61 @@
 package analytic
 
 import (
-	v1 "k8s.io/api/networking/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"k8s.io/api/networking/v1beta1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
-func NewIngress(resource *v2alpha1.HorusecPlatform) *v1.Ingress {
-	return &v1.Ingress{
-		TypeMeta:   metav1.TypeMeta{},
-		ObjectMeta: metav1.ObjectMeta{},
-		Spec:       v1.IngressSpec{},
-		Status:     v1.IngressStatus{},
+func NewIngress(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathType) v1beta1.IngressRule {
+	if !resource.Spec.Components.Analytic.Ingress.Enabled {
+		return v1beta1.IngressRule{}
+	}
+
+	return v1beta1.IngressRule{
+		Host: resource.Spec.Components.Analytic.Ingress.Host,
+		IngressRuleValue: v1beta1.IngressRuleValue{
+			HTTP: &v1beta1.HTTPIngressRuleValue{
+				Paths: []v1beta1.HTTPIngressPath{
+					{
+						Path:     resource.Spec.Components.Analytic.Ingress.Path,
+						PathType: &pathType,
+						Backend: v1beta1.IngressBackend{
+							ServiceName: resource.Spec.Components.Analytic.Name,
+							ServicePort: intstr.IntOrString{
+								Type:   0,
+								IntVal: int32(resource.Spec.Components.Analytic.Port.HTTP),
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func NewIngress(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathType) v1beta1.IngressRule {
+	if !resource.Spec.Components.Analytic.Ingress.TLS {
+		return v1beta1.IngressRule{}
+	}
+
+	return v1beta1.IngressRule{
+		Host: resource.Spec.Components.Analytic.Ingress.Host,
+		IngressRuleValue: v1beta1.IngressRuleValue{
+			HTTP: &v1beta1.HTTPIngressRuleValue{
+				Paths: []v1beta1.HTTPIngressPath{
+					{
+						Path:     resource.Spec.Components.Analytic.Ingress.Path,
+						PathType: &pathType,
+						Backend: v1beta1.IngressBackend{
+							ServiceName: resource.Spec.Components.Analytic.Name,
+							ServicePort: intstr.IntOrString{
+								Type:   0,
+								IntVal: int32(resource.Spec.Components.Analytic.Port.HTTP),
+							},
+						},
+					},
+				},
+			},
+		},
 	}
 }
