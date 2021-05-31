@@ -13,7 +13,7 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
-	var replicas int32 = 1
+	component := resource.GetAuthComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -22,8 +22,6 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			},
 		},
 	}
-	var httpPort int32 = 8006
-	var grpcPort int32 = 8007
 	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
@@ -31,7 +29,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			Labels:    Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: &replicas,
+			Replicas: component.GetReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: Labels},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
@@ -39,8 +37,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 					Name:  "horusec-auth",
 					Image: "docker.io/horuszup/horusec-auth:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(int(httpPort))},
-						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(int(grpcPort))},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
+						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(component.Port.Grpc)},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_DISABLED_EMAILS", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
@@ -60,8 +58,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", "horusec-jwt", "jwt-token"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: httpPort},
-						{Name: "grpc", ContainerPort: grpcPort},
+						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "grpc", ContainerPort: int32(component.Port.Grpc)},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

@@ -13,7 +13,7 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
-	var replicas int32 = 1
+	component := resource.GetMessagesComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -22,7 +22,6 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			},
 		},
 	}
-	var httpPort int32 = 8002
 	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
@@ -30,7 +29,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			Labels:    Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: &replicas,
+			Replicas: component.GetReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: Labels},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
@@ -38,7 +37,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 					Name:  "horusec-messages",
 					Image: "docker.io/horuszup/horusec-messages:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(int(httpPort))},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
@@ -56,7 +55,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_SMTP_PASSWORD", "horusec-smtp", "password"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: httpPort},
+						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

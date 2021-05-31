@@ -4,12 +4,16 @@ import (
 	"context"
 	"fmt"
 
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+
+	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
+
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
+	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/horusec/core"
 	"github.com/ZupIT/horusec-operator/internal/horusec/manager"
 	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
-	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 
 	coreV1 "k8s.io/api/core/v1"
@@ -19,7 +23,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
@@ -122,12 +125,56 @@ func (a *Adapter) EnsureServicesAccounts(ctx context.Context) (*operation.Result
 	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) EnsureAutoscalers(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+// nolint:funlen
+func (a *Adapter) ensureAutoscaling(ctx context.Context,
+	desired *autoScalingV2beta2.HorizontalPodAutoscaler) (*operation.Result, error) {
+	deps, err := a.svc.ListAutoscaling(ctx, a.resource.Namespace, desired.Labels)
+	if err != nil {
+		return nil, err
+	}
+	horizontalScaler := []autoScalingV2beta2.HorizontalPodAutoscaler{}
+	if desired != nil {
+		horizontalScaler = append(horizontalScaler, *desired)
+	}
+	inv := inventory.ForHorizontalPodAutoscaling(deps.Items, horizontalScaler)
+	err = a.svc.Apply(ctx, inv)
+	if err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) EnsureHPA(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+func (a *Adapter) EnsureAuthAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, auth.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureCoreAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, core.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureAPIAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, api.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureMessagesAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, messages.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureAnalyticAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, analytic.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureManagerAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, manager.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureVulnerabilityAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, vulnerability.NewAutoscaling(a.resource))
+}
+
+func (a *Adapter) EnsureWebhookAutoscaling(ctx context.Context) (*operation.Result, error) {
+	return a.ensureAutoscaling(ctx, webhook.NewAutoscaling(a.resource))
 }
 
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {

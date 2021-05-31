@@ -90,88 +90,45 @@ type Components struct {
 }
 
 type Analytic struct {
-	Container    Container `json:"container,omitempty"`
-	Database     Database  `json:"database,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
+	Database Database `json:"database,omitempty"`
 }
 
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Api struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
+	Database Database `json:"database,omitempty"`
 }
 
 type Auth struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
-	Type         string    `json:"type,omitempty"`
+	BaseComponent
+	Type     string   `json:"type,omitempty"`
+	Database Database `json:"database,omitempty"`
 }
 
 type Core struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
+	Database Database `json:"database,omitempty"`
 }
 
 type Manager struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
 }
 
 type Messages struct {
-	Container    Container  `json:"container,omitempty"`
-	ExtraEnv     []string   `json:"extraEnv,omitempty"`
-	Ingress      Ingress    `json:"ingress,omitempty"`
-	Name         string     `json:"name,omitempty"`
-	Pod          Pod        `json:"pod,omitempty"`
-	Port         Port       `json:"port,omitempty"`
-	ReplicaCount int        `json:"replicaCount,omitempty"`
-	Enabled      bool       `json:"enabled,omitempty"`
-	MailServer   MailServer `json:"mailServer,omitempty"`
+	BaseComponent
+	Enabled    bool       `json:"enabled,omitempty"`
+	MailServer MailServer `json:"mailServer,omitempty"`
 }
 
 type Vulnerability struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
+	Database Database `json:"database,omitempty"`
 }
 
 type Webhook struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	BaseComponent
+	Database Database `json:"database,omitempty"`
 }
 
 type Container struct {
@@ -234,11 +191,11 @@ type Pod struct {
 }
 
 type Autoscaling struct {
-	Enabled      bool `json:"enabled,omitempty"`
-	MaxReplicas  int  `json:"maxReplicas,omitempty"`
-	MinReplicas  int  `json:"minReplicas,omitempty"`
-	TargetCPU    int  `json:"targetCPU,omitempty"`
-	TargetMemory int  `json:"targetMemory,omitempty"`
+	Enabled      bool   `json:"enabled,omitempty"`
+	MaxReplicas  int32  `json:"maxReplicas,omitempty"`
+	MinReplicas  *int32 `json:"minReplicas,omitempty"`
+	TargetCPU    *int32 `json:"targetCPU,omitempty"`
+	TargetMemory *int32 `json:"targetMemory,omitempty"`
 }
 
 type Port struct {

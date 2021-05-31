@@ -10,8 +10,7 @@ import (
 
 //nolint:funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
-	var replicas int32 = 1
-	var httpPort int32 = 8043
+	component := resource.GetManagerComponent()
 	return &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
@@ -19,7 +18,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 			Labels:    Labels,
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: &replicas,
+			Replicas: component.GetReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: Labels},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
@@ -39,7 +38,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) *appsv1.Deployment {
 						{Name: "REACT_APP_HORUSEC_MANAGER_THEME", Value: ""},
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: httpPort},
+						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
 					},
 				}}},
 			},

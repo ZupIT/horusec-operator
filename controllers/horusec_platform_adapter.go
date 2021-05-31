@@ -31,6 +31,7 @@ type HorusecPlatformAdapter interface {
 	EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error)
+
 	EnsureAuthDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureCoreDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureAPIDeployments(ctx context.Context) (*operation.Result, error)
@@ -39,10 +40,18 @@ type HorusecPlatformAdapter interface {
 	EnsureManagerDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureVulnerabilityDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureWebhookDeployments(ctx context.Context) (*operation.Result, error)
+
+	EnsureAuthAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureCoreAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureAPIAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureMessagesAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureAnalyticAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureManagerAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureVulnerabilityAutoscaling(ctx context.Context) (*operation.Result, error)
+	EnsureWebhookAutoscaling(ctx context.Context) (*operation.Result, error)
+
 	EnsureServices(ctx context.Context) (*operation.Result, error)
 	EnsureServicesAccounts(ctx context.Context) (*operation.Result, error)
-	EnsureAutoscalers(ctx context.Context) (*operation.Result, error)
-	EnsureHPA(ctx context.Context) (*operation.Result, error)
 	EnsureIngressRules(ctx context.Context) (*operation.Result, error)
 	EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error)
 }

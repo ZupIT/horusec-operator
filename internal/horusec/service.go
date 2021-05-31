@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+
 	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 
 	"github.com/go-logr/logr"
@@ -73,6 +75,19 @@ func (s *Service) ListDeployments(ctx context.Context,
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err)
+	}
+	return list, nil
+}
+
+func (s *Service) ListAutoscaling(ctx context.Context,
+	namespace string, matchingLabels map[string]string) (*autoScalingV2beta2.HorizontalPodAutoscalerList, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(matchingLabels),
+	}
+	list := &autoScalingV2beta2.HorizontalPodAutoscalerList{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list %s Autoscaling: %w", matchingLabels["app.kubernetes.io/name"], err)
 	}
 	return list, nil
 }
