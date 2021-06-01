@@ -6,12 +6,11 @@ import (
 
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 	"k8s.io/api/networking/v1beta1"
 
-	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
+	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 
-	corev1 "k8s.io/api/core/v1"
+	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
 
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
@@ -142,10 +141,6 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 		}
 	}
 	return operation.ContinueProcessing()
-}
-
-func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
 }
 
 func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {
