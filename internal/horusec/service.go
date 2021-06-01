@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 	"k8s.io/api/networking/v1beta1"
 
 	"github.com/go-logr/logr"
@@ -72,15 +73,28 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	return nil
 }
 
-func (s *Service) ListAuthDeployments(
-	ctx context.Context, namespace string, labels map[string]string) (*v1.DeploymentList, error) {
+func (s *Service) ListDeployments(ctx context.Context,
+	namespace string, matchingLabels map[string]string) (*v1.DeploymentList, error) {
 	opts := []k8s.ListOption{
 		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels),
+		k8s.MatchingLabels(matchingLabels),
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list auth deployments: %w", err)
+		return nil, fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err)
+	}
+	return list, nil
+}
+
+func (s *Service) ListAutoscaling(ctx context.Context,
+	namespace string, matchingLabels map[string]string) (*autoScalingV2beta2.HorizontalPodAutoscalerList, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(matchingLabels),
+	}
+	list := &autoScalingV2beta2.HorizontalPodAutoscalerList{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list %s Autoscaling: %w", matchingLabels["app.kubernetes.io/name"], err)
 	}
 	return list, nil
 }
