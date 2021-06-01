@@ -1,4 +1,4 @@
-package auth
+package analytic
 
 import (
 	core "k8s.io/api/core/v1"

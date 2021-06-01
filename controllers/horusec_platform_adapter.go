@@ -27,6 +27,7 @@ type AdapterFactory interface {
 }
 
 type HorusecPlatformAdapter interface {
+	EnsureInitialization(ctx context.Context) (*operation.Result, error)
 	EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error)
@@ -36,7 +37,7 @@ type HorusecPlatformAdapter interface {
 	EnsureAutoscaling(ctx context.Context) (*operation.Result, error)
 
 	EnsureServices(ctx context.Context) (*operation.Result, error)
-	EnsureServicesAccounts(ctx context.Context) (*operation.Result, error)
 	EnsureIngressRules(ctx context.Context) (*operation.Result, error)
 	EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error)
+	EnsureServiceAccounts(ctx context.Context) (*operation.Result, error)
 }

@@ -54,6 +54,19 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 	return operation.ContinueProcessing()
 }
 
+func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, error) {
+	if a.resource.Status.Conditions != nil {
+		return operation.ContinueProcessing()
+	}
+	a.resource.Status.Conditions = []v2alpha1.Condition{}
+	a.resource.Status.State = v2alpha1.StatusPending
+	err := a.svc.UpdateHorusecPlatformStatus(ctx, a.resource)
+	if err != nil {
+		return operation.RequeueWithError(err)
+	}
+	return operation.StopProcessing()
+}
+
 func (a *Adapter) EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
@@ -74,21 +87,34 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 	panic("implement me") // TODO
 }
 
-func (a *Adapter) EnsureServicesAccounts(ctx context.Context) (*operation.Result, error) {
-	servicesAccounts, err := a.svc.ListAuthServiceAccounts(ctx, a.resource.GetNamespace())
+func (a *Adapter) ensureServiceAccounts(desired *coreV1.ServiceAccount) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service account %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
+}
+
+//nolint:funlen // to improve in the future
+func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
+	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
 	if err != nil {
 		return nil, err
 	}
 
-	desired := auth.NewServiceAccount(a.resource)
-	if err = controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set Service Account %q owner reference: %v", desired.GetName(), err)
+	desired := a.listServiceAccounts()
+	for index := range desired {
+		if err := a.ensureServiceAccounts(&desired[index]); err != nil {
+			return nil, err
+		}
 	}
 
-	inv := inventory.ForServiceAccount(servicesAccounts.Items, []coreV1.ServiceAccount{*desired})
+	inv := inventory.ForServiceAccount(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
+
 	return operation.ContinueProcessing()
 }
 
@@ -119,6 +145,19 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 
 func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
+}
+
+func (a *Adapter) listServiceAccounts() []coreV1.ServiceAccount {
+	return []coreV1.ServiceAccount{
+		analytic.NewServiceAccount(a.resource),
+		api.NewServiceAccount(a.resource),
+		auth.NewServiceAccount(a.resource),
+		core.NewServiceAccount(a.resource),
+		manager.NewServiceAccount(a.resource),
+		messages.NewServiceAccount(a.resource),
+		vulnerability.NewServiceAccount(a.resource),
+		webhook.NewServiceAccount(a.resource),
+	}
 }
 
 func (a *Adapter) listOfDeployments() []appsv1.Deployment {
