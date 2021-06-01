@@ -92,13 +92,21 @@ type Components struct {
 
 type Analytic struct {
 	Container    Container `json:"container,omitempty"`
-	Database     Database  `json:"database,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
 	Ingress      Ingress   `json:"ingress,omitempty"`
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Analytic) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 //nolint:golint, stylecheck // no need to be API in uppercase
@@ -109,7 +117,16 @@ type Api struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Api) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Auth struct {
@@ -119,8 +136,17 @@ type Auth struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
 	Type         string    `json:"type,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Auth) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Core struct {
@@ -130,7 +156,16 @@ type Core struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Core) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Manager struct {
@@ -140,7 +175,15 @@ type Manager struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Manager) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Messages struct {
@@ -150,9 +193,17 @@ type Messages struct {
 	Name         string     `json:"name,omitempty"`
 	Pod          Pod        `json:"pod,omitempty"`
 	Port         Port       `json:"port,omitempty"`
-	ReplicaCount int        `json:"replicaCount,omitempty"`
+	ReplicaCount *int32     `json:"replicaCount,omitempty"`
 	Enabled      bool       `json:"enabled,omitempty"`
 	MailServer   MailServer `json:"mailServer,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Messages) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Vulnerability struct {
@@ -162,7 +213,16 @@ type Vulnerability struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Vulnerability) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Webhook struct {
@@ -172,15 +232,24 @@ type Webhook struct {
 	Name         string    `json:"name,omitempty"`
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
-	ReplicaCount int       `json:"replicaCount,omitempty"`
+	ReplicaCount *int32    `json:"replicaCount,omitempty"`
+	Database     Database  `json:"database,omitempty"`
+}
+
+//nolint:gocritic // [auto created]
+func (a Webhook) GetReplicaCount() *int32 {
+	if !a.Pod.Autoscaling.Enabled {
+		return a.ReplicaCount
+	}
+	return nil
 }
 
 type Container struct {
-	Image           Image           `json:"image,omitempty"`
-	LivenessProbe   *string         `json:"livenessProbe,omitempty"`
-	ReadinessProbe  *string         `json:"readinessProbe,omitempty"`
-	Resources       *string         `json:"resources,omitempty"`
-	SecurityContext SecurityContext `json:"securityContext,omitempty"`
+	Image           Image                       `json:"image,omitempty"`
+	LivenessProbe   corev1.Probe                `json:"livenessProbe,omitempty"`
+	ReadinessProbe  corev1.Probe                `json:"readinessProbe,omitempty"`
+	Resources       corev1.ResourceRequirements `json:"resources,omitempty"`
+	SecurityContext SecurityContext             `json:"securityContext,omitempty"`
 }
 
 type Image struct {
@@ -223,10 +292,14 @@ type SecretKeyRef struct {
 }
 
 type Ingress struct {
-	Enabled bool    `json:"enabled,omitempty"`
-	Host    string  `json:"host,omitempty"`
-	Path    string  `json:"path,omitempty"`
-	TLS     *string `json:"tls,omitempty"`
+	Enabled bool   `json:"enabled,omitempty"`
+	Host    string `json:"host,omitempty"`
+	Path    string `json:"path,omitempty"`
+	TLS     TLS    `json:"tls,omitempty"`
+}
+
+type TLS struct {
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type Pod struct {
@@ -235,11 +308,11 @@ type Pod struct {
 }
 
 type Autoscaling struct {
-	Enabled      bool `json:"enabled,omitempty"`
-	MaxReplicas  int  `json:"maxReplicas,omitempty"`
-	MinReplicas  int  `json:"minReplicas,omitempty"`
-	TargetCPU    int  `json:"targetCPU,omitempty"`
-	TargetMemory int  `json:"targetMemory,omitempty"`
+	Enabled      bool   `json:"enabled,omitempty"`
+	MaxReplicas  int32  `json:"maxReplicas,omitempty"`
+	MinReplicas  *int32 `json:"minReplicas,omitempty"`
+	TargetCPU    *int32 `json:"targetCPU,omitempty"`
+	TargetMemory *int32 `json:"targetMemory,omitempty"`
 }
 
 type Port struct {
