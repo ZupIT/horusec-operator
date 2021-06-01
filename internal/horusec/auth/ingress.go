@@ -31,14 +31,3 @@ func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathTyp
 		},
 	}
 }
-
-func NewIngressTLS(resource *v2alpha1.HorusecPlatform) v1beta1.IngressTLS {
-	if !resource.Spec.Components.Auth.Ingress.Enabled {
-		return v1beta1.IngressTLS{}
-	}
-
-	return v1beta1.IngressTLS{
-		Hosts:      []string{resource.Spec.Components.Auth.Ingress.Host},
-		SecretName: resource.Spec.Components.Auth.Ingress.TLS.SecretName,
-	}
-}
