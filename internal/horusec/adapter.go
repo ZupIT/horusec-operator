@@ -108,7 +108,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 	return operation.ContinueProcessing()
 }
 
-//nolint:dupl, funlen // improve in the future
+//nolint:funlen // improve in the future
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServices(ctx, a.resource.GetNamespace(),
 		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
@@ -132,11 +132,11 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 }
 
 // todo
-func (a *Adapter) listServices() []corev1.Service {
-	return []corev1.Service{}
+func (a *Adapter) listServices() []coreV1.Service {
+	return []coreV1.Service{}
 }
 
-func (a *Adapter) ensureServices(desired *corev1.Service) error {
+func (a *Adapter) ensureServices(desired *coreV1.Service) error {
 	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
 		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
 	}
