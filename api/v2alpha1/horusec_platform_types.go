@@ -15,6 +15,7 @@
 package v2alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -255,12 +256,46 @@ type MailServer struct {
 
 // HorusecPlatformStatus defines the observed state of HorusecPlatform
 type HorusecPlatformStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Conditions []Condition `json:"conditions"`
+	State      Status      `json:"state"`
 }
+
+type Condition struct {
+	Type   ConditionType          `json:"type"`
+	Status corev1.ConditionStatus `json:"status"`
+	// +optional
+	LastProbeTime metav1.Time `json:"lastProbeTime,omitempty"`
+	// +optional
+	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty"`
+	// +optional
+	Reason string `json:"reason,omitempty"`
+	// +optional
+	Message string `json:"message,omitempty"`
+}
+
+type ConditionType string
+
+const (
+	ConditionReady   ConditionType = "Ready"
+	ConditionPending ConditionType = "Pending"
+	ConditionError   ConditionType = "Error"
+	ConditionInvalid ConditionType = "Invalid"
+)
+
+type Status string
+
+const (
+	StatusPending Status = "Pending"
+	StatusReady   Status = "Ready"
+	StatusError   Status = "Error"
+)
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:resource:shortName=horus
+// nolint:lll // kubebuilder tags could not be split into multiple lines.
+//+kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.state",description="The status of the platform installation"
+//+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // HorusecPlatform is the Schema for the horusecs API
 type HorusecPlatform struct {
