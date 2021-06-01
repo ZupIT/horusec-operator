@@ -15,6 +15,7 @@
 package v2alpha1
 
 import (
+	core "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -175,11 +176,11 @@ type Webhook struct {
 }
 
 type Container struct {
-	Image           Image           `json:"image,omitempty"`
-	LivenessProbe   *string         `json:"livenessProbe,omitempty"`
-	ReadinessProbe  *string         `json:"readinessProbe,omitempty"`
-	Resources       *string         `json:"resources,omitempty"`
-	SecurityContext SecurityContext `json:"securityContext,omitempty"`
+	Image           Image                     `json:"image,omitempty"`
+	LivenessProbe   core.Probe                `json:"livenessProbe,omitempty"`
+	ReadinessProbe  core.Probe                `json:"readinessProbe,omitempty"`
+	Resources       core.ResourceRequirements `json:"resources,omitempty"`
+	SecurityContext SecurityContext           `json:"securityContext,omitempty"`
 }
 
 type Image struct {
@@ -222,10 +223,14 @@ type SecretKeyRef struct {
 }
 
 type Ingress struct {
-	Enabled bool    `json:"enabled,omitempty"`
-	Host    string  `json:"host,omitempty"`
-	Path    string  `json:"path,omitempty"`
-	TLS     *string `json:"tls,omitempty"`
+	Enabled bool   `json:"enabled,omitempty"`
+	Host    string `json:"host,omitempty"`
+	Path    string `json:"path,omitempty"`
+	TLS     TLS    `json:"tls,omitempty"`
+}
+
+type TLS struct {
+	SecretName string `json:"secretName,omitempty"`
 }
 
 type Pod struct {

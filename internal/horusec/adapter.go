@@ -3,8 +3,10 @@ package horusec
 import (
 	"context"
 	"fmt"
-	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
+
 	"k8s.io/api/networking/v1beta1"
+
+	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
 
 	corev1 "k8s.io/api/core/v1"
 
