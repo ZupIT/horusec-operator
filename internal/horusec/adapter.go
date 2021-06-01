@@ -131,9 +131,17 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 	return operation.ContinueProcessing()
 }
 
-// todo
 func (a *Adapter) listServices() []coreV1.Service {
-	return []coreV1.Service{}
+	return []coreV1.Service{
+		analytic.NewService(a.resource),
+		api.NewService(a.resource),
+		auth.NewService(a.resource),
+		core.NewService(a.resource),
+		manager.NewService(a.resource),
+		messages.NewService(a.resource),
+		vulnerability.NewService(a.resource),
+		webhook.NewService(a.resource),
+	}
 }
 
 func (a *Adapter) ensureServices(desired *coreV1.Service) error {
