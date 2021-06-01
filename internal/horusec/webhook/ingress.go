@@ -23,10 +23,7 @@ func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathTyp
 						PathType: &pathType,
 						Backend: v1beta1.IngressBackend{
 							ServiceName: resource.Spec.Components.Webhook.Name,
-							ServicePort: intstr.IntOrString{
-								Type:   0,
-								IntVal: int32(resource.Spec.Components.Webhook.Port.HTTP),
-							},
+							ServicePort: intstr.FromInt(resource.Spec.Components.Webhook.Port.HTTP),
 						},
 					},
 				},
