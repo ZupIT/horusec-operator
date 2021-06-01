@@ -7,6 +7,7 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
+//nolint:funlen // improve in the future
 func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathType) v1beta1.IngressRule {
 	if !resource.Spec.Components.Manager.Ingress.Enabled {
 		return v1beta1.IngressRule{}

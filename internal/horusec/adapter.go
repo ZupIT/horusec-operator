@@ -89,7 +89,7 @@ func (a *Adapter) ensureServiceAccounts(desired *corev1.ServiceAccount) error {
 	return nil
 }
 
-//nolint:funlen, dupl // to improve in the future
+//nolint:funlen // to improve in the future
 func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
 		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
@@ -133,7 +133,7 @@ func (a *Adapter) EnsureHPA(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
 
-//nolint:funlen, dupl // to improve in the future
+//nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
 		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})

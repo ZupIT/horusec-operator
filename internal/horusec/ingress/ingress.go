@@ -15,6 +15,7 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 )
 
+//nolint:funlen // improve in the future
 func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
 	pathType := v1beta1.PathTypePrefix
 
