@@ -32,10 +32,8 @@ type HorusecPlatformAdapter interface {
 	EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error)
 	EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error)
-
 	EnsureDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureAutoscaling(ctx context.Context) (*operation.Result, error)
-
 	EnsureServices(ctx context.Context) (*operation.Result, error)
 	EnsureIngressRules(ctx context.Context) (*operation.Result, error)
 	EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error)

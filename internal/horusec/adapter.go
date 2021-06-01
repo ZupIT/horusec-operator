@@ -38,26 +38,6 @@ type Adapter struct {
 	resource *v2alpha1.HorusecPlatform
 }
 
-//nolint:funlen
-func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
-	desired := a.listOfDeployments()
-	for index := range desired {
-		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, desired[index].ObjectMeta.Labels)
-		if err != nil {
-			return nil, err
-		}
-		if err = controllerutil.SetControllerReference(a.resource, &desired[index], a.scheme); err != nil {
-			return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired[index].GetName(), err)
-		}
-		inv := inventory.ForDeployments(deps.Items, desired)
-		err = a.svc.Apply(ctx, inv)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return operation.ContinueProcessing()
-}
-
 func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, error) {
 	if a.resource.Status.Conditions != nil {
 		return operation.ContinueProcessing()
@@ -87,38 +67,23 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 	panic("implement me") // TODO
 }
 
-func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) ensureServiceAccounts(desired *coreV1.ServiceAccount) error {
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set service account %q owner reference: %v", desired.GetName(), err)
-	}
-
-	return nil
-}
-
-//nolint:funlen // to improve in the future
-func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
-	if err != nil {
-		return nil, err
-	}
-
-	desired := a.listServiceAccounts()
+//nolint:funlen
+func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
+	desired := a.listOfDeployments()
 	for index := range desired {
-		if err := a.ensureServiceAccounts(&desired[index]); err != nil {
+		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, desired[index].ObjectMeta.Labels)
+		if err != nil {
+			return nil, err
+		}
+		if err = controllerutil.SetControllerReference(a.resource, &desired[index], a.scheme); err != nil {
+			return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired[index].GetName(), err)
+		}
+		inv := inventory.ForDeployments(deps.Items, desired)
+		err = a.svc.Apply(ctx, inv)
+		if err != nil {
 			return nil, err
 		}
 	}
-
-	inv := inventory.ForServiceAccount(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
-		return nil, err
-	}
-
 	return operation.ContinueProcessing()
 }
 
@@ -143,15 +108,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureAutoscalers(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureHPA(ctx context.Context) (*operation.Result, error) {
+func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
 
@@ -169,6 +126,34 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 	}
 
 	inv := inventory.ForIngresses(existing.Items, []v1beta1.Ingress{*desired})
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {
+	panic("implement me") // TODO
+}
+
+//nolint // to improve in the future
+func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
+	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+	if err != nil {
+		return nil, err
+	}
+
+	desired := a.listServiceAccounts()
+	for index := range desired {
+		desiredItem := &desired[index]
+		if err := controllerutil.SetControllerReference(a.resource, desiredItem, a.scheme); err != nil {
+			return nil, fmt.Errorf("failed to set service account %q owner reference: %v", desiredItem.GetName(), err)
+		}
+	}
+
+	inv := inventory.ForServiceAccount(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
