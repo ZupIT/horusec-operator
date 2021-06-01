@@ -35,9 +35,9 @@ type HorusecPlatformAdapter interface {
 	EnsureAuthDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureDeployments(ctx context.Context) (*operation.Result, error)
 	EnsureServices(ctx context.Context) (*operation.Result, error)
-	EnsureServicesAccounts(ctx context.Context) (*operation.Result, error)
 	EnsureAutoscalers(ctx context.Context) (*operation.Result, error)
 	EnsureHPA(ctx context.Context) (*operation.Result, error)
 	EnsureIngressRules(ctx context.Context) (*operation.Result, error)
 	EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error)
+	EnsureServiceAccounts(ctx context.Context) (*operation.Result, error)
 }
