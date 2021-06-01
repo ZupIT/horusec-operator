@@ -15,7 +15,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 
 	appsv1 "k8s.io/api/apps/v1"
-	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 

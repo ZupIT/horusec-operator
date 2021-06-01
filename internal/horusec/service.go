@@ -11,7 +11,6 @@ import (
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 )
 

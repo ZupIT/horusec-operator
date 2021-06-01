@@ -65,7 +65,11 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return requeue.OnErr(err)
 	}
 
-	result, err := operation.NewHandler(adapter.EnsureAuthDeployments, adapter.EnsureServiceAccounts, adapter.EnsureServicesAccounts, adapter.EnsureInitialization).Handle(ctx)
+	result, err := operation.NewHandler(
+		adapter.EnsureAuthDeployments,
+		adapter.EnsureServiceAccounts,
+		adapter.EnsureInitialization,
+	).Handle(ctx)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
 		Info("finished reconcile")
