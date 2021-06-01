@@ -86,8 +86,43 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 	panic("implement me") // TODO
 }
 
+//todo
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+	if err != nil {
+		return nil, err
+	}
+
+	desired := a.listServiceAccounts()
+	for index := range desired {
+		if err := a.ensureServiceAccounts(&desired[index]); err != nil {
+			return nil, err
+		}
+	}
+
+	inv := inventory.ForServiceAccount(existing.Items, desired)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+//todo
+func (a *Adapter) listServices() []corev1.Service {
+	return []corev1.Service{
+
+	}
+}
+
+//todo
+func (a *Adapter) ensureServices(desired *corev1.ServiceAccount) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service account %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
 }
 
 func (a *Adapter) ensureServiceAccounts(desired *corev1.ServiceAccount) error {
