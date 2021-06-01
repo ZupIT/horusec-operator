@@ -15,6 +15,7 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 
 	appsv1 "k8s.io/api/apps/v1"
+	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
@@ -29,6 +30,19 @@ type Adapter struct {
 	svc    *Service
 
 	resource *v2alpha1.HorusecPlatform
+}
+
+func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, error) {
+	if a.resource.Status.Conditions != nil {
+		return operation.ContinueProcessing()
+	}
+	a.resource.Status.Conditions = []v2alpha1.Condition{}
+	a.resource.Status.State = v2alpha1.StatusPending
+	err := a.svc.UpdateHorusecPlatformStatus(ctx, a.resource)
+	if err != nil {
+		return operation.RequeueWithError(err)
+	}
+	return operation.StopProcessing()
 }
 
 //nolint:funlen // to improve in the future

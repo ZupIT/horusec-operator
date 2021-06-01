@@ -10,9 +10,9 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/ZupIT/horusec-operator/internal/inventory"
-
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
+	"github.com/ZupIT/horusec-operator/internal/inventory"
 )
 
 type Service struct {
@@ -34,6 +34,15 @@ func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) 
 		return nil, fmt.Errorf("failed to lookup resource: %w", err)
 	}
 	return r, nil
+}
+
+func (s *Service) UpdateHorusecPlatformStatus(ctx context.Context, resource *v2alpha1.HorusecPlatform) error {
+	err := s.client.Status().Update(ctx, resource)
+	if err != nil {
+		return err
+	}
+	s.log.Info(fmt.Sprintf("%T %q status updated", resource, resource.GetName()))
+	return nil
 }
 
 //nolint:funlen // to improve in the future

@@ -15,5 +15,5 @@ func OnErr(err error) (reconcile.Result, error) {
 }
 
 func After(duration time.Duration, err error) (reconcile.Result, error) {
-	return reconcile.Result{RequeueAfter: duration}, err
+	return reconcile.Result{RequeueAfter: duration, Requeue: true}, err
 }
