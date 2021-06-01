@@ -86,22 +86,22 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 	panic("implement me") // TODO
 }
 
-//todo
+//nolint:dupl, funlen // improve in the future
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
+	existing, err := a.svc.ListServices(ctx, a.resource.GetNamespace(),
 		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
 	if err != nil {
 		return nil, err
 	}
 
-	desired := a.listServiceAccounts()
+	desired := a.listServices()
 	for index := range desired {
-		if err := a.ensureServiceAccounts(&desired[index]); err != nil {
+		if err := a.ensureServices(&desired[index]); err != nil {
 			return nil, err
 		}
 	}
 
-	inv := inventory.ForServiceAccount(existing.Items, desired)
+	inv := inventory.ForService(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
@@ -109,17 +109,14 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 	return operation.ContinueProcessing()
 }
 
-//todo
+// todo
 func (a *Adapter) listServices() []corev1.Service {
-	return []corev1.Service{
-
-	}
+	return []corev1.Service{}
 }
 
-//todo
-func (a *Adapter) ensureServices(desired *corev1.ServiceAccount) error {
+func (a *Adapter) ensureServices(desired *corev1.Service) error {
 	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set service account %q owner reference: %v", desired.GetName(), err)
+		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
 	}
 
 	return nil
@@ -133,7 +130,7 @@ func (a *Adapter) ensureServiceAccounts(desired *corev1.ServiceAccount) error {
 	return nil
 }
 
-//nolint:funlen // to improve in the future
+//nolint:funlen, dupl // to improve in the future
 func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
 		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
