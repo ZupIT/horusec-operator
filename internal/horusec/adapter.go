@@ -4,6 +4,10 @@ import (
 	"context"
 	"fmt"
 
+	"k8s.io/api/networking/v1beta1"
+
+	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
+
 	corev1 "k8s.io/api/core/v1"
 
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
@@ -142,8 +146,25 @@ func (a *Adapter) EnsureHPA(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
 
+//nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+	if err != nil {
+		return nil, err
+	}
+
+	desired := ingress.NewIngress(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
+	}
+
+	inv := inventory.ForIngresses(existing.Items, []v1beta1.Ingress{*desired})
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
 }
 
 func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error) {

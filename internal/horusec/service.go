@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"k8s.io/api/networking/v1beta1"
+
 	"github.com/go-logr/logr"
 	v1 "k8s.io/api/apps/v1"
 	core "k8s.io/api/core/v1"
@@ -93,6 +95,21 @@ func (s *Service) ListServiceAccounts(
 	list := &core.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, fmt.Errorf("failed to list %s service accounts: %w", name, err)
+	}
+
+	return list, nil
+}
+
+func (s *Service) ListIngress(
+	ctx context.Context, namespace, name string, labels map[string]string) (*v1beta1.IngressList, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(labels),
+	}
+
+	list := &v1beta1.IngressList{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list %s ingress: %w", name, err)
 	}
 
 	return list, nil
