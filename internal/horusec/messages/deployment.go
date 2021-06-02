@@ -37,7 +37,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Name:  "horusec-messages",
 					Image: "docker.io/horuszup/horusec-messages:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetMessagesPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
@@ -55,7 +55,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_SMTP_PASSWORD", "horusec-smtp", "password"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "http", ContainerPort: int32(resource.GetMessagesPortHTTP())},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

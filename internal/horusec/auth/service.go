@@ -19,24 +19,16 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 		Spec: coreV1.ServiceSpec{
 			Ports: []coreV1.ServicePort{
 				{
-					Name:     "http",
-					Port:     int32(resource.GetAuthComponent().Port.HTTP),
-					Protocol: "TCP",
-					TargetPort: intstr.IntOrString{
-						Type:   0,
-						IntVal: 0,
-						StrVal: "http",
-					},
+					Name:       "http",
+					Port:       int32(resource.GetAuthPortHTTP()),
+					Protocol:   "TCP",
+					TargetPort: intstr.FromInt(resource.GetAuthPortHTTP()),
 				},
 				{
-					Name:     "grpc",
-					Port:     int32(resource.GetAuthComponent().Port.Grpc),
-					Protocol: "TCP",
-					TargetPort: intstr.IntOrString{
-						Type:   0,
-						IntVal: 0,
-						StrVal: "http",
-					},
+					Name:       "grpc",
+					Port:       int32(resource.GetAuthPortGRPC()),
+					Protocol:   "TCP",
+					TargetPort: intstr.FromInt(resource.GetAuthPortGRPC()),
 				},
 			},
 			Selector: map[string]string{

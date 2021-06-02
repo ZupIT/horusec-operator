@@ -37,8 +37,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Name:  "horusec-auth",
 					Image: "docker.io/horuszup/horusec-auth:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
-						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(component.Port.Grpc)},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
+						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_DISABLED_EMAILS", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
@@ -58,8 +58,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", "horusec-jwt", "jwt-token"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
-						{Name: "grpc", ContainerPort: int32(component.Port.Grpc)},
+						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
+						{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

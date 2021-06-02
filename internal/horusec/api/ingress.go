@@ -19,11 +19,11 @@ func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathTyp
 			HTTP: &v1beta1.HTTPIngressRuleValue{
 				Paths: []v1beta1.HTTPIngressPath{
 					{
-						Path:     resource.Spec.Components.Api.Ingress.Path,
+						Path:     resource.GetAPIPath(),
 						PathType: &pathType,
 						Backend: v1beta1.IngressBackend{
-							ServiceName: resource.Spec.Components.Api.Name,
-							ServicePort: intstr.FromInt(resource.Spec.Components.Api.Port.HTTP),
+							ServiceName: resource.GetAPIName(),
+							ServicePort: intstr.FromInt(resource.GetAPIPortHTTP()),
 						},
 					},
 				},

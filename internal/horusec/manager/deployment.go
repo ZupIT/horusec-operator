@@ -38,7 +38,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "REACT_APP_HORUSEC_MANAGER_THEME", Value: ""},
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},
 					},
 				}}},
 			},

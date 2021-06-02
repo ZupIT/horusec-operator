@@ -19,14 +19,10 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 		Spec: coreV1.ServiceSpec{
 			Ports: []coreV1.ServicePort{
 				{
-					Name:     "http",
-					Port:     int32(resource.GetWebhookComponent().Port.HTTP),
-					Protocol: "TCP",
-					TargetPort: intstr.IntOrString{
-						Type:   0,
-						IntVal: 0,
-						StrVal: "http",
-					},
+					Name:       "http",
+					Port:       int32(resource.GetWebhookPortHTTP()),
+					Protocol:   "TCP",
+					TargetPort: intstr.FromInt(resource.GetWebhookPortHTTP()),
 				},
 			},
 			Selector: map[string]string{
