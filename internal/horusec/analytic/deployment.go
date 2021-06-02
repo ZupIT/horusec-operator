@@ -24,15 +24,15 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 	}
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetAnalyticName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetAnalyticLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: component.GetReplicaCount(),
-			Selector: &metav1.LabelSelector{MatchLabels: Labels},
+			Selector: &metav1.LabelSelector{MatchLabels: resource.GetAnalyticLabels()},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetAnalyticLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  "horusec-analytic",
 					Image: "docker.io/horuszup/horusec-analytic:v2.12.1",

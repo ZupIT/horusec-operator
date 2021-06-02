@@ -1,5 +1,7 @@
 package v2alpha1
 
+import "fmt"
+
 func (h *HorusecPlatform) GetMessagesComponent() Messages {
 	return h.Spec.Components.Messages
 }
@@ -9,7 +11,7 @@ func (h *HorusecPlatform) GetMessagesAutoscaling() Autoscaling {
 func (h *HorusecPlatform) GetMessagesName() string {
 	name := h.GetMessagesComponent().Name
 	if name == "" {
-		return "messages"
+		return fmt.Sprintf("%s-messages", h.GetName())
 	}
 	return name
 }
@@ -26,4 +28,11 @@ func (h *HorusecPlatform) GetMessagesPortHTTP() int {
 		return 8004
 	}
 	return port
+}
+func (h *HorusecPlatform) GetMessagesLabels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "messages",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
 }

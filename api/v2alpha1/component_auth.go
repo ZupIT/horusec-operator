@@ -1,5 +1,7 @@
 package v2alpha1
 
+import "fmt"
+
 func (h *HorusecPlatform) GetAuthComponent() Auth {
 	return h.Spec.Components.Auth
 }
@@ -9,7 +11,7 @@ func (h *HorusecPlatform) GetAuthAutoscaling() Autoscaling {
 func (h *HorusecPlatform) GetAuthName() string {
 	name := h.GetAuthComponent().Name
 	if name == "" {
-		return "auth"
+		return fmt.Sprintf("%s-auth", h.GetName())
 	}
 	return name
 }
@@ -33,4 +35,11 @@ func (h *HorusecPlatform) GetAuthPortGRPC() int {
 		return 8007
 	}
 	return port
+}
+func (h *HorusecPlatform) GetAuthLabels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "auth",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
 }

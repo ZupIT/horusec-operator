@@ -12,9 +12,9 @@ import (
 func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 	return coreV1.Service{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetAPIName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetApiLabels(),
 		},
 		Spec: coreV1.ServiceSpec{
 			Ports: []coreV1.ServicePort{

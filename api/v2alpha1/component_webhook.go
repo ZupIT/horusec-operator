@@ -1,5 +1,7 @@
 package v2alpha1
 
+import "fmt"
+
 func (h *HorusecPlatform) GetWebhookComponent() Webhook {
 	return h.Spec.Components.Webhook
 }
@@ -9,7 +11,7 @@ func (h *HorusecPlatform) GetWebhookAutoscaling() Autoscaling {
 func (h *HorusecPlatform) GetWebhookName() string {
 	name := h.GetWebhookComponent().Name
 	if name == "" {
-		return "webhook"
+		return fmt.Sprintf("%s-webhook", h.GetName())
 	}
 	return name
 }
@@ -26,4 +28,11 @@ func (h *HorusecPlatform) GetWebhookPortHTTP() int {
 		return 8005
 	}
 	return port
+}
+func (h *HorusecPlatform) GetWebhookLabels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "webhook",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
 }

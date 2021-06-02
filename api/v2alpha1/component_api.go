@@ -1,5 +1,7 @@
 package v2alpha1
 
+import "fmt"
+
 func (h *HorusecPlatform) GetAPIComponent() Api {
 	return h.Spec.Components.Api
 }
@@ -9,7 +11,7 @@ func (h *HorusecPlatform) GetAPIAutoscaling() Autoscaling {
 func (h *HorusecPlatform) GetAPIName() string {
 	name := h.GetAPIComponent().Name
 	if name == "" {
-		return "api"
+		return fmt.Sprintf("%s-api", h.GetName())
 	}
 	return name
 }
@@ -26,4 +28,11 @@ func (h *HorusecPlatform) GetAPIPortHTTP() int {
 		return 8000
 	}
 	return port
+}
+func (h *HorusecPlatform) GetApiLabels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "api",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
 }
