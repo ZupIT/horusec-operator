@@ -34,7 +34,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetMessagesLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-messages",
+					Name:  resource.GetMessagesName(),
 					Image: "docker.io/horuszup/horusec-messages:v2.12.1",
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetMessagesPortHTTP())},

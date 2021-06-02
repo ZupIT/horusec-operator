@@ -34,10 +34,10 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetApiLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-api",
+					Name:  resource.GetAPIName(),
 					Image: "docker.io/horuszup/horusec-api:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAPIPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
@@ -50,7 +50,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", "horusec-database", "password"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "http", ContainerPort: int32(resource.GetAPIPortHTTP())},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

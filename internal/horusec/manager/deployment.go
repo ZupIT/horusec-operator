@@ -23,7 +23,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetManagerLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-manager",
+					Name:  resource.GetManagerName(),
 					Image: "docker.io/horuszup/horusec-manager:v2.12.1",
 					Env: []corev1.EnvVar{
 						{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: ""},
