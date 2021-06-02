@@ -23,7 +23,7 @@ func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    resource.Labels,
+			Labels:    resource.GetDefaultLabel(),
 		},
 		Spec: v1beta1.IngressSpec{
 			Rules: []v1beta1.IngressRule{

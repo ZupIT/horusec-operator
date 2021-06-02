@@ -48,3 +48,6 @@ func (h *HorusecPlatform) GetVulnerabilityAutoscaling() Autoscaling {
 func (h *HorusecPlatform) GetWebhookAutoscaling() Autoscaling {
 	return h.GetWebhookComponent().Pod.Autoscaling
 }
+func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
+	return map[string]string{"app.kubernetes.io/managed-by": "horusec"}
+}
