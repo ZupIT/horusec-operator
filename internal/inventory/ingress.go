@@ -2,15 +2,14 @@ package inventory
 
 import (
 	"fmt"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"k8s.io/api/networking/v1beta1"
-
-	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:gocritic, funlen // to improve in the future
 func ForIngresses(existing, desired []v1beta1.Ingress) Object {
-	var update []client.Object
+	update := []client.Object{}
 	mcreate := ingressMap(desired)
 	mdelete := ingressMap(existing)
 
@@ -18,7 +17,6 @@ func ForIngresses(existing, desired []v1beta1.Ingress) Object {
 		if t, ok := mdelete[k]; ok {
 			tp := t.DeepCopy()
 
-			// we can't blindly DeepCopyInto, so, we select what we bring from the new to the old object
 			tp.Spec = v.Spec
 			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
 
@@ -54,9 +52,10 @@ func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
 
 //nolint:gosec, exportloopref, gocritic // to improve in the future
 func ingressList(m map[string]v1beta1.Ingress) []client.Object {
-	var l []client.Object
+	l := []client.Object{}
 	for _, v := range m {
-		l = append(l, &v)
+		obj := v
+		l = append(l, &obj)
 	}
 	return l
 }

@@ -57,7 +57,8 @@ func serviceMap(deps []v1.Service) map[string]v1.Service {
 func serviceList(m map[string]v1.Service) []client.Object {
 	var l []client.Object
 	for _, v := range m {
-		l = append(l, &v)
+		obj := v
+		l = append(l, &obj)
 	}
 	return l
 }
