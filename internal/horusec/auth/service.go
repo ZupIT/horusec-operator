@@ -31,9 +31,7 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 					TargetPort: intstr.FromInt(resource.GetAuthPortGRPC()),
 				},
 			},
-			Selector: map[string]string{
-				"app": "horusec-auth",
-			},
+			Selector: resource.GetAuthLabels(),
 			Type: "ClusterIP",
 		},
 	}

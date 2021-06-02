@@ -18,7 +18,7 @@ func (h *HorusecPlatform) GetAPIName() string {
 func (h *HorusecPlatform) GetAPIPath() string {
 	path := h.GetAPIComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetAPIName()
+		return "/api"
 	}
 	return path
 }

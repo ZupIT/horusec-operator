@@ -18,7 +18,7 @@ func (h *HorusecPlatform) GetMessagesName() string {
 func (h *HorusecPlatform) GetMessagesPath() string {
 	path := h.GetMessagesComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetMessagesName()
+		return "/messages"
 	}
 	return path
 }

@@ -25,10 +25,8 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 					TargetPort: intstr.FromInt(resource.GetWebhookPortHTTP()),
 				},
 			},
-			Selector: map[string]string{
-				"app": "horusec-webhook",
-			},
-			Type: "ClusterIP",
+			Selector: resource.GetWebhookLabels(),
+			Type:     "ClusterIP",
 		},
 	}
 }

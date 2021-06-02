@@ -18,14 +18,14 @@ func (h *HorusecPlatform) GetCoreName() string {
 func (h *HorusecPlatform) GetCorePath() string {
 	path := h.GetCoreComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetCoreName()
+		return "/core"
 	}
 	return path
 }
 func (h *HorusecPlatform) GetCorePortHTTP() int {
 	port := h.GetCoreComponent().Port.HTTP
 	if port == 0 {
-		return 8008
+		return 8003
 	}
 	return port
 }

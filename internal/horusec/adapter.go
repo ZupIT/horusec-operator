@@ -71,7 +71,7 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
 	desired := a.listOfDeployments()
 	for index := range desired {
-		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, desired[index].ObjectMeta.Labels)
+		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, a.resource.GetDefaultLabel())
 		if err != nil {
 			return nil, err
 		}
@@ -91,7 +91,7 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
 	desired := a.listOfAutoscaling()
 	for index := range desired {
-		deps, err := a.svc.ListAutoscaling(ctx, a.resource.Namespace, desired[index].Labels)
+		deps, err := a.svc.ListAutoscaling(ctx, a.resource.Namespace, a.resource.GetDefaultLabel())
 		if err != nil {
 			return nil, err
 		}
@@ -111,7 +111,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 //nolint:funlen // improve in the future
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServices(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+		a.resource.GetName(), a.resource.GetDefaultLabel())
 	if err != nil {
 		return nil, err
 	}
@@ -155,7 +155,7 @@ func (a *Adapter) ensureServices(desired *coreV1.Service) error {
 //nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+		a.resource.GetName(), a.resource.GetDefaultLabel())
 	if err != nil {
 		return nil, err
 	}
@@ -180,7 +180,7 @@ func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Res
 //nolint // to improve in the future
 func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+		a.resource.GetName(), a.resource.GetDefaultLabel())
 	if err != nil {
 		return nil, err
 	}

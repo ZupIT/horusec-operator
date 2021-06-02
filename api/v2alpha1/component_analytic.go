@@ -18,7 +18,7 @@ func (h *HorusecPlatform) GetAnalyticName() string {
 func (h *HorusecPlatform) GetAnalyticPath() string {
 	path := h.GetAnalyticComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetAnalyticName()
+		return "/analytic"
 	}
 	return path
 }

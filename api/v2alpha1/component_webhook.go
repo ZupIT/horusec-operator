@@ -18,14 +18,14 @@ func (h *HorusecPlatform) GetWebhookName() string {
 func (h *HorusecPlatform) GetWebhookPath() string {
 	path := h.GetWebhookComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetWebhookName()
+		return "/webhook"
 	}
 	return path
 }
 func (h *HorusecPlatform) GetWebhookPortHTTP() int {
 	port := h.GetWebhookComponent().Port.HTTP
 	if port == 0 {
-		return 8005
+		return 8004
 	}
 	return port
 }

@@ -25,9 +25,7 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 					TargetPort: intstr.FromInt(resource.GetAPIPortHTTP()),
 				},
 			},
-			Selector: map[string]string{
-				"app": "horusec-analytic",
-			},
+			Selector: resource.GetApiLabels(),
 			Type: "ClusterIP",
 		},
 	}

@@ -18,7 +18,7 @@ func (h *HorusecPlatform) GetAuthName() string {
 func (h *HorusecPlatform) GetAuthPath() string {
 	path := h.GetAuthComponent().Ingress.Path
 	if path == "" {
-		return "/" + h.GetAuthName()
+		return "/auth"
 	}
 	return path
 }
