@@ -53,7 +53,7 @@ func serviceMap(deps []v1.Service) map[string]v1.Service {
 	return m
 }
 
-//nolint:gosec, exportloopref, gocritic // improve in the future
+//nolint // improve in the future
 func serviceList(m map[string]v1.Service) []client.Object {
 	var l []client.Object
 	for _, v := range m {

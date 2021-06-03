@@ -56,5 +56,3 @@ func (h *HorusecPlatform) GetAPIImage() string {
 
 	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }
-
-

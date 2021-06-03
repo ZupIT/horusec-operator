@@ -2,6 +2,7 @@ package inventory
 
 import (
 	"fmt"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"k8s.io/api/networking/v1beta1"
@@ -50,7 +51,7 @@ func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
 	return m
 }
 
-//nolint:gosec, exportloopref, gocritic // to improve in the future
+//nolint // to improve in the future
 func ingressList(m map[string]v1beta1.Ingress) []client.Object {
 	l := []client.Object{}
 	for _, v := range m {

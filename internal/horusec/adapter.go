@@ -98,7 +98,7 @@ func (a *Adapter) ensureDeployments(desired *appsv1.Deployment) error {
 	return nil
 }
 
-//nolint:funlen
+//nolint
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
 	if err != nil {

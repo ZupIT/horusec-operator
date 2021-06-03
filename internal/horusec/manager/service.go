@@ -26,7 +26,7 @@ func NewService(resource *v2alpha1.HorusecPlatform) coreV1.Service {
 				},
 			},
 			Selector: resource.GetManagerLabels(),
-			Type: "ClusterIP",
+			Type:     "ClusterIP",
 		},
 	}
 }

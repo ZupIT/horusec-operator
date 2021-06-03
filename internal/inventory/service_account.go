@@ -2,6 +2,7 @@ package inventory
 
 import (
 	"fmt"
+
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -49,7 +50,7 @@ func serviceAccountMap(deps []corev1.ServiceAccount) map[string]corev1.ServiceAc
 	return m
 }
 
-//nolint:gocritic, gosec, exportloopref // to improve in the future
+//nolint // to improve in the future
 func serviceAccountList(m map[string]corev1.ServiceAccount) []client.Object {
 	l := []client.Object{}
 	for _, v := range m {
