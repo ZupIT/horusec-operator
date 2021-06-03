@@ -101,14 +101,6 @@ type Analytic struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Analytic) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Api struct {
 	Container    Container `json:"container,omitempty"`
@@ -119,14 +111,6 @@ type Api struct {
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
 	Database     Database  `json:"database,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Api) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Auth struct {
@@ -141,14 +125,6 @@ type Auth struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Auth) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Core struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -160,14 +136,6 @@ type Core struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Core) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Manager struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -176,14 +144,6 @@ type Manager struct {
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Manager) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Messages struct {
@@ -198,14 +158,6 @@ type Messages struct {
 	MailServer   MailServer `json:"mailServer,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Messages) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Vulnerability struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -217,14 +169,6 @@ type Vulnerability struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Vulnerability) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Webhook struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -234,14 +178,6 @@ type Webhook struct {
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
 	Database     Database  `json:"database,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Webhook) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Container struct {

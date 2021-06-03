@@ -6,3 +6,7 @@ func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
+func (h *HorusecPlatform) GetLatestVersion() string {
+	return "v2.12.1"
+}

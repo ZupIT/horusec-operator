@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetAnalyticComponent() Analytic {
 	return h.Spec.Components.Analytic
@@ -35,4 +38,21 @@ func (h *HorusecPlatform) GetAnalyticLabels() map[string]string {
 		"app.kubernetes.io/component":  "analytic",
 		"app.kubernetes.io/managed-by": "horusec",
 	}
+}
+func (h *HorusecPlatform) GetAnalyticReplicaCount() *int32 {
+	if !h.GetAnalyticAutoscaling().Enabled {
+		return h.GetAnalyticComponent().ReplicaCount
+	}
+	return nil
+}
+func (h *HorusecPlatform) GetAnalyticDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetAnalyticName(), h.GetAnalyticPortHTTP())
+}
+func (h *HorusecPlatform) GetAnalyticImage() string {
+	image := h.GetAnalyticComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-analytic:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }

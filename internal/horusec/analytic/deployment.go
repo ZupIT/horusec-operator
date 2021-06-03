@@ -13,7 +13,6 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	component := resource.GetAnalyticComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -29,18 +28,18 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Labels:    resource.GetAnalyticLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: component.GetReplicaCount(),
+			Replicas: resource.GetAnalyticReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetAnalyticLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetAnalyticLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  resource.GetAnalyticName(),
-					Image: "docker.io/horuszup/horusec-analytic:v2.12.1",
+					Image: resource.GetAnalyticImage(),
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAnalyticPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
-						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
+						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: "localhost"},
 						{Name: "HORUSEC_BROKER_PORT", Value: "5672"},
 						{Name: "HORUSEC_DATABASE_SQL_URI", Value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@db.svc.cluster.local:5432/horusec_analytic_db?sslmode=disable"},

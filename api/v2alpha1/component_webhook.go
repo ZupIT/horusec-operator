@@ -36,3 +36,9 @@ func (h *HorusecPlatform) GetWebhookLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+func (h *HorusecPlatform) GetWebhookReplicaCount() *int32 {
+	if !h.GetWebhookAutoscaling().Enabled {
+		return h.GetWebhookComponent().ReplicaCount
+	}
+	return nil
+}

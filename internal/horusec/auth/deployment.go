@@ -13,7 +13,6 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	component := resource.GetAuthComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -29,13 +28,13 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Labels:    resource.GetAuthLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: component.GetReplicaCount(),
+			Replicas: resource.GetAuthReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetAuthLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetAuthLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  resource.GetAuthName(),
-					Image: "docker.io/horuszup/horusec-auth:v2.12.1",
+					Image: resource.GetAuthImage(),
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
 						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},

@@ -1,6 +1,8 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func (h *HorusecPlatform) GetManagerComponent() Manager {
 	return h.Spec.Components.Manager
@@ -35,4 +37,10 @@ func (h *HorusecPlatform) GetManagerLabels() map[string]string {
 		"app.kubernetes.io/component":  "manager",
 		"app.kubernetes.io/managed-by": "horusec",
 	}
+}
+func (h *HorusecPlatform) GetManagerReplicaCount() *int32 {
+	if !h.GetManagerAutoscaling().Enabled {
+		return h.GetManagerComponent().ReplicaCount
+	}
+	return nil
 }

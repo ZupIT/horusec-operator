@@ -10,7 +10,6 @@ import (
 
 //nolint:funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	component := resource.GetManagerComponent()
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetManagerName(),
@@ -18,7 +17,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Labels:    resource.GetManagerLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: component.GetReplicaCount(),
+			Replicas: resource.GetManagerReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetManagerLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetManagerLabels()},

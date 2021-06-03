@@ -13,7 +13,6 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	component := resource.GetCoreComponent()
 	probe := corev1.Probe{
 		Handler: corev1.Handler{
 			HTTPGet: &corev1.HTTPGetAction{
@@ -29,7 +28,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Labels:    resource.GetWebhookLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: component.GetReplicaCount(),
+			Replicas: resource.GetWebhookReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetWebhookLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetWebhookLabels()},
@@ -40,7 +39,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetWebhookPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
-						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
+						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: "localhost"},
 						{Name: "HORUSEC_HTTP_TIMEOUT", Value: "60"},
 						{Name: "HORUSEC_BROKER_PORT", Value: "5672"},

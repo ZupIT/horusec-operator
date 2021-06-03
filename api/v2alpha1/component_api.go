@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetAPIComponent() Api {
 	return h.Spec.Components.Api
@@ -36,3 +39,22 @@ func (h *HorusecPlatform) GetApiLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+func (h *HorusecPlatform) GetAPIReplicaCount() *int32 {
+	if !h.GetAPIAutoscaling().Enabled {
+		return h.GetAPIComponent().ReplicaCount
+	}
+	return nil
+}
+func (h *HorusecPlatform) GetAPIDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetAPIName(), h.GetAPIPortHTTP())
+}
+func (h *HorusecPlatform) GetAPIImage() string {
+	image := h.GetAPIComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-api:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+}
+
+

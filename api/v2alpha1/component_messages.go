@@ -36,3 +36,9 @@ func (h *HorusecPlatform) GetMessagesLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+func (h *HorusecPlatform) GetMessagesReplicaCount() *int32 {
+	if !h.GetMessagesAutoscaling().Enabled {
+		return h.GetMessagesComponent().ReplicaCount
+	}
+	return nil
+}
