@@ -59,7 +59,7 @@ func (h *HorusecPlatform) GetGlobalDatabaseUsername() *corev1.SecretKeySelector 
 func (h *HorusecPlatform) GetGlobalDatabasePassword() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.Spec.Global.Database.Password).IsZero() {
 		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-broker"},
+			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
 			Key:                  "password",
 			Optional:             nil,
 		}
@@ -115,6 +115,7 @@ func (h *HorusecPlatform) GetGlobalBrokerPort() string {
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?"+
-		"sslmode=disable", h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName())
+	return fmt.Sprintf(
+		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=disable",
+		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName())
 }
