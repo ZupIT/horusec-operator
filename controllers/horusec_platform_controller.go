@@ -69,7 +69,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		adapter.EnsureInitialization,
 		adapter.EnsureServiceAccounts,
 		adapter.EnsureServices,
-		//adapter.EnsureDeployments,
+		adapter.EnsureDeployments,
 		adapter.EnsureAutoscaling,
 		adapter.EnsureIngressRules,
 	).Handle(ctx)
