@@ -2,7 +2,6 @@ package tracing
 
 import (
 	"context"
-	"net/http"
 	"runtime"
 	"strings"
 
@@ -65,10 +64,4 @@ func SpanFromContext(ctx context.Context) *Span {
 	}
 
 	return &Span{Span: span}
-}
-
-func ExtractSpanContextFromRequest(r *http.Request) opentracing.SpanContext {
-	tracer := opentracing.GlobalTracer()
-	ctx, _ := tracer.Extract(opentracing.HTTPHeaders, opentracing.HTTPHeadersCarrier(r.Header))
-	return ctx
 }
