@@ -19,18 +19,19 @@ import (
 	"flag"
 	"os"
 
+	"github.com/ZupIT/horusec-operator/internal/tracing"
+	"go.uber.org/zap/zapcore"
+
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
-
-	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -56,12 +57,20 @@ func main() {
 		"Enable leader election for controller manager. "+
 			"Enabling this will ensure there is only one active controller manager.")
 	opts := zap.Options{
-		Development: true,
+		Development:     true,
+		StacktraceLevel: zapcore.DPanicLevel,
 	}
 	opts.BindFlags(flag.CommandLine)
 	flag.Parse()
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
+
+	closer, err := tracing.Initialize("horusec-operator", "github.com/ZupIT/horusec-operator/")
+	if err != nil {
+		setupLog.Error(err, "unable to initialize tracing")
+		os.Exit(1)
+	}
+	defer closer.Close()
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
