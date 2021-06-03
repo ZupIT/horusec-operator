@@ -4,6 +4,7 @@ import (
 	"fmt"
 	corev1 "k8s.io/api/core/v1"
 	"reflect"
+	"strconv"
 )
 
 func (h *HorusecPlatform) GetAnalyticComponent() Analytic {
@@ -66,7 +67,7 @@ func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelecto
 			Optional:             nil,
 		}
 	}
-	secret:= h.GetAnalyticComponent().Database.User.SecretKeyRef
+	secret := h.GetAnalyticComponent().Database.User.SecretKeyRef
 	return &secret
 }
 func (h *HorusecPlatform) GetAnalyticDatabasePassword() *corev1.SecretKeySelector {
@@ -77,6 +78,46 @@ func (h *HorusecPlatform) GetAnalyticDatabasePassword() *corev1.SecretKeySelecto
 			Optional:             nil,
 		}
 	}
-	secret:= h.GetAnalyticComponent().Database.Password.SecretKeyRef
+	secret := h.GetAnalyticComponent().Database.Password.SecretKeyRef
 	return &secret
+}
+
+func (h *HorusecPlatform) GetAnalyticDatabaseLogMode() string {
+	if h.Spec.Components.Analytic.Database.LogMode {
+		return "true"
+	}
+
+	return "false"
+}
+
+func (h *HorusecPlatform) GetAnalyticDatabaseHost() string {
+	host := h.Spec.Components.Analytic.Database.Host
+	if host == "" {
+		return "postgresql"
+	}
+
+	return host
+}
+
+func (h *HorusecPlatform) GetAnalyticDatabasePort() string {
+	port := h.Spec.Components.Analytic.Database.Port
+	if port <= 0 {
+		return "5432"
+	}
+
+	return strconv.Itoa(port)
+}
+
+func (h *HorusecPlatform) GetAnalyticDatabaseName() string {
+	name := h.Spec.Components.Analytic.Database.Name
+	if name == "" {
+		return "horusec_analytic_db"
+	}
+
+	return name
+}
+
+func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
+	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?" +
+		"sslmode=disable", h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName())
 }
