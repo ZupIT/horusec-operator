@@ -56,7 +56,7 @@ func (h *HorusecPlatform) GetAuthDefaultHTTPURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAuthName(), h.GetAuthPortHTTP())
 }
 func (h *HorusecPlatform) GetAuthDefaultGRPCURL() string {
-	return fmt.Sprintf("http://%s:%v", h.GetAuthName(), h.GetAuthPortGRPC())
+	return fmt.Sprintf("%s:%v", h.GetAuthName(), h.GetAuthPortGRPC())
 }
 func (h *HorusecPlatform) GetAuthImage() string {
 	image := h.GetAuthComponent().Container.Image

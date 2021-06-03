@@ -2,7 +2,6 @@ package inventory
 
 import (
 	"fmt"
-
 	batchv1 "k8s.io/api/batch/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -16,8 +15,15 @@ func ForJobs(existing, desired []batchv1.Job) Object {
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
 			tp := t.DeepCopy()
+			//
+			//if reflect.ValueOf(v.Spec.Template).IsZero() && !reflect.ValueOf(tp.Spec.Template).IsZero() {
+			//	v.Spec.Template = tp.Spec.Template
+			//}
+			//if v.Spec.Selector == nil && tp.Spec.Selector != nil {
+			//	v.Spec.Selector = tp.Spec.Selector
+			//}
 
-			tp.Spec = v.Spec
+			//tp.Spec = v.Spec
 			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
 
 			for k, v := range v.ObjectMeta.Annotations {

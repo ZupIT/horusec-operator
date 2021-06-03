@@ -49,11 +49,11 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_DEFAULT_USER_DATA", Value: "{\"username\": \"dev\", \"email\":\"dev@example.com\", \"password\":\"Devpass0*\"}"},
 						{Name: "HORUSEC_MANAGER_URL", Value: "http://0.0.0.0:8043"},
 						{Name: "HORUSEC_AUTH_URL", Value: "http://0.0.0.0:8006"},
-						{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
 						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetGlobalDatabaseUsername()),
 						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetGlobalDatabasePassword()),
+						{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 					},
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},

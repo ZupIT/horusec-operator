@@ -18,9 +18,6 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{
-					Name: "migration",
-				},
 				Spec: corev1.PodSpec{
 					RestartPolicy: corev1.RestartPolicyNever,
 					Containers: []corev1.Container{
@@ -29,16 +26,10 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 							Image:   resource.GetDatabaseMigrationImage(),
 							Command: []string{"migrate.sh"},
 							Env: []corev1.EnvVar{
-								{
-									Name:      "HORUSEC_DATABASE_USERNAME",
-									ValueFrom: &corev1.EnvVarSource{SecretKeyRef: resource.GetDatabaseUserSecretKeyRef()},
-								},
-								{
-									Name:      "HORUSEC_DATABASE_PASSWORD",
-									ValueFrom: &corev1.EnvVarSource{SecretKeyRef: resource.GetDatabasePasswordSecretKeyRef()},
-								},
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetGlobalDatabaseUsername()),
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetGlobalDatabasePassword()),
 								{Name: "MIGRATION_NAME", Value: "platform"},
-								{Name: "HORUSEC_DATABASE_SQL_URI", Value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@db.svc.cluster.local:5432/horusec_db?sslmode=disable"},
+								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 							},
 						},
 					},

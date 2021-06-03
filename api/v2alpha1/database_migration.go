@@ -16,40 +16,7 @@ package v2alpha1
 
 import (
 	"fmt"
-	corev1 "k8s.io/api/core/v1"
 )
-
-func (in *HorusecPlatform) GetDatabaseUserSecretKeyRef() *corev1.SecretKeySelector {
-	secretKeyRef := in.Spec.Global.Database.User.SecretKeyRef
-	secretKey := secretKeyRef.Key
-	if secretKey == "" {
-		secretKey = "username"
-	}
-	secretName := secretKeyRef.Name
-	if secretName == "" {
-		secretName = "horusec-database"
-	}
-	return &corev1.SecretKeySelector{
-		LocalObjectReference: corev1.LocalObjectReference{Name: secretName},
-		Key:                  secretKey,
-	}
-}
-
-func (in *HorusecPlatform) GetDatabasePasswordSecretKeyRef() *corev1.SecretKeySelector {
-	secretKeyRef := in.Spec.Global.Database.Password.SecretKeyRef
-	secretKey := secretKeyRef.Key
-	if secretKey == "" {
-		secretKey = "password"
-	}
-	secretName := secretKeyRef.Name
-	if secretName == "" {
-		secretName = "horusec-database"
-	}
-	return &corev1.SecretKeySelector{
-		LocalObjectReference: corev1.LocalObjectReference{Name: secretName},
-		Key:                  secretKey,
-	}
-}
 
 func (in *HorusecPlatform) GetDatabaseMigrationImage() string {
 	registry := in.GetDatabaseMigrationImageRegistry()
