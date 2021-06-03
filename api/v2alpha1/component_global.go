@@ -7,7 +7,7 @@ import (
 
 func (h *HorusecPlatform) NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
 	return corev1.EnvVar{
-		Name: variableName,
+		Name:      variableName,
 		ValueFrom: &corev1.EnvVarSource{SecretKeyRef: secretKeyRef},
 	}
 }
