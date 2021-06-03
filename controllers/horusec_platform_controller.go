@@ -17,26 +17,21 @@ package controllers
 import (
 	"context"
 
-	"github.com/go-logr/logr"
-	"k8s.io/apimachinery/pkg/api/errors"
-	ctrl "sigs.k8s.io/controller-runtime"
-
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/internal/requeue"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
+	"k8s.io/apimachinery/pkg/api/errors"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
 type HorusecPlatformReconciler struct {
 	factory AdapterFactory
-	log     logr.Logger
 }
 
 func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconciler {
-	return &HorusecPlatformReconciler{
-		factory: factory,
-		log:     ctrl.Log.WithName("controllers").WithName("HorusecPlatform"),
-	}
+	return &HorusecPlatformReconciler{factory: factory}
 }
 
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecs,verbs=get;list;watch;create;update;patch;delete
@@ -54,7 +49,10 @@ func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconc
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.8.3/pkg/reconcile
 //nolint:funlen // to improve in the future
 func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	log := r.log.WithValues("horusec", req.NamespacedName)
+	span, ctx := tracing.StartSpanFromContext(ctx, tracing.WithCustomResource(req.NamespacedName))
+	defer span.Finish()
+
+	log := span.Logger()
 	log.Info("reconciling")
 
 	adapter, err := r.factory.CreateHorusecPlatformAdapter(ctx, req.NamespacedName)
@@ -62,6 +60,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if errors.IsNotFound(err) {
 			return requeue.Not()
 		}
+		span.SetError(err)
 		return requeue.OnErr(err)
 	}
 
@@ -76,7 +75,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
 		Info("finished reconcile")
-	return result, err
+	return result, span.HandleError(err)
 }
 
 // SetupWithManager sets up the controller with the Manager.
