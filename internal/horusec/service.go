@@ -27,7 +27,7 @@ func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) 
 	r := new(v2alpha1.HorusecPlatform)
 	err := s.client.Get(ctx, key, r)
 	if err != nil {
-		return nil, fmt.Errorf("failed to lookup resource: %w", err)
+		return nil, span.HandleError(fmt.Errorf("failed to lookup resource: %w", err))
 	}
 	return r, nil
 }
@@ -38,7 +38,7 @@ func (s *Service) UpdateHorusecPlatformStatus(ctx context.Context, resource *v2a
 
 	err := s.client.Status().Update(ctx, resource)
 	if err != nil {
-		return err
+		return span.HandleError(err)
 	}
 	span.Logger().Info(fmt.Sprintf("%T %q status updated", resource, resource.GetName()))
 	return nil
@@ -52,21 +52,21 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 
 	for _, obj := range inv.Create {
 		if err := s.client.Create(ctx, obj); err != nil {
-			return fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err)
+			return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
 		}
 		log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
 	}
 
 	for _, obj := range inv.Update {
 		if err := s.client.Update(ctx, obj); err != nil {
-			return fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err)
+			return span.HandleError(fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err))
 		}
 		log.Info(fmt.Sprintf("%T %q updated", obj, obj.GetName()))
 	}
 
 	for _, obj := range inv.Delete {
 		if err := s.client.Delete(ctx, obj); err != nil {
-			return fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err)
+			return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
 		}
 		log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
 	}
@@ -85,7 +85,7 @@ func (s *Service) ListDeployments(ctx context.Context,
 	}
 	list := &v1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err)
+		return nil, span.HandleError(fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err))
 	}
 	return list, nil
 }
@@ -101,7 +101,7 @@ func (s *Service) ListAutoscaling(ctx context.Context,
 	}
 	list := &autoScalingV2beta2.HorizontalPodAutoscalerList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list %s Autoscaling: %w", matchingLabels["app.kubernetes.io/name"], err)
+		return nil, span.HandleError(fmt.Errorf("failed to list %s Autoscaling: %w", matchingLabels["app.kubernetes.io/name"], err))
 	}
 	return list, nil
 }
@@ -118,7 +118,7 @@ func (s *Service) ListServiceAccounts(
 
 	list := &core.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list %s service accounts: %w", name, err)
+		return nil, span.HandleError(fmt.Errorf("failed to list %s service accounts: %w", name, err))
 	}
 
 	return list, nil
@@ -135,7 +135,7 @@ func (s *Service) ListServices(
 	}
 	list := &core.ServiceList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list %s services: %w", name, err)
+		return nil, span.HandleError(fmt.Errorf("failed to list %s services: %w", name, err))
 	}
 	return list, nil
 }
@@ -152,7 +152,7 @@ func (s *Service) ListIngress(
 
 	list := &v1beta1.IngressList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, fmt.Errorf("failed to list %s ingress: %w", name, err)
+		return nil, span.HandleError(fmt.Errorf("failed to list %s ingress: %w", name, err))
 	}
 
 	return list, nil

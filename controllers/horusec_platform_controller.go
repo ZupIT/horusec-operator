@@ -60,6 +60,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if errors.IsNotFound(err) {
 			return requeue.Not()
 		}
+		span.SetError(err)
 		return requeue.OnErr(err)
 	}
 
@@ -74,7 +75,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
 		Info("finished reconcile")
-	return result, err
+	return result, span.HandleError(err)
 }
 
 // SetupWithManager sets up the controller with the Manager.
