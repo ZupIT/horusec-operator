@@ -24,21 +24,21 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 	}
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetAuthName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetAuthLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: component.GetReplicaCount(),
-			Selector: &metav1.LabelSelector{MatchLabels: Labels},
+			Selector: &metav1.LabelSelector{MatchLabels: resource.GetAuthLabels()},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetAuthLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-auth",
+					Name:  resource.GetAuthName(),
 					Image: "docker.io/horuszup/horusec-auth:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
-						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(component.Port.Grpc)},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
+						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_DISABLED_EMAILS", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
@@ -58,8 +58,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", "horusec-jwt", "jwt-token"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
-						{Name: "grpc", ContainerPort: int32(component.Port.Grpc)},
+						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
+						{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

@@ -13,17 +13,17 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 	component := resource.GetManagerComponent()
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetManagerName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetManagerLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: component.GetReplicaCount(),
-			Selector: &metav1.LabelSelector{MatchLabels: Labels},
+			Selector: &metav1.LabelSelector{MatchLabels: resource.GetManagerLabels()},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetManagerLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-manager",
+					Name:  resource.GetManagerName(),
 					Image: "docker.io/horuszup/horusec-manager:v2.12.1",
 					Env: []corev1.EnvVar{
 						{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: ""},
@@ -38,7 +38,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "REACT_APP_HORUSEC_MANAGER_THEME", Value: ""},
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},
 					},
 				}}},
 			},

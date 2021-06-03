@@ -2,14 +2,13 @@ package inventory
 
 import (
 	"fmt"
-
-	core "k8s.io/api/core/v1"
+	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:funlen, gocritic // to improve in the future
-func ForServiceAccount(existing, desired []core.ServiceAccount) Object {
-	var update []client.Object
+func ForServiceAccount(existing, desired []corev1.ServiceAccount) Object {
+	update := []client.Object{}
 	mcreate := serviceAccountMap(desired)
 	mdelete := serviceAccountMap(existing)
 
@@ -17,6 +16,7 @@ func ForServiceAccount(existing, desired []core.ServiceAccount) Object {
 		if t, ok := mdelete[k]; ok {
 			tp := t.DeepCopy()
 
+			// we can't blindly DeepCopyInto, so, we select what we bring from the new to the old object
 			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
 
 			for k, v := range v.ObjectMeta.Annotations {
@@ -41,8 +41,8 @@ func ForServiceAccount(existing, desired []core.ServiceAccount) Object {
 }
 
 //nolint:gocritic // to improve in the future
-func serviceAccountMap(deps []core.ServiceAccount) map[string]core.ServiceAccount {
-	m := map[string]core.ServiceAccount{}
+func serviceAccountMap(deps []corev1.ServiceAccount) map[string]corev1.ServiceAccount {
+	m := map[string]corev1.ServiceAccount{}
 	for _, d := range deps {
 		m[fmt.Sprintf("%s.%s", d.Namespace, d.Name)] = d
 	}
@@ -50,10 +50,11 @@ func serviceAccountMap(deps []core.ServiceAccount) map[string]core.ServiceAccoun
 }
 
 //nolint:gocritic, gosec, exportloopref // to improve in the future
-func serviceAccountList(m map[string]core.ServiceAccount) []client.Object {
-	var l []client.Object
+func serviceAccountList(m map[string]corev1.ServiceAccount) []client.Object {
+	l := []client.Object{}
 	for _, v := range m {
-		l = append(l, &v)
+		obj := v
+		l = append(l, &obj)
 	}
 	return l
 }

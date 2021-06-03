@@ -114,6 +114,19 @@ func (s *Service) ListServiceAccounts(
 	return list, nil
 }
 
+func (s *Service) ListServices(
+	ctx context.Context, namespace, name string, labels map[string]string) (*core.ServiceList, error) {
+	opts := []k8s.ListOption{
+		k8s.InNamespace(namespace),
+		k8s.MatchingLabels(labels),
+	}
+	list := &core.ServiceList{}
+	if err := s.client.List(ctx, list, opts...); err != nil {
+		return nil, fmt.Errorf("failed to list %s services: %w", name, err)
+	}
+	return list, nil
+}
+
 func (s *Service) ListIngress(
 	ctx context.Context, namespace, name string, labels map[string]string) (*v1beta1.IngressList, error) {
 	opts := []k8s.ListOption{

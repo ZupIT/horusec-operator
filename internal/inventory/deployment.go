@@ -8,15 +8,9 @@ import (
 	appsv1 "k8s.io/api/apps/v1"
 )
 
-type Deployment struct {
-	Create []appsv1.Deployment
-	Update []appsv1.Deployment
-	Delete []appsv1.Deployment
-}
-
 //nolint:funlen, gocritic // to improve in the future
 func ForDeployments(existing, desired []appsv1.Deployment) Object {
-	var update []client.Object
+	update := []client.Object{}
 	mcreate := deploymentMap(desired)
 	mdelete := deploymentMap(existing)
 
@@ -24,10 +18,14 @@ func ForDeployments(existing, desired []appsv1.Deployment) Object {
 		if t, ok := mdelete[k]; ok {
 			tp := t.DeepCopy()
 
+			// if we have a nil value for the replicas in the desired deployment
+			// but we have a specific value in the current deployment, we override the desired with the current
+			// as this might have been written by an HPA
 			if tp.Spec.Replicas != nil && v.Spec.Replicas == nil {
 				v.Spec.Replicas = tp.Spec.Replicas
 			}
 
+			// we can't blindly DeepCopyInto, so, we select what we bring from the new to the old object
 			tp.Spec = v.Spec
 			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
 
@@ -63,9 +61,10 @@ func deploymentMap(deps []appsv1.Deployment) map[string]appsv1.Deployment {
 
 //nolint:gocritic, gosec, exportloopref // to improve in the future
 func deploymentList(m map[string]appsv1.Deployment) []client.Object {
-	var l []client.Object
+	l := []client.Object{}
 	for _, v := range m {
-		l = append(l, &v)
+		obj := v
+		l = append(l, &obj)
 	}
 	return l
 }

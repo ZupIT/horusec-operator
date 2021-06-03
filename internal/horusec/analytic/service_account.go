@@ -10,9 +10,9 @@ import (
 func NewServiceAccount(resource *v2alpha1.HorusecPlatform) core.ServiceAccount {
 	return core.ServiceAccount{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetAnalyticName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetAnalyticLabels(),
 		},
 	}
 }

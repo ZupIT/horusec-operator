@@ -24,20 +24,20 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 	}
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetName(),
+			Name:      resource.GetWebhookName(),
 			Namespace: resource.GetNamespace(),
-			Labels:    Labels,
+			Labels:    resource.GetWebhookLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: component.GetReplicaCount(),
-			Selector: &metav1.LabelSelector{MatchLabels: Labels},
+			Selector: &metav1.LabelSelector{MatchLabels: resource.GetWebhookLabels()},
 			Template: corev1.PodTemplateSpec{
-				ObjectMeta: metav1.ObjectMeta{Labels: Labels},
+				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetWebhookLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  "horusec-webhook",
+					Name:  resource.GetWebhookName(),
 					Image: "docker.io/horuszup/horusec-webhook:v2.12.1",
 					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(component.Port.HTTP)},
+						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetWebhookPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
 						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: "horusec-auth:8007"},
@@ -51,7 +51,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", "horusec-database", "password"),
 					},
 					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(component.Port.HTTP)},
+						{Name: "http", ContainerPort: int32(resource.GetWebhookPortHTTP())},
 					},
 					LivenessProbe:  &probe,
 					ReadinessProbe: &probe,

@@ -3,6 +3,7 @@ package horusec
 import (
 	"context"
 	"fmt"
+	"reflect"
 
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 
@@ -69,53 +70,120 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 
 //nolint:funlen
 func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
+	existing, err := a.svc.ListDeployments(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
+	}
+
 	desired := a.listOfDeployments()
 	for index := range desired {
-		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, desired[index].ObjectMeta.Labels)
-		if err != nil {
-			return nil, err
-		}
-		if err = controllerutil.SetControllerReference(a.resource, &desired[index], a.scheme); err != nil {
-			return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired[index].GetName(), err)
-		}
-		inv := inventory.ForDeployments(deps.Items, desired)
-		err = a.svc.Apply(ctx, inv)
-		if err != nil {
+		if err := a.ensureDeployments(&desired[index]); err != nil {
 			return nil, err
 		}
 	}
+
+	inv := inventory.ForDeployments(existing.Items, desired)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
 	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) ensureDeployments(desired *appsv1.Deployment) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
 }
 
 //nolint:funlen
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
-	desired := a.listOfAutoscaling()
-	for index := range desired {
-		deps, err := a.svc.ListAutoscaling(ctx, a.resource.Namespace, desired[index].Labels)
-		if err != nil {
-			return nil, err
-		}
-		horizontalScaler := []autoScalingV2beta2.HorizontalPodAutoscaler{}
-		if desired[index] != nil {
-			horizontalScaler = append(horizontalScaler, *desired[index])
-		}
-		inv := inventory.ForHorizontalPodAutoscaling(deps.Items, horizontalScaler)
-		err = a.svc.Apply(ctx, inv)
-		if err != nil {
-			return nil, err
-		}
+	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
 	}
+
+	result := []autoScalingV2beta2.HorizontalPodAutoscaler{}
+
+	desired := a.listOfAutoscaling()
+	for index, _ := range desired {
+		if reflect.ValueOf(desired[index]).IsZero() {
+			continue
+		}
+
+		if err := a.ensureAutoscaling(&desired[index]); err != nil {
+			return nil, err
+		}
+
+		result = append(result, desired[index])
+	}
+
+	inv := inventory.ForHorizontalPodAutoscaling(existing.Items, result)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
 	return operation.ContinueProcessing()
 }
 
+func (a *Adapter) ensureAutoscaling(desired *autoScalingV2beta2.HorizontalPodAutoscaler) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set autoscaling %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
+}
+
+//nolint:funlen // improve in the future
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	existing, err := a.svc.ListServices(ctx, a.resource.GetNamespace(),
+		a.resource.GetName(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
+	}
+
+	desired := a.listServices()
+	for index := range desired {
+		if err := a.ensureServices(&desired[index]); err != nil {
+			return nil, err
+		}
+	}
+
+	inv := inventory.ForService(existing.Items, desired)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) listServices() []coreV1.Service {
+	return []coreV1.Service{
+		analytic.NewService(a.resource),
+		api.NewService(a.resource),
+		auth.NewService(a.resource),
+		core.NewService(a.resource),
+		manager.NewService(a.resource),
+		messages.NewService(a.resource),
+		vulnerability.NewService(a.resource),
+		webhook.NewService(a.resource),
+	}
+}
+
+func (a *Adapter) ensureServices(desired *coreV1.Service) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
 }
 
 //nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+		a.resource.GetName(), a.resource.GetDefaultLabel())
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +208,7 @@ func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Res
 //nolint // to improve in the future
 func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), map[string]string{"app.kubernetes.io/managed-by": "horusec"})
+		a.resource.GetName(), a.resource.GetDefaultLabel())
 	if err != nil {
 		return nil, err
 	}
@@ -187,8 +255,8 @@ func (a *Adapter) listOfDeployments() []appsv1.Deployment {
 	}
 }
 
-func (a *Adapter) listOfAutoscaling() []*autoScalingV2beta2.HorizontalPodAutoscaler {
-	return []*autoScalingV2beta2.HorizontalPodAutoscaler{
+func (a *Adapter) listOfAutoscaling() []autoScalingV2beta2.HorizontalPodAutoscaler {
+	return []autoScalingV2beta2.HorizontalPodAutoscaler{
 		auth.NewAutoscaling(a.resource),
 		core.NewAutoscaling(a.resource),
 		api.NewAutoscaling(a.resource),

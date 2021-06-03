@@ -7,12 +7,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type HorizontalPodAutoscaler struct {
-	Create []autoScalingV2beta2.HorizontalPodAutoscaler
-	Update []autoScalingV2beta2.HorizontalPodAutoscaler
-	Delete []autoScalingV2beta2.HorizontalPodAutoscaler
-}
-
 //nolint:funlen,gocritic // to improve in the future
 func ForHorizontalPodAutoscaling(existing []autoScalingV2beta2.HorizontalPodAutoscaler,
 	desired []autoScalingV2beta2.HorizontalPodAutoscaler) Object {
@@ -68,7 +62,8 @@ func hpaMap(hpas []autoScalingV2beta2.HorizontalPodAutoscaler) map[string]autoSc
 func hpaList(m map[string]autoScalingV2beta2.HorizontalPodAutoscaler) []client.Object {
 	l := []client.Object{}
 	for _, v := range m {
-		l = append(l, &v)
+		obj := v
+		l = append(l, &obj)
 	}
 	return l
 }
