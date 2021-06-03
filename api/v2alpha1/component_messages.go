@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetMessagesComponent() Messages {
 	return h.Spec.Components.Messages
@@ -41,4 +44,15 @@ func (h *HorusecPlatform) GetMessagesReplicaCount() *int32 {
 		return h.GetMessagesComponent().ReplicaCount
 	}
 	return nil
+}
+func (h *HorusecPlatform) GetMessagesDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetMessagesName(), h.GetMessagesPortHTTP())
+}
+func (h *HorusecPlatform) GetMessagesImage() string {
+	image := h.GetMessagesComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-messages:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }

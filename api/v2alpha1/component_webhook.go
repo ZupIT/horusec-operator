@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetWebhookComponent() Webhook {
 	return h.Spec.Components.Webhook
@@ -41,4 +44,15 @@ func (h *HorusecPlatform) GetWebhookReplicaCount() *int32 {
 		return h.GetWebhookComponent().ReplicaCount
 	}
 	return nil
+}
+func (h *HorusecPlatform) GetWebhookDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetWebhookName(), h.GetWebhookPortHTTP())
+}
+func (h *HorusecPlatform) GetWebhookImage() string {
+	image := h.GetWebhookComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-webhook:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }

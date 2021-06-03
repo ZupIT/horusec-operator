@@ -34,7 +34,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetWebhookLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  resource.GetWebhookName(),
-					Image: "docker.io/horuszup/horusec-webhook:v2.12.1",
+					Image: resource.GetWebhookImage(),
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetWebhookPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: "false"},
