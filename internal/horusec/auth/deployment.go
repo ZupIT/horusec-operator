@@ -49,7 +49,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_DEFAULT_USER_DATA", Value: "{\"username\": \"dev\", \"email\":\"dev@example.com\", \"password\":\"Devpass0*\"}"},
 						{Name: "HORUSEC_MANAGER_URL", Value: "http://0.0.0.0:8043"},
 						{Name: "HORUSEC_AUTH_URL", Value: "http://0.0.0.0:8006"},
-						{Name: "HORUSEC_DATABASE_SQL_URI", Value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@db.svc.cluster.local:5432/horusec_db?sslmode=disable"},
+						{Name: "HORUSEC_DATABASE_SQL_URI", Value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@postgresql:5432/horusec_db?sslmode=disable"},
 						NewEnvFromSecret("HORUSEC_BROKER_USERNAME", "horusec-broker", "username"),
 						NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", "horusec-broker", "password"),
 						NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", "horusec-database", "username"),
