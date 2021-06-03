@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/ZupIT/horusec-operator/internal/horusec/migration"
+	v1 "k8s.io/api/batch/v1"
+
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 
 	"k8s.io/api/networking/v1beta1"
@@ -52,20 +55,23 @@ func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, 
 	return operation.StopProcessing()
 }
 
-func (a *Adapter) EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
 func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	existing, err := a.svc.ListJobs(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
+	}
+
+	desired := migration.NewJob(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, &desired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", desired.GetName(), err)
+	}
+
+	inv := inventory.ForJobs(existing.Items, []v1.Job{desired})
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
 }
 
 //nolint:funlen
@@ -108,7 +114,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 	result := []autoScalingV2beta2.HorizontalPodAutoscaler{}
 
 	desired := a.listOfAutoscaling()
-	for index, _ := range desired {
+	for index := range desired {
 		if reflect.ValueOf(desired[index]).IsZero() {
 			continue
 		}

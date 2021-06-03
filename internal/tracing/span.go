@@ -58,7 +58,9 @@ func (s *Span) SetError(err error) {
 }
 
 func (s *Span) HandleError(err error) error {
-	s.SetError(err)
+	if err != nil {
+		s.SetError(err)
+	}
 	return err
 }
 

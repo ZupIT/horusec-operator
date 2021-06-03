@@ -204,14 +204,19 @@ type SecurityContext struct {
 }
 
 type Database struct {
-	Dialect  string   `json:"dialect,omitempty"`
-	Host     string   `json:"host,omitempty"`
-	LogMode  bool     `json:"logMode,omitempty"`
-	Name     string   `json:"name,omitempty"`
-	Password Password `json:"password,omitempty"`
-	Port     int      `json:"port,omitempty"`
-	SslMode  bool     `json:"sslMode,omitempty"`
-	User     User     `json:"user,omitempty"`
+	Dialect   string    `json:"dialect,omitempty"`
+	Host      string    `json:"host,omitempty"`
+	LogMode   bool      `json:"logMode,omitempty"`
+	Name      string    `json:"name,omitempty"`
+	Password  Password  `json:"password,omitempty"`
+	Port      int       `json:"port,omitempty"`
+	SslMode   bool      `json:"sslMode,omitempty"`
+	User      User      `json:"user,omitempty"`
+	Migration Migration `json:"migration,omitempty"`
+}
+
+type Migration struct {
+	Image Image `json:"image,omitempty"`
 }
 
 type Password struct {

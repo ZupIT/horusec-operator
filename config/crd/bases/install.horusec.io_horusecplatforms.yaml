@@ -355,6 +355,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -777,6 +795,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -1199,6 +1235,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -1623,6 +1677,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -2820,6 +2892,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -3242,6 +3332,24 @@ spec:
                             type: string
                           logMode:
                             type: boolean
+                          migration:
+                            properties:
+                              image:
+                                properties:
+                                  pullPolicy:
+                                    type: string
+                                  pullSecrets:
+                                    items:
+                                      type: string
+                                    type: array
+                                  registry:
+                                    type: string
+                                  repository:
+                                    type: string
+                                  tag:
+                                    type: string
+                                type: object
+                            type: object
                           name:
                             type: string
                           password:
@@ -3472,6 +3580,24 @@ spec:
                         type: string
                       logMode:
                         type: boolean
+                      migration:
+                        properties:
+                          image:
+                            properties:
+                              pullPolicy:
+                                type: string
+                              pullSecrets:
+                                items:
+                                  type: string
+                                type: array
+                              registry:
+                                type: string
+                              repository:
+                                type: string
+                              tag:
+                                type: string
+                            type: object
+                        type: object
                       name:
                         type: string
                       password:
