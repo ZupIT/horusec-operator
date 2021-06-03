@@ -3,6 +3,7 @@ package horusec
 import (
 	"context"
 	"fmt"
+	"reflect"
 
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 
@@ -69,43 +70,70 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 
 //nolint:funlen
 func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
+	existing, err := a.svc.ListDeployments(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
+	}
+
 	desired := a.listOfDeployments()
 	for index := range desired {
-		deps, err := a.svc.ListDeployments(ctx, a.resource.Namespace, a.resource.GetDefaultLabel())
-		if err != nil {
-			return nil, err
-		}
-		if err = controllerutil.SetControllerReference(a.resource, &desired[index], a.scheme); err != nil {
-			return nil, fmt.Errorf("failed to set Deployment %q owner reference: %v", desired[index].GetName(), err)
-		}
-		inv := inventory.ForDeployments(deps.Items, desired)
-		err = a.svc.Apply(ctx, inv)
-		if err != nil {
+		if err := a.ensureDeployments(&desired[index]); err != nil {
 			return nil, err
 		}
 	}
+
+	inv := inventory.ForDeployments(existing.Items, desired)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
 	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) ensureDeployments(desired *appsv1.Deployment) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
 }
 
 //nolint:funlen
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
-	desired := a.listOfAutoscaling()
-	for index := range desired {
-		deps, err := a.svc.ListAutoscaling(ctx, a.resource.Namespace, a.resource.GetDefaultLabel())
-		if err != nil {
-			return nil, err
-		}
-		horizontalScaler := []autoScalingV2beta2.HorizontalPodAutoscaler{}
-		if desired[index] != nil {
-			horizontalScaler = append(horizontalScaler, *desired[index])
-		}
-		inv := inventory.ForHorizontalPodAutoscaling(deps.Items, horizontalScaler)
-		err = a.svc.Apply(ctx, inv)
-		if err != nil {
-			return nil, err
-		}
+	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
 	}
+
+	result := []autoScalingV2beta2.HorizontalPodAutoscaler{}
+
+	desired := a.listOfAutoscaling()
+	for index, _ := range desired {
+		if reflect.ValueOf(desired[index]).IsZero() {
+			continue
+		}
+
+		if err := a.ensureAutoscaling(&desired[index]); err != nil {
+			return nil, err
+		}
+
+		result = append(result, desired[index])
+	}
+
+	inv := inventory.ForHorizontalPodAutoscaling(existing.Items, result)
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
 	return operation.ContinueProcessing()
+}
+
+func (a *Adapter) ensureAutoscaling(desired *autoScalingV2beta2.HorizontalPodAutoscaler) error {
+	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		return fmt.Errorf("failed to set autoscaling %q owner reference: %v", desired.GetName(), err)
+	}
+
+	return nil
 }
 
 //nolint:funlen // improve in the future
@@ -227,8 +255,8 @@ func (a *Adapter) listOfDeployments() []appsv1.Deployment {
 	}
 }
 
-func (a *Adapter) listOfAutoscaling() []*autoScalingV2beta2.HorizontalPodAutoscaler {
-	return []*autoScalingV2beta2.HorizontalPodAutoscaler{
+func (a *Adapter) listOfAutoscaling() []autoScalingV2beta2.HorizontalPodAutoscaler {
+	return []autoScalingV2beta2.HorizontalPodAutoscaler{
 		auth.NewAutoscaling(a.resource),
 		core.NewAutoscaling(a.resource),
 		api.NewAutoscaling(a.resource),

@@ -8,12 +8,12 @@ import (
 )
 
 // nolint:funlen // constructor is required all data
-func NewAutoscaling(resource *v2alpha1.HorusecPlatform) *autoScalingV2beta2.HorizontalPodAutoscaler {
+func NewAutoscaling(resource *v2alpha1.HorusecPlatform) autoScalingV2beta2.HorizontalPodAutoscaler {
 	autoScaling := resource.GetWebhookAutoscaling()
 	if !autoScaling.Enabled {
-		return nil
+		return autoScalingV2beta2.HorizontalPodAutoscaler{}
 	}
-	return &autoScalingV2beta2.HorizontalPodAutoscaler{
+	return autoScalingV2beta2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetWebhookName(),
 			Namespace: resource.GetNamespace(),
