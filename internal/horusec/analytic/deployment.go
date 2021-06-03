@@ -43,10 +43,10 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_BROKER_HOST", Value: "rabbitmq"},
 						{Name: "HORUSEC_BROKER_PORT", Value: "5672"},
 						{Name: "HORUSEC_DATABASE_SQL_URI", Value: "postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@postgresql:5432/horusec_analytic_db?sslmode=disable"},
-						NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
-						NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
-						NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", "horusec-database", "username"),
-						NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", "horusec-database", "password"),
+						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
+						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
+						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetAnalyticDatabaseUsername()),
+						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetAnalyticDatabasePassword()),
 					},
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetAnalyticPortHTTP())},
@@ -56,12 +56,5 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 				}}},
 			},
 		},
-	}
-}
-
-func NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
-	return corev1.EnvVar{
-		Name: variableName,
-		ValueFrom: &corev1.EnvVarSource{SecretKeyRef: secretKeyRef},
 	}
 }

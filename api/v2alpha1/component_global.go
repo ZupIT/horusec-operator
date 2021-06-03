@@ -5,6 +5,13 @@ import (
 	"reflect"
 )
 
+func (h *HorusecPlatform) NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
+	return corev1.EnvVar{
+		Name: variableName,
+		ValueFrom: &corev1.EnvVarSource{SecretKeyRef: secretKeyRef},
+	}
+}
+
 func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
