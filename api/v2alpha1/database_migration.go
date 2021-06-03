@@ -27,7 +27,7 @@ func (in *HorusecPlatform) GetDatabaseUserSecretKeyRef() *corev1.SecretKeySelect
 	}
 	secretName := secretKeyRef.Name
 	if secretName == "" {
-		secretKey = "horusec-database"
+		secretName = "horusec-database"
 	}
 	return &corev1.SecretKeySelector{
 		LocalObjectReference: corev1.LocalObjectReference{Name: secretName},
@@ -43,7 +43,7 @@ func (in *HorusecPlatform) GetDatabasePasswordSecretKeyRef() *corev1.SecretKeySe
 	}
 	secretName := secretKeyRef.Name
 	if secretName == "" {
-		secretKey = "horusec-database"
+		secretName = "horusec-database"
 	}
 	return &corev1.SecretKeySelector{
 		LocalObjectReference: corev1.LocalObjectReference{Name: secretName},
