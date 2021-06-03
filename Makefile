@@ -83,3 +83,6 @@ install: manifests kustomize
 
 uninstall: manifests kustomize
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+
+test-sample:
+	kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml

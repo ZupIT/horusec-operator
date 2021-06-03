@@ -53,7 +53,7 @@ type Clients struct {
 
 type Confidential struct {
 	ID           string       `json:"id,omitempty"`
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Public struct {
@@ -61,7 +61,7 @@ type Public struct {
 }
 
 type Jwt struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Broker struct {
@@ -215,16 +215,11 @@ type Database struct {
 }
 
 type Password struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type User struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
-}
-
-type SecretKeyRef struct {
-	Key  string `json:"key,omitempty"`
-	Name string `json:"name,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Ingress struct {
