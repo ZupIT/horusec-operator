@@ -52,18 +52,6 @@ func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, 
 	return operation.StopProcessing()
 }
 
-func (a *Adapter) EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
 func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error) {
 	panic("implement me") // TODO
 }
