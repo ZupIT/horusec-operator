@@ -14,12 +14,12 @@ spec:
         name: horusec_analytic_db
         password:
           secretKeyRef:
-            key: database-password
-            name: database-password
+            key: username
+            name: horusec-database
         user:
           secretKeyRef:
-            key: database-username
-            name: database-username
+            key: username
+            name: horusec-database
       ingress:
         host: manager.horus.dev.zup.corp
         tls:
@@ -86,9 +86,9 @@ spec:
       name: horusdb
       password:
         secretKeyRef:
-          key: database-password
-          name: database-password
+          key: username
+          name: horusec-database
       user:
         secretKeyRef:
-          key: database-username
-          name: database-username
+          key: username
+          name: horusec-database
