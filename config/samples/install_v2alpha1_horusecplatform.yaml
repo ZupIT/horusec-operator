@@ -42,6 +42,11 @@ spec:
         tls:
           secretName: horusec-tls
     messages:
+      container:
+        livenessProbe:
+          timeoutSeconds: 3
+        readinessProbe:
+          timeoutSeconds: 3
       ingress:
         host: manager.horus.dev.zup.corp
         tls:
