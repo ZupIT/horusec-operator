@@ -2,6 +2,4 @@ apiVersion: install.horusec.io/v2alpha1
 kind: HorusecPlatform
 metadata:
   name: horusecplatform-sample
-spec:
-  # Add fields here
-  foo: bar
+spec: {}

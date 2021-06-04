@@ -36,7 +36,13 @@ func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconc
 
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms/finalizers,verbs=update
+//+kubebuilder:rbac:groups="",resources=serviceaccounts,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=extensions,resources=ingresses,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=networking.k8s.io,resources=ingresses,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=batch,resources=jobs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=autoscaling,resources=horizontalpodautoscalers,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
