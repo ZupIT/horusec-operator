@@ -51,11 +51,11 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	defer span.Finish()
 	log := span.Logger()
 
-	for _, obj := range inv.Create {
-		if err := s.client.Create(ctx, obj); err != nil {
-			return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
+	for _, obj := range inv.Delete {
+		if err := s.client.Delete(ctx, obj); err != nil {
+			return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
 		}
-		log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
+		log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
 	}
 
 	for _, obj := range inv.Update {
@@ -65,11 +65,11 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 		log.Info(fmt.Sprintf("%T %q updated", obj, obj.GetName()))
 	}
 
-	for _, obj := range inv.Delete {
-		if err := s.client.Delete(ctx, obj); err != nil {
-			return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
+	for _, obj := range inv.Create {
+		if err := s.client.Create(ctx, obj); err != nil {
+			return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
 		}
-		log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
+		log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
 	}
 
 	return nil
