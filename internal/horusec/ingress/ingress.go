@@ -98,11 +98,13 @@ func mapRulesAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]v1beta1.H
 
 	rulesMap := map[string][]v1beta1.HTTPIngressPath{}
 	for index := range ingressRules {
-		if value, ok := rulesMap[ingressRules[index].Host]; ok {
-			rulesMap[ingressRules[index].Host] = append(value, ingressRules[0].IngressRuleValue.HTTP.Paths[0])
+		if ingressPath, ok := rulesMap[ingressRules[index].Host]; ok {
+			for _, path := range ingressPath {
+				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], path)
+			}
 		} else {
-			for _, value := range ingressRules[0].IngressRuleValue.HTTP.Paths {
-				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], value)
+			for _, path := range ingressRules[index].IngressRuleValue.HTTP.Paths {
+				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], path)
 			}
 		}
 	}
