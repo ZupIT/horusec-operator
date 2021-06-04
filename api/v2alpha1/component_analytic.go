@@ -2,9 +2,10 @@ package v2alpha1
 
 import (
 	"fmt"
-	corev1 "k8s.io/api/core/v1"
 	"reflect"
 	"strconv"
+
+	corev1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) GetAnalyticComponent() Analytic {
@@ -117,9 +118,18 @@ func (h *HorusecPlatform) GetAnalyticDatabaseName() string {
 	return name
 }
 
+func (h *HorusecPlatform) GetAnalyticSSLMode() string {
+	mode := h.Spec.Components.Analytic.Database.SslMode
+	if mode == nil || *mode {
+		return "enable"
+	}
+
+	return "disable"
+}
+
 func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?"+
-		"sslmode=disable", h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName())
+	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=%s",
+		h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName(), h.GetAnalyticSSLMode())
 }
 
 func (h *HorusecPlatform) GetAnalyticHost() string {

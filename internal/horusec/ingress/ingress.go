@@ -1,6 +1,9 @@
 package ingress
 
 import (
+	"k8s.io/api/networking/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
@@ -10,8 +13,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
 	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
-	"k8s.io/api/networking/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 //nolint:funlen // improve in the future
@@ -185,4 +186,3 @@ func mapRulesAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]v1beta1.H
 
 	return rulesMap
 }
-

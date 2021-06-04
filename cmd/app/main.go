@@ -19,13 +19,16 @@ import (
 	"flag"
 	"os"
 
-	"github.com/ZupIT/horusec-operator/internal/tracing"
 	"go.uber.org/zap/zapcore"
 
-	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
+
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+
+	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
