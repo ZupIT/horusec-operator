@@ -26,7 +26,7 @@ func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
 			Labels:    resource.GetDefaultLabel(),
 		},
 		Spec: v1beta1.IngressSpec{
-			Rules: []v1beta1.IngressRule{
+			Rules: []v1beta1.IngressRule{ // TODO: single rule for each host
 				analytic.NewIngressRule(resource, pathType),
 				api.NewIngressRule(resource, pathType),
 				auth.NewIngressRule(resource, pathType),
