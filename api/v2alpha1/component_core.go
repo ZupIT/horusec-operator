@@ -56,3 +56,12 @@ func (h *HorusecPlatform) GetCoreImage() string {
 
 	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }
+
+func (h *HorusecPlatform) GetCoreHost() string {
+	host := h.Spec.Components.Core.Ingress.Host
+	if host == "" {
+		return "core.local"
+	}
+
+	return host
+}

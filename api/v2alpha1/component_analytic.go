@@ -118,6 +118,15 @@ func (h *HorusecPlatform) GetAnalyticDatabaseName() string {
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?" +
+	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?"+
 		"sslmode=disable", h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName())
+}
+
+func (h *HorusecPlatform) GetAnalyticHost() string {
+	host := h.Spec.Components.Analytic.Ingress.Host
+	if host == "" {
+		return "analytic.local"
+	}
+
+	return host
 }

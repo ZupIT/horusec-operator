@@ -56,3 +56,12 @@ func (h *HorusecPlatform) GetWebhookImage() string {
 
 	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }
+
+func (h *HorusecPlatform) GetWebhookHost() string {
+	host := h.Spec.Components.Webhook.Ingress.Host
+	if host == "" {
+		return "webhook.local"
+	}
+
+	return host
+}

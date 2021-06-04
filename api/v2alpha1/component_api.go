@@ -56,3 +56,12 @@ func (h *HorusecPlatform) GetAPIImage() string {
 
 	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }
+
+func (h *HorusecPlatform) GetAPIHost() string {
+	host := h.Spec.Components.Api.Ingress.Host
+	if host == "" {
+		return "api.local"
+	}
+
+	return host
+}

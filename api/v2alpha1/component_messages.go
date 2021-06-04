@@ -82,3 +82,12 @@ func (h *HorusecPlatform) GetMessagesMailServerPassword() *corev1.SecretKeySelec
 	value := h.GetMessagesMailServer().Password.SecretKeyRef
 	return &value
 }
+
+func (h *HorusecPlatform) GetMessagesHost() string {
+	host := h.Spec.Components.Messages.Ingress.Host
+	if host == "" {
+		return "messages.local"
+	}
+
+	return host
+}
