@@ -49,13 +49,15 @@ func mapSecretsAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]string 
 
 	tlsMap := map[string][]string{}
 	for index := range ingressConfig {
-		if ingressConfig[index].Enabled == nil {
-			ingressConfig[index].Enabled = &defaultEnable
-		}
-		if value, ok := tlsMap[ingressConfig[index].TLS.SecretName]; ok && *ingressConfig[index].Enabled {
-			tlsMap[ingressConfig[index].TLS.SecretName] = append(value, ingressConfig[index].Host)
-		} else {
-			tlsMap[ingressConfig[index].TLS.SecretName] = append(tlsMap[ingressConfig[index].TLS.SecretName], ingressConfig[index].Host)
+		if ingressConfig[index].TLS.SecretName != "" {
+			if ingressConfig[index].Enabled == nil {
+				ingressConfig[index].Enabled = &defaultEnable
+			}
+			if value, ok := tlsMap[ingressConfig[index].TLS.SecretName]; ok && *ingressConfig[index].Enabled {
+				tlsMap[ingressConfig[index].TLS.SecretName] = append(value, ingressConfig[index].Host)
+			} else {
+				tlsMap[ingressConfig[index].TLS.SecretName] = append(tlsMap[ingressConfig[index].TLS.SecretName], ingressConfig[index].Host)
+			}
 		}
 	}
 
@@ -94,35 +96,93 @@ func NewIngressRules(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressRule {
 }
 
 func mapRulesAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]v1beta1.HTTPIngressPath {
-	ingressRules := newIngressRulesList(resource)
-
 	rulesMap := map[string][]v1beta1.HTTPIngressPath{}
-	for index := range ingressRules {
-		if ingressPath, ok := rulesMap[ingressRules[index].Host]; ok {
-			for _, path := range ingressPath {
-				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], path)
-			}
-		} else {
-			for _, path := range ingressRules[index].IngressRuleValue.HTTP.Paths {
-				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], path)
-			}
+
+	pathType := v1beta1.PathTypePrefix
+	analyticIngress := analytic.NewIngressRule(resource, pathType)
+
+	if ingressPath, ok := rulesMap[analyticIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[analyticIngress.Host] = append(rulesMap[analyticIngress.Host], path)
+		}
+	} else {
+		for _, path := range analyticIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[analyticIngress.Host] = append(rulesMap[analyticIngress.Host], path)
+		}
+	}
+
+	apiIngress := api.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[apiIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[apiIngress.Host] = append(rulesMap[apiIngress.Host], path)
+		}
+	} else {
+		for _, path := range apiIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[apiIngress.Host] = append(rulesMap[apiIngress.Host], path)
+		}
+	}
+
+	authIngress := auth.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[authIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[authIngress.Host] = append(rulesMap[authIngress.Host], path)
+		}
+	} else {
+		for _, path := range authIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[authIngress.Host] = append(rulesMap[authIngress.Host], path)
+		}
+	}
+	coreIngress := core.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[coreIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[coreIngress.Host] = append(rulesMap[coreIngress.Host], path)
+		}
+	} else {
+		for _, path := range coreIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[coreIngress.Host] = append(rulesMap[coreIngress.Host], path)
+		}
+	}
+	managerIngress := manager.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[managerIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[managerIngress.Host] = append(rulesMap[managerIngress.Host], path)
+		}
+	} else {
+		for _, path := range managerIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[managerIngress.Host] = append(rulesMap[managerIngress.Host], path)
+		}
+	}
+	messagesIngress := messages.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[messagesIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[messagesIngress.Host] = append(rulesMap[messagesIngress.Host], path)
+		}
+	} else {
+		for _, path := range messagesIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[messagesIngress.Host] = append(rulesMap[messagesIngress.Host], path)
+		}
+	}
+	vulnerabilityIngress := vulnerability.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[vulnerabilityIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[vulnerabilityIngress.Host] = append(rulesMap[vulnerabilityIngress.Host], path)
+		}
+	} else {
+		for _, path := range vulnerabilityIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[vulnerabilityIngress.Host] = append(rulesMap[vulnerabilityIngress.Host], path)
+		}
+	}
+	webhookIngress := webhook.NewIngressRule(resource, pathType)
+	if ingressPath, ok := rulesMap[webhookIngress.Host]; ok {
+		for _, path := range ingressPath {
+			rulesMap[webhookIngress.Host] = append(rulesMap[webhookIngress.Host], path)
+		}
+	} else {
+		for _, path := range webhookIngress.IngressRuleValue.HTTP.Paths {
+			rulesMap[webhookIngress.Host] = append(rulesMap[webhookIngress.Host], path)
 		}
 	}
 
 	return rulesMap
 }
 
-func newIngressRulesList(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressRule {
-	pathType := v1beta1.PathTypePrefix
-
-	return []v1beta1.IngressRule{
-		analytic.NewIngressRule(resource, pathType),
-		api.NewIngressRule(resource, pathType),
-		auth.NewIngressRule(resource, pathType),
-		core.NewIngressRule(resource, pathType),
-		manager.NewIngressRule(resource, pathType),
-		messages.NewIngressRule(resource, pathType),
-		vulnerability.NewIngressRule(resource, pathType),
-		webhook.NewIngressRule(resource, pathType),
-	}
-}
