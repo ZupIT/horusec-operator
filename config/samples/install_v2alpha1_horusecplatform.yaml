@@ -11,7 +11,7 @@ spec:
         name: horusec_analytic_db
         password:
           secretKeyRef:
-            key: username
+            key: password
             name: horusec-database
         user:
           secretKeyRef:
@@ -62,7 +62,7 @@ spec:
       name: horusdb
       password:
         secretKeyRef:
-          key: username
+          key: password
           name: horusec-database
       user:
         secretKeyRef:
