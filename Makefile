@@ -8,7 +8,7 @@ HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-VERSION ?= 2.0.0-alpha.4
+VERSION ?= 2.0.0-alpha.5
 IMAGE_TAG_BASE ?= horuszup/horusec-operator
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 IMG ?= $(IMAGE_TAG_BASE):v$(VERSION)
@@ -56,6 +56,12 @@ pipeline: fmt fix-imports lint test coverage build security
 
 up-sample:
 	sh ./config/samples/sample_install_dependencies.sh
+
+apply-sample:
+	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+
+replace-sample:
+	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
 
 docker-build:
 	docker build -t $(IMG) -f ./Dockerfile .

@@ -20,7 +20,7 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
 				Spec: corev1.PodSpec{
-					RestartPolicy:                 corev1.RestartPolicyNever,
+					RestartPolicy:                 corev1.RestartPolicyOnFailure,
 					TerminationGracePeriodSeconds: &terminationPeriod,
 					Containers: []corev1.Container{
 						{
