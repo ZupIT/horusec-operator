@@ -54,9 +54,16 @@ func (h *HorusecPlatform) GetAnalyticDefaultURL() string {
 func (h *HorusecPlatform) GetAnalyticRegistry() string {
 	registry := h.GetAnalyticComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-analytic"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetAnalyticRepository() string {
+	repository := h.GetAnalyticComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-analytic"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetAnalyticTag() string {
 	tag := h.GetAnalyticComponent().Container.Image.Tag
@@ -66,9 +73,8 @@ func (h *HorusecPlatform) GetAnalyticTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetAnalyticImage() string {
-	return fmt.Sprintf("%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticTag())
+	return fmt.Sprintf("%s%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticRepository(), h.GetAnalyticTag())
 }
-
 func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.GetAnalyticComponent().Database.User).IsZero() {
 		return &corev1.SecretKeySelector{

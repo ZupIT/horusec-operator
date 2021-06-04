@@ -47,12 +47,20 @@ func (h *HorusecPlatform) GetCoreReplicaCount() *int32 {
 func (h *HorusecPlatform) GetCoreDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetCoreName(), h.GetCorePortHTTP())
 }
+
 func (h *HorusecPlatform) GetCoreRegistry() string {
 	registry := h.GetCoreComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-core"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetCoreRepository() string {
+	repository := h.GetCoreComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-core"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetCoreTag() string {
 	tag := h.GetCoreComponent().Container.Image.Tag
@@ -62,9 +70,8 @@ func (h *HorusecPlatform) GetCoreTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetCoreImage() string {
-	return fmt.Sprintf("%s:%s", h.GetCoreRegistry(), h.GetCoreTag())
+	return fmt.Sprintf("%s%s:%s", h.GetCoreRegistry(), h.GetCoreRepository(), h.GetCoreTag())
 }
-
 func (h *HorusecPlatform) GetCoreHost() string {
 	host := h.Spec.Components.Core.Ingress.Host
 	if host == "" {

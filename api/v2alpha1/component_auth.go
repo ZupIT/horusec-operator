@@ -60,9 +60,16 @@ func (h *HorusecPlatform) GetAuthDefaultGRPCURL() string {
 func (h *HorusecPlatform) GetAuthRegistry() string {
 	registry := h.GetAuthComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-auth"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetAuthRepository() string {
+	repository := h.GetAuthComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-auth"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetAuthTag() string {
 	tag := h.GetAuthComponent().Container.Image.Tag
@@ -72,7 +79,7 @@ func (h *HorusecPlatform) GetAuthTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetAuthImage() string {
-	return fmt.Sprintf("%s:%s", h.GetAuthRegistry(), h.GetAuthTag())
+	return fmt.Sprintf("%s%s:%s", h.GetAuthRegistry(), h.GetAuthRepository(), h.GetAuthTag())
 }
 
 func (h *HorusecPlatform) GetAuthHost() string {

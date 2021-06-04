@@ -53,9 +53,16 @@ func (h *HorusecPlatform) GetMessagesDefaultURL() string {
 func (h *HorusecPlatform) GetMessagesRegistry() string {
 	registry := h.GetMessagesComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-messages"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetMessagesRepository() string {
+	repository := h.GetMessagesComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-messages"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetMessagesTag() string {
 	tag := h.GetMessagesComponent().Container.Image.Tag
@@ -65,7 +72,7 @@ func (h *HorusecPlatform) GetMessagesTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetMessagesImage() string {
-	return fmt.Sprintf("%s:%s", h.GetMessagesRegistry(), h.GetMessagesTag())
+	return fmt.Sprintf("%s%s:%s", h.GetMessagesRegistry(), h.GetMessagesRepository(), h.GetMessagesTag())
 }
 func (h *HorusecPlatform) GetMessagesMailServer() MailServer {
 	return h.GetMessagesComponent().MailServer

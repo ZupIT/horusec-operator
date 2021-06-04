@@ -50,9 +50,16 @@ func (h *HorusecPlatform) GetManagerDefaultURL() string {
 func (h *HorusecPlatform) GetManagerRegistry() string {
 	registry := h.GetManagerComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-manager"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetManagerRepository() string {
+	repository := h.GetManagerComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-manager"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetManagerTag() string {
 	tag := h.GetManagerComponent().Container.Image.Tag
@@ -62,7 +69,7 @@ func (h *HorusecPlatform) GetManagerTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetManagerImage() string {
-	return fmt.Sprintf("%s:%s", h.GetManagerRegistry(), h.GetManagerTag())
+	return fmt.Sprintf("%s%s:%s", h.GetManagerRegistry(), h.GetManagerRepository(), h.GetManagerTag())
 }
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 	host := h.GetAnalyticComponent().Ingress.Host

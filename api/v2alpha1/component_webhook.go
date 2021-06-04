@@ -50,9 +50,16 @@ func (h *HorusecPlatform) GetWebhookDefaultURL() string {
 func (h *HorusecPlatform) GetWebhookRegistry() string {
 	registry := h.GetWebhookComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-webhook"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetWebhookRepository() string {
+	repository := h.GetWebhookComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-webhook"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetWebhookTag() string {
 	tag := h.GetWebhookComponent().Container.Image.Tag
@@ -62,9 +69,8 @@ func (h *HorusecPlatform) GetWebhookTag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetWebhookImage() string {
-	return fmt.Sprintf("%s:%s", h.GetWebhookRegistry(), h.GetWebhookTag())
+	return fmt.Sprintf("%s%s:%s", h.GetWebhookRegistry(), h.GetWebhookRepository(), h.GetWebhookTag())
 }
-
 func (h *HorusecPlatform) GetWebhookHost() string {
 	host := h.Spec.Components.Webhook.Ingress.Host
 	if host == "" {

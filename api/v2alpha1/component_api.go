@@ -50,9 +50,16 @@ func (h *HorusecPlatform) GetAPIDefaultURL() string {
 func (h *HorusecPlatform) GetAPIRegistry() string {
 	registry := h.GetAPIComponent().Container.Image.Registry
 	if registry == "" {
-		return "docker.io/horuszup/horusec-api"
+		return "docker.io/"
 	}
 	return registry
+}
+func (h *HorusecPlatform) GetAPIRepository() string {
+	repository := h.GetAPIComponent().Container.Image.Repository
+	if repository == "" {
+		return "horuszup/horusec-api"
+	}
+	return repository
 }
 func (h *HorusecPlatform) GetAPITag() string {
 	tag := h.GetAPIComponent().Container.Image.Tag
@@ -62,7 +69,7 @@ func (h *HorusecPlatform) GetAPITag() string {
 	return tag
 }
 func (h *HorusecPlatform) GetAPIImage() string {
-	return fmt.Sprintf("%s:%s", h.GetAPIRegistry(), h.GetAPITag())
+	return fmt.Sprintf("%s%s:%s", h.GetAPIRegistry(), h.GetAPIRepository(), h.GetAPITag())
 }
 func (h *HorusecPlatform) GetAPIHost() string {
 	host := h.Spec.Components.Api.Ingress.Host
