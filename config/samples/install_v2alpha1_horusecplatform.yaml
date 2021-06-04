@@ -57,6 +57,16 @@ spec:
         tls:
           secretName: horusec-tls
   global:
+    broker:
+      host: rabbitmq
+      password:
+        secretKeyRef:
+          key: password
+          name: horusec-broker
+      user:
+        secretKeyRef:
+          key: username
+          name: horusec-broker
     database:
       host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
       name: horusdb
