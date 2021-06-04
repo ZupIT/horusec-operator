@@ -1,0 +1,17 @@
+.idea
+.vscode
+coverage.out
+charts/
+*bin*
+*tmp*
+tmp/
+tmp-analysis/
+.env
+.aws/
+*.pem
+deployments/certs
+./images
+*.srl
+.horusec/
+e2e/**analysis
+vendor
