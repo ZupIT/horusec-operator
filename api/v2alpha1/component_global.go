@@ -119,3 +119,14 @@ func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=disable",
 		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName())
 }
+
+func (h *HorusecPlatform) GetAllIngressIsDisabled() bool {
+	return !h.GetAnalyticComponent().Ingress.Enabled &&
+		!h.GetAPIComponent().Ingress.Enabled &&
+		!h.GetAuthComponent().Ingress.Enabled &&
+		!h.GetCoreComponent().Ingress.Enabled &&
+		!h.GetManagerComponent().Ingress.Enabled &&
+		!h.GetMessagesComponent().Ingress.Enabled &&
+		!h.GetVulnerabilityComponent().Ingress.Enabled &&
+		!h.GetWebhookComponent().Ingress.Enabled
+}

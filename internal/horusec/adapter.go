@@ -190,13 +190,16 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 	if err != nil {
 		return nil, err
 	}
-
-	desired := ingress.NewIngress(a.resource)
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
+	var desiredList []v1beta1.Ingress
+	if !a.resource.GetAllIngressIsDisabled() {
+		desired := ingress.NewIngress(a.resource)
+		if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+			return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
+		}
+		desiredList = append(desiredList, *desired)
 	}
 
-	inv := inventory.ForIngresses(existing.Items, []v1beta1.Ingress{*desired})
+	inv := inventory.ForIngresses(existing.Items, desiredList)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}

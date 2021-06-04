@@ -41,5 +41,5 @@ fi
 #
 #applyClusterChanges() {
 #    sleep 10
-#    kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml
+#    kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
 #}

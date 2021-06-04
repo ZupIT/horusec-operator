@@ -30,10 +30,6 @@ func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
 }
 
 func NewIngressTLS(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressTLS {
-	if !resource.Spec.Components.Analytic.Ingress.Enabled {
-		return []v1beta1.IngressTLS{}
-	}
-
 	var ingressList []v1beta1.IngressTLS
 	for key, value := range mapSecretsAndHosts(resource) {
 		ingress := v1beta1.IngressTLS{
@@ -76,10 +72,6 @@ func newIngressConfigList(resource *v2alpha1.HorusecPlatform) []v2alpha1.Ingress
 }
 
 func NewIngressRules(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressRule {
-	if !resource.Spec.Components.Analytic.Ingress.Enabled {
-		return []v1beta1.IngressRule{}
-	}
-
 	var ingressList []v1beta1.IngressRule
 	for key, value := range mapRulesAndHosts(resource) {
 		ingress := v1beta1.IngressRule{
