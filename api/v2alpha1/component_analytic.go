@@ -121,14 +121,14 @@ func (h *HorusecPlatform) GetAnalyticDatabaseName() string {
 func (h *HorusecPlatform) GetAnalyticSSLMode() string {
 	mode := h.Spec.Components.Analytic.Database.SslMode
 	if mode == nil || *mode {
-		return "enable"
+		return ""
 	}
 
-	return "disable"
+	return "?sslmode=disable"
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=%s",
+	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
 		h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName(), h.GetAnalyticSSLMode())
 }
 

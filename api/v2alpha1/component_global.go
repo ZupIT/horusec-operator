@@ -101,10 +101,10 @@ func (h *HorusecPlatform) GetGlobalDatabaseName() string {
 func (h *HorusecPlatform) GetGlobalSSLMode() string {
 	mode := h.Spec.Global.Database.SslMode
 	if mode == nil || *mode {
-		return "enable"
+		return ""
 	}
 
-	return "disable"
+	return "?sslmode=disable"
 }
 func (h *HorusecPlatform) GetGlobalBrokerHost() string {
 	host := h.Spec.Global.Broker.Host
@@ -125,7 +125,7 @@ func (h *HorusecPlatform) GetGlobalBrokerPort() string {
 
 func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 	return fmt.Sprintf(
-		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=%s",
+		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
 		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName(), h.GetGlobalSSLMode())
 }
 
