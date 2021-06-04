@@ -1,3 +1,4 @@
+---
 apiVersion: install.horusec.io/v2alpha1
 kind: HorusecPlatform
 metadata:
@@ -5,26 +6,89 @@ metadata:
 spec:
   components:
     analytic:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
       database:
-        name: horusec_analytic_db
         host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
-        user:
-          secretKeyRef:
-            key: database-username
-            name: database-username
+        name: horusec_analytic_db
         password:
           secretKeyRef:
-            key: database-password
-            name: database-password
+            key: username
+            name: horusec-database
+        user:
+          secretKeyRef:
+            key: username
+            name: horusec-database
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    api:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    auth:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    core:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    manager:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    messages:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    vulnerability:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    webhook:
+      container:
+        image:
+          registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
   global:
     database:
-      name: horusdb
       host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
-      user:
-        secretKeyRef:
-          key: database-username
-          name: database-username
+      name: horusdb
       password:
         secretKeyRef:
-          key: database-password
-          name: database-password
+          key: username
+          name: horusec-database
+      user:
+        secretKeyRef:
+          key: username
+          name: horusec-database
