@@ -12,6 +12,7 @@ import (
 	batchv1 "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
 	"k8s.io/api/networking/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -51,8 +52,9 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 	defer span.Finish()
 	log := span.Logger()
 
+	deleteOptions := []k8s.DeleteOption{k8s.PropagationPolicy(metav1.DeletePropagationBackground)}
 	for _, obj := range inv.Delete {
-		if err := s.client.Delete(ctx, obj); err != nil {
+		if err := s.client.Delete(ctx, obj, deleteOptions...); err != nil {
 			return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
 		}
 		log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
