@@ -228,7 +228,7 @@ type User struct {
 }
 
 type Ingress struct {
-	Enabled bool   `json:"enabled,omitempty"`
+	Enabled bool   `json:"enabled,omitempty" default:"true"`
 	Host    string `json:"host,omitempty"`
 	Path    string `json:"path,omitempty"`
 	TLS     TLS    `json:"tls,omitempty"`
