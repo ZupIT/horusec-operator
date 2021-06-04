@@ -303,6 +303,11 @@ func (in *Core) DeepCopy() *Core {
 func (in *Database) DeepCopyInto(out *Database) {
 	*out = *in
 	in.Password.DeepCopyInto(&out.Password)
+	if in.SslMode != nil {
+		in, out := &in.SslMode, &out.SslMode
+		*out = new(bool)
+		**out = **in
+	}
 	in.User.DeepCopyInto(&out.User)
 	in.Migration.DeepCopyInto(&out.Migration)
 }
