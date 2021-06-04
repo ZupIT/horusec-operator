@@ -51,3 +51,11 @@ func (in *HorusecPlatform) GetGlobalDatabaseMigrationImageTag() string {
 	}
 	return "v2.12.1"
 }
+
+func (h *HorusecPlatform) GetDatabaseMigrationLabels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "migration",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
+}
