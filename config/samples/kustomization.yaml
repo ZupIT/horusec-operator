@@ -1,4 +1,4 @@
 ## Append samples you want in your CSV to this file as resources ##
 resources:
-- install_v2alpha1_horusec.yaml
+- install_v2alpha1_horusecplatform.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

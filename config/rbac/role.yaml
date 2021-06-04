@@ -9,7 +9,7 @@ rules:
 - apiGroups:
   - install.horusec.io
   resources:
-  - horusecs
+  - horusecplatforms
   verbs:
   - create
   - delete
@@ -21,13 +21,13 @@ rules:
 - apiGroups:
   - install.horusec.io
   resources:
-  - horusecs/finalizers
+  - horusecplatforms/finalizers
   verbs:
   - update
 - apiGroups:
   - install.horusec.io
   resources:
-  - horusecs/status
+  - horusecplatforms/status
   verbs:
   - get
   - patch
