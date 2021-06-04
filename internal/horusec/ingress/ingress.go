@@ -1,9 +1,6 @@
 package ingress
 
 import (
-	"k8s.io/api/networking/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
@@ -13,12 +10,12 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
 	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
+	"k8s.io/api/networking/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 //nolint:funlen // improve in the future
 func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
-	pathType := v1beta1.PathTypePrefix
-
 	return &v1beta1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
@@ -26,17 +23,8 @@ func NewIngress(resource *v2alpha1.HorusecPlatform) *v1beta1.Ingress {
 			Labels:    resource.GetDefaultLabel(),
 		},
 		Spec: v1beta1.IngressSpec{
-			Rules: []v1beta1.IngressRule{ // TODO: single rule for each host
-				analytic.NewIngressRule(resource, pathType),
-				api.NewIngressRule(resource, pathType),
-				auth.NewIngressRule(resource, pathType),
-				core.NewIngressRule(resource, pathType),
-				manager.NewIngressRule(resource, pathType),
-				messages.NewIngressRule(resource, pathType),
-				vulnerability.NewIngressRule(resource, pathType),
-				webhook.NewIngressRule(resource, pathType),
-			},
-			TLS: NewIngressTLS(resource),
+			Rules: NewIngressRules(resource),
+			TLS:   NewIngressTLS(resource),
 		},
 	}
 }
@@ -84,5 +72,57 @@ func newIngressConfigList(resource *v2alpha1.HorusecPlatform) []v2alpha1.Ingress
 		resource.Spec.Components.Messages.Ingress,
 		resource.Spec.Components.Vulnerability.Ingress,
 		resource.Spec.Components.Webhook.Ingress,
+	}
+}
+
+func NewIngressRules(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressRule {
+	if !resource.Spec.Components.Analytic.Ingress.Enabled {
+		return []v1beta1.IngressRule{}
+	}
+
+	var ingressList []v1beta1.IngressRule
+	for key, value := range mapRulesAndHosts(resource) {
+		ingress := v1beta1.IngressRule{
+			Host: key,
+			IngressRuleValue: v1beta1.IngressRuleValue{
+				HTTP: &v1beta1.HTTPIngressRuleValue{
+					Paths: value,
+				},
+			},
+		}
+
+		ingressList = append(ingressList, ingress)
+	}
+
+	return ingressList
+}
+
+func mapRulesAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]v1beta1.HTTPIngressPath {
+	ingressRules := newIngressRulesList(resource)
+
+	rulesMap := map[string][]v1beta1.HTTPIngressPath{}
+	for index := range ingressRules {
+		if value, ok := rulesMap[ingressRules[index].Host]; ok {
+			rulesMap[ingressRules[index].Host] = append(value, ingressRules[1].IngressRuleValue.HTTP.Paths[1])
+		} else {
+			rulesMap[ingressRules[index].Host] = ingressRules[1].IngressRuleValue.HTTP.Paths
+		}
+	}
+
+	return rulesMap
+}
+
+func newIngressRulesList(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressRule {
+	pathType := v1beta1.PathTypePrefix
+
+	return []v1beta1.IngressRule{
+		analytic.NewIngressRule(resource, pathType),
+		api.NewIngressRule(resource, pathType),
+		auth.NewIngressRule(resource, pathType),
+		core.NewIngressRule(resource, pathType),
+		manager.NewIngressRule(resource, pathType),
+		messages.NewIngressRule(resource, pathType),
+		vulnerability.NewIngressRule(resource, pathType),
+		webhook.NewIngressRule(resource, pathType),
 	}
 }

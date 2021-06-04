@@ -66,3 +66,12 @@ func (h *HorusecPlatform) GetAuthImage() string {
 
 	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
 }
+
+func (h *HorusecPlatform) GetAuthHost() string {
+	host := h.Spec.Components.Auth.Ingress.Host
+	if host == "" {
+		return "auth.local"
+	}
+
+	return host
+}

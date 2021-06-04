@@ -96,3 +96,12 @@ func (h *HorusecPlatform) GetWebhookEndpoint() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) GetManagerHost() string {
+	host := h.Spec.Components.Manager.Ingress.Host
+	if host == "" {
+		return "manager.local"
+	}
+
+	return host
+}
