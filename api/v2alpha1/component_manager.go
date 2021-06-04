@@ -59,7 +59,7 @@ func (h *HorusecPlatform) GetManagerImage() string {
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 	host := h.GetAnalyticComponent().Ingress.Host
 	if host == "" {
-		return h.GetAnalyticDefaultURL()
+		return h.GetAnalyticHost()
 	}
 
 	return host
@@ -67,7 +67,7 @@ func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 func (h *HorusecPlatform) GetAPIEndpoint() string {
 	host := h.GetAPIComponent().Ingress.Host
 	if host == "" {
-		return h.GetAPIDefaultURL()
+		return h.GetAPIHost()
 	}
 
 	return host
@@ -75,7 +75,7 @@ func (h *HorusecPlatform) GetAPIEndpoint() string {
 func (h *HorusecPlatform) GetAuthEndpoint() string {
 	host := h.GetAuthComponent().Ingress.Host
 	if host == "" {
-		return h.GetAuthDefaultHTTPURL()
+		return h.GetAuthHost()
 	}
 
 	return host
@@ -83,7 +83,7 @@ func (h *HorusecPlatform) GetAuthEndpoint() string {
 func (h *HorusecPlatform) GetCoreEndpoint() string {
 	host := h.GetCoreComponent().Ingress.Host
 	if host == "" {
-		return h.GetCoreDefaultURL()
+		return h.GetCoreHost()
 	}
 
 	return host
@@ -91,7 +91,7 @@ func (h *HorusecPlatform) GetCoreEndpoint() string {
 func (h *HorusecPlatform) GetWebhookEndpoint() string {
 	host := h.GetWebhookComponent().Ingress.Host
 	if host == "" {
-		return h.GetWebhookDefaultURL()
+		return h.GetWebhookHost()
 	}
 
 	return host
