@@ -2,9 +2,10 @@ package tracing
 
 import (
 	"fmt"
+	"io"
+
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go/config"
-	"io"
 )
 
 // Initialize create an instance of Jaeger Tracer and sets it as GlobalTracer.

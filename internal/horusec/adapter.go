@@ -5,6 +5,13 @@ import (
 	"fmt"
 	"reflect"
 
+	appsv1 "k8s.io/api/apps/v1"
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+	v1 "k8s.io/api/batch/v1"
+	coreV1 "k8s.io/api/core/v1"
+	"k8s.io/api/networking/v1beta1"
+	"k8s.io/apimachinery/pkg/runtime"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
@@ -18,12 +25,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
-	appsv1 "k8s.io/api/apps/v1"
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-	v1 "k8s.io/api/batch/v1"
-	coreV1 "k8s.io/api/core/v1"
-	"k8s.io/api/networking/v1beta1"
-	"k8s.io/apimachinery/pkg/runtime"
 
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )

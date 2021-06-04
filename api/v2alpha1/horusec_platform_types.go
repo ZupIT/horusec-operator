@@ -210,7 +210,7 @@ type Database struct {
 	Name      string    `json:"name,omitempty"`
 	Password  Password  `json:"password,omitempty"`
 	Port      int       `json:"port,omitempty"`
-	SslMode   bool      `json:"sslMode,omitempty"`
+	SslMode   *bool     `json:"sslMode,omitempty"`
 	User      User      `json:"user,omitempty"`
 	Migration Migration `json:"migration,omitempty"`
 }

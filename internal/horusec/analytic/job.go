@@ -3,10 +3,11 @@ package analytic
 import (
 	"fmt"
 
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {

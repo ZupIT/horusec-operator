@@ -2,8 +2,9 @@ package v2alpha1
 
 import (
 	"fmt"
-	corev1 "k8s.io/api/core/v1"
 	"reflect"
+
+	corev1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) GetMessagesComponent() Messages {

@@ -2,9 +2,10 @@ package v2alpha1
 
 import (
 	"fmt"
-	corev1 "k8s.io/api/core/v1"
 	"reflect"
 	"strconv"
+
+	corev1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
@@ -97,6 +98,14 @@ func (h *HorusecPlatform) GetGlobalDatabaseName() string {
 
 	return name
 }
+func (h *HorusecPlatform) GetGlobalSSLMode() string {
+	mode := h.Spec.Global.Database.SslMode
+	if mode == nil || *mode {
+		return ""
+	}
+
+	return "?sslmode=disable"
+}
 func (h *HorusecPlatform) GetGlobalBrokerHost() string {
 	host := h.Spec.Global.Broker.Host
 	if host == "" {
@@ -116,8 +125,8 @@ func (h *HorusecPlatform) GetGlobalBrokerPort() string {
 
 func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 	return fmt.Sprintf(
-		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s?sslmode=disable",
-		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName())
+		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
+		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName(), h.GetGlobalSSLMode())
 }
 
 func (h *HorusecPlatform) GetAllIngressIsDisabled() bool {
