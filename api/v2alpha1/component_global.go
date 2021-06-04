@@ -121,12 +121,12 @@ func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 }
 
 func (h *HorusecPlatform) GetAllIngressIsDisabled() bool {
-	return !h.GetAnalyticComponent().Ingress.Enabled &&
-		!h.GetAPIComponent().Ingress.Enabled &&
-		!h.GetAuthComponent().Ingress.Enabled &&
-		!h.GetCoreComponent().Ingress.Enabled &&
-		!h.GetManagerComponent().Ingress.Enabled &&
-		!h.GetMessagesComponent().Ingress.Enabled &&
-		!h.GetVulnerabilityComponent().Ingress.Enabled &&
-		!h.GetWebhookComponent().Ingress.Enabled
+	return !h.IsAnalyticIngressEnabled() &&
+		!h.IsAPIIngressEnabled() &&
+		!h.IsAuthIngressEnabled() &&
+		!h.IsCoreIngressEnabled() &&
+		!h.IsManagerIngressEnabled() &&
+		!h.IsMessagesIngressEnabled() &&
+		!h.IsVulnerabilityIngressEnabled() &&
+		!h.IsWebhookIngressEnabled()
 }

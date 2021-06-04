@@ -11,7 +11,7 @@ helm repo update
 
 echo "Adding installing dependencies..."
 helm install rabbitmq bitnami/rabbitmq
-helm install postgresql --set postgresqlDatabase=horusec_db bitnami/postgresql
+helm install postgresql --set postgresqlDatabase=horusec_db --set postgresqlDatabase=horusec_analytic_db bitnami/postgresql
 
 echo "Getting user and pwd of dependencies..."
 export POSTGRES_USERNAME="postgres"
