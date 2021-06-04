@@ -41,8 +41,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
-						{Name: "HORUSEC_SMTP_HOST", Value: ""},
-						{Name: "HORUSEC_SMTP_PORT", Value: ""},
+						{Name: "HORUSEC_SMTP_HOST", Value: ""}, // TODO: get info from CRD
+						{Name: "HORUSEC_SMTP_PORT", Value: ""}, // TODO: get info from CRD
 						{Name: "HORUSEC_EMAIL_FROM", Value: "horusec@zup.com.br"},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
