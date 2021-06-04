@@ -20,34 +20,66 @@ spec:
           secretKeyRef:
             key: database-username
             name: database-username
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     api:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     auth:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     core:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     manager:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     messages:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     vulnerability:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
     webhook:
       container:
         image:
           registry: 671982376808.dkr.ecr.us-east-1.amazonaws.com
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
   global:
     database:
       host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
