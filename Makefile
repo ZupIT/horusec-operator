@@ -8,7 +8,7 @@ HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-VERSION ?= 2.0.0-alpha.1
+VERSION ?= 2.0.0-alpha.2
 IMAGE_TAG_BASE ?= horuszup/horusec-operator
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 IMG ?= $(IMAGE_TAG_BASE):v$(VERSION)
@@ -54,14 +54,14 @@ update-swagger:
 
 pipeline: fmt fix-imports lint test coverage build security
 
-up-sample-dependencies:
+up-sample:
 	sh ./config/samples/sample_install_dependencies.sh
 
-test-sample:
-	kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml
-
 docker-build:
-	docker build -t horuszup/horusec-operator:v2.0.0-alpha.1 -f ./Dockerfile .
+	docker build -t $(IMG) -f ./Dockerfile .
+
+docker-push:
+	docker push $(IMG)
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.

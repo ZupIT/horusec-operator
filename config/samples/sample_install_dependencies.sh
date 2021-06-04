@@ -30,11 +30,16 @@ kubectl create secret generic horusec-broker --from-literal="user=$RABBITMQ_USER
 kubectl create secret generic jwt-token --from-literal=jwt-token=$JWT_SECRET
 
 echo "Installing horusec-operator..."
-make install
+if ! make install; then
+    echo "Error on install operator on cluster"
+    exit 1
+fi
 
-echo "FINISHED !!"
-
-echo "Now up horusec-operator and apply your changes to up horusec services....."
-echo "Ex.:"
-echo "go run cmd/app"
-echo "kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml"
+#applyClusterChanges &
+#
+#go run ./cmd/app
+#
+#applyClusterChanges() {
+#    sleep 10
+#    kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml
+#}
