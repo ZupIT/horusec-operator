@@ -44,14 +44,18 @@ func NewIngressTLS(resource *v2alpha1.HorusecPlatform) []v1beta1.IngressTLS {
 }
 
 func mapSecretsAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]string {
+	defaultEnable := true
 	ingressConfig := newIngressConfigList(resource)
 
 	tlsMap := map[string][]string{}
 	for index := range ingressConfig {
-		if value, ok := tlsMap[ingressConfig[index].TLS.SecretName]; ok && ingressConfig[index].Enabled {
+		if ingressConfig[index].Enabled == nil {
+			ingressConfig[index].Enabled = &defaultEnable
+		}
+		if value, ok := tlsMap[ingressConfig[index].TLS.SecretName]; ok && *ingressConfig[index].Enabled {
 			tlsMap[ingressConfig[index].TLS.SecretName] = append(value, ingressConfig[index].Host)
 		} else {
-			tlsMap[ingressConfig[index].TLS.SecretName] = []string{ingressConfig[index].Host}
+			tlsMap[ingressConfig[index].TLS.SecretName] = append(tlsMap[ingressConfig[index].TLS.SecretName], ingressConfig[index].Host)
 		}
 	}
 
