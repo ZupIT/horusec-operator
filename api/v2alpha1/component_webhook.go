@@ -2,7 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 )
 
 func (h *HorusecPlatform) GetWebhookComponent() Webhook {
@@ -48,13 +47,22 @@ func (h *HorusecPlatform) GetWebhookReplicaCount() *int32 {
 func (h *HorusecPlatform) GetWebhookDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetWebhookName(), h.GetWebhookPortHTTP())
 }
-func (h *HorusecPlatform) GetWebhookImage() string {
-	image := h.GetWebhookComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-webhook:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetWebhookRegistry() string {
+	registry := h.GetWebhookComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-webhook"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
+}
+func (h *HorusecPlatform) GetWebhookTag() string {
+	tag := h.GetWebhookComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetWebhookImage() string {
+	return fmt.Sprintf("%s:%s", h.GetWebhookRegistry(), h.GetWebhookTag())
 }
 
 func (h *HorusecPlatform) GetWebhookHost() string {

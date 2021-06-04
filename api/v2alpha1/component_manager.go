@@ -2,7 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 )
 
 func (h *HorusecPlatform) GetManagerComponent() Manager {
@@ -48,13 +47,22 @@ func (h *HorusecPlatform) GetManagerReplicaCount() *int32 {
 func (h *HorusecPlatform) GetManagerDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetManagerName(), h.GetManagerPortHTTP())
 }
-func (h *HorusecPlatform) GetManagerImage() string {
-	image := h.GetManagerComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-manager:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetManagerRegistry() string {
+	registry := h.GetManagerComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-manager"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
+}
+func (h *HorusecPlatform) GetManagerTag() string {
+	tag := h.GetManagerComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetManagerImage() string {
+	return fmt.Sprintf("%s:%s", h.GetManagerRegistry(), h.GetManagerTag())
 }
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 	host := h.GetAnalyticComponent().Ingress.Host

@@ -50,13 +50,22 @@ func (h *HorusecPlatform) GetAnalyticReplicaCount() *int32 {
 func (h *HorusecPlatform) GetAnalyticDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAnalyticName(), h.GetAnalyticPortHTTP())
 }
-func (h *HorusecPlatform) GetAnalyticImage() string {
-	image := h.GetAnalyticComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-analytic:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetAnalyticRegistry() string {
+	registry := h.GetAnalyticComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-analytic"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
+}
+func (h *HorusecPlatform) GetAnalyticTag() string {
+	tag := h.GetAnalyticComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetAnalyticImage() string {
+	return fmt.Sprintf("%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticTag())
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelector {

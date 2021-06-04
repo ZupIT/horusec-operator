@@ -2,7 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 )
 
 func (h *HorusecPlatform) GetAPIComponent() Api {
@@ -48,15 +47,23 @@ func (h *HorusecPlatform) GetAPIReplicaCount() *int32 {
 func (h *HorusecPlatform) GetAPIDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAPIName(), h.GetAPIPortHTTP())
 }
-func (h *HorusecPlatform) GetAPIImage() string {
-	image := h.GetAPIComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-api:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetAPIRegistry() string {
+	registry := h.GetAPIComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-api"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
 }
-
+func (h *HorusecPlatform) GetAPITag() string {
+	tag := h.GetAPIComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetAPIImage() string {
+	return fmt.Sprintf("%s:%s", h.GetAPIRegistry(), h.GetAPITag())
+}
 func (h *HorusecPlatform) GetAPIHost() string {
 	host := h.Spec.Components.Api.Ingress.Host
 	if host == "" {

@@ -2,7 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 )
 
 func (h *HorusecPlatform) GetAuthComponent() Auth {
@@ -58,13 +57,22 @@ func (h *HorusecPlatform) GetAuthDefaultHTTPURL() string {
 func (h *HorusecPlatform) GetAuthDefaultGRPCURL() string {
 	return fmt.Sprintf("%s:%v", h.GetAuthName(), h.GetAuthPortGRPC())
 }
-func (h *HorusecPlatform) GetAuthImage() string {
-	image := h.GetAuthComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-auth:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetAuthRegistry() string {
+	registry := h.GetAuthComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-auth"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
+}
+func (h *HorusecPlatform) GetAuthTag() string {
+	tag := h.GetAuthComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetAuthImage() string {
+	return fmt.Sprintf("%s:%s", h.GetAuthRegistry(), h.GetAuthTag())
 }
 
 func (h *HorusecPlatform) GetAuthHost() string {

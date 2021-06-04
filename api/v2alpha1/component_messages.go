@@ -49,13 +49,22 @@ func (h *HorusecPlatform) GetMessagesReplicaCount() *int32 {
 func (h *HorusecPlatform) GetMessagesDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetMessagesName(), h.GetMessagesPortHTTP())
 }
-func (h *HorusecPlatform) GetMessagesImage() string {
-	image := h.GetMessagesComponent().Container.Image
-	if reflect.ValueOf(image).IsZero() {
-		return fmt.Sprintf("docker.io/horuszup/horusec-messages:%s", h.GetLatestVersion())
+func (h *HorusecPlatform) GetMessagesRegistry() string {
+	registry := h.GetMessagesComponent().Container.Image.Registry
+	if registry == "" {
+		return "docker.io/horuszup/horusec-messages"
 	}
-
-	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+	return registry
+}
+func (h *HorusecPlatform) GetMessagesTag() string {
+	tag := h.GetMessagesComponent().Container.Image.Tag
+	if tag == "" {
+		return h.GetLatestVersion()
+	}
+	return tag
+}
+func (h *HorusecPlatform) GetMessagesImage() string {
+	return fmt.Sprintf("%s:%s", h.GetMessagesRegistry(), h.GetMessagesTag())
 }
 func (h *HorusecPlatform) GetMessagesMailServer() MailServer {
 	return h.GetMessagesComponent().MailServer
