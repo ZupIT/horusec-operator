@@ -2,4 +2,29 @@ apiVersion: install.horusec.io/v2alpha1
 kind: HorusecPlatform
 metadata:
   name: horusecplatform-sample
-spec: {}
+spec:
+  components:
+    analytic:
+      database:
+        name: horusec_analytic_db
+        host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
+        user:
+          secretKeyRef:
+            key: database-username
+            name: database-username
+        password:
+          secretKeyRef:
+            key: database-password
+            name: database-password
+  global:
+    database:
+      name: horusdb
+      host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
+      user:
+        secretKeyRef:
+          key: database-username
+          name: database-username
+      password:
+        secretKeyRef:
+          key: database-password
+          name: database-password
