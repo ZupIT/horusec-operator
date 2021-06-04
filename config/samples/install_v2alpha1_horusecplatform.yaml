@@ -46,6 +46,16 @@ spec:
         host: manager.horus.dev.zup.corp
         tls:
           secretName: horusec-tls
+      mailServer:
+        host: smtp.mailtrap.io
+        password:
+          secretKeyRef:
+            key: password
+            name: horusec-smtp
+        user:
+          secretKeyRef:
+            key: username
+            name: horusec-smtp
     vulnerability:
       ingress:
         host: manager.horus.dev.zup.corp
