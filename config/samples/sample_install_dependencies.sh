@@ -36,5 +36,5 @@ echo "FINISHED !!"
 
 echo "Now up horusec-operator and apply your changes to up horusec services....."
 echo "Ex.:"
-echo "go run cmd/app/main.go"
+echo "go run cmd/app"
 echo "kubectl apply -f ./config/samples/install_v2alpha1_horusec.yaml"
