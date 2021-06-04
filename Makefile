@@ -1,13 +1,17 @@
 GO ?= go
 GOFMT ?= gofmt
 GO_FILES ?= $$(find . -name '*.go' | grep -v vendor)
-GOLANG_CI_LINT ?= ./bin/golangci-lint
+GOLANG_CI_LINT ?= $(shell pwd)/bin/golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-operator
 HORUSEC ?= horusec
-CONTROLLER_GEN ?= ./bin/controller-gen
-KUSTOMIZE ?= ./bin/kustomize
+CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
+KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
+VERSION ?= 2.0.0-alpha.8
+IMAGE_TAG_BASE ?= horuszup/horusec-operator
+BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
+IMG ?= $(IMAGE_TAG_BASE):v$(VERSION)
 
 fmt:
 	$(GOFMT) -w $(GO_FILES)
@@ -50,6 +54,20 @@ update-swagger:
 
 pipeline: fmt fix-imports lint test coverage build security
 
+up-sample:
+	sh ./config/samples/sample_install_dependencies.sh
+
+apply-sample:
+	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+
+replace-sample:
+	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+
+docker-build:
+	docker build -t $(IMG) -f ./Dockerfile .
+
+docker-push:
+	docker push $(IMG)
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.
@@ -83,3 +101,10 @@ install: manifests kustomize
 
 uninstall: manifests kustomize
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
+
+deploy: manifests kustomize
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	$(KUSTOMIZE) build config/default | kubectl apply -f -
+
+undeploy:
+	$(KUSTOMIZE) build config/default | kubectl delete -f -

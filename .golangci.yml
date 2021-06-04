@@ -130,6 +130,7 @@ run:
     - examples/
     - tmp
     - e2e/
+    - api/v2alpha1
   skip-files:
     - .*_test.go
     - .*_mock.go

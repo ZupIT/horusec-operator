@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetManagerComponent() Manager {
 	return h.Spec.Components.Manager
@@ -35,4 +38,79 @@ func (h *HorusecPlatform) GetManagerLabels() map[string]string {
 		"app.kubernetes.io/component":  "manager",
 		"app.kubernetes.io/managed-by": "horusec",
 	}
+}
+func (h *HorusecPlatform) GetManagerReplicaCount() *int32 {
+	if !h.GetManagerAutoscaling().Enabled {
+		return h.GetManagerComponent().ReplicaCount
+	}
+	return nil
+}
+func (h *HorusecPlatform) GetManagerDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetManagerName(), h.GetManagerPortHTTP())
+}
+func (h *HorusecPlatform) GetManagerImage() string {
+	image := h.GetManagerComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-manager:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+}
+func (h *HorusecPlatform) GetAnalyticEndpoint() string {
+	host := h.GetAnalyticComponent().Ingress.Host
+	if host == "" {
+		return h.GetAnalyticHost()
+	}
+
+	return host
+}
+func (h *HorusecPlatform) GetAPIEndpoint() string {
+	host := h.GetAPIComponent().Ingress.Host
+	if host == "" {
+		return h.GetAPIHost()
+	}
+
+	return host
+}
+func (h *HorusecPlatform) GetAuthEndpoint() string {
+	host := h.GetAuthComponent().Ingress.Host
+	if host == "" {
+		return h.GetAuthHost()
+	}
+
+	return host
+}
+func (h *HorusecPlatform) GetCoreEndpoint() string {
+	host := h.GetCoreComponent().Ingress.Host
+	if host == "" {
+		return h.GetCoreHost()
+	}
+
+	return host
+}
+func (h *HorusecPlatform) GetWebhookEndpoint() string {
+	host := h.GetWebhookComponent().Ingress.Host
+	if host == "" {
+		return h.GetWebhookHost()
+	}
+
+	return host
+}
+
+func (h *HorusecPlatform) GetManagerHost() string {
+	host := h.Spec.Components.Manager.Ingress.Host
+	if host == "" {
+		return "manager.local"
+	}
+
+	return host
+}
+
+func (h *HorusecPlatform) IsManagerIngressEnabled() bool {
+	enabled := h.Spec.Components.Manager.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
 }

@@ -9,12 +9,12 @@ import (
 
 //nolint:funlen // improve in the future
 func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathType) v1beta1.IngressRule {
-	if !resource.Spec.Components.Manager.Ingress.Enabled {
+	if !resource.IsManagerIngressEnabled() {
 		return v1beta1.IngressRule{}
 	}
 
 	return v1beta1.IngressRule{
-		Host: resource.Spec.Components.Manager.Ingress.Host,
+		Host: resource.GetManagerHost(),
 		IngressRuleValue: v1beta1.IngressRuleValue{
 			HTTP: &v1beta1.HTTPIngressRuleValue{
 				Paths: []v1beta1.HTTPIngressPath{

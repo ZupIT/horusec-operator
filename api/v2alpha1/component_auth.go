@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetAuthComponent() Auth {
 	return h.Spec.Components.Auth
@@ -42,4 +45,42 @@ func (h *HorusecPlatform) GetAuthLabels() map[string]string {
 		"app.kubernetes.io/component":  "auth",
 		"app.kubernetes.io/managed-by": "horusec",
 	}
+}
+func (h *HorusecPlatform) GetAuthReplicaCount() *int32 {
+	if !h.GetAuthAutoscaling().Enabled {
+		return h.GetAuthComponent().ReplicaCount
+	}
+	return nil
+}
+func (h *HorusecPlatform) GetAuthDefaultHTTPURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetAuthName(), h.GetAuthPortHTTP())
+}
+func (h *HorusecPlatform) GetAuthDefaultGRPCURL() string {
+	return fmt.Sprintf("%s:%v", h.GetAuthName(), h.GetAuthPortGRPC())
+}
+func (h *HorusecPlatform) GetAuthImage() string {
+	image := h.GetAuthComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-auth:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+}
+
+func (h *HorusecPlatform) GetAuthHost() string {
+	host := h.Spec.Components.Auth.Ingress.Host
+	if host == "" {
+		return "auth.local"
+	}
+
+	return host
+}
+
+func (h *HorusecPlatform) IsAuthIngressEnabled() bool {
+	enabled := h.Spec.Components.Auth.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
 }

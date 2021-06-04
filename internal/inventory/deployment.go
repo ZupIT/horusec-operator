@@ -59,7 +59,7 @@ func deploymentMap(deps []appsv1.Deployment) map[string]appsv1.Deployment {
 	return m
 }
 
-//nolint:gocritic, gosec, exportloopref // to improve in the future
+//nolint // to improve in the future
 func deploymentList(m map[string]appsv1.Deployment) []client.Object {
 	l := []client.Object{}
 	for _, v := range m {

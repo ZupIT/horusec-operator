@@ -52,8 +52,8 @@ type Clients struct {
 }
 
 type Confidential struct {
-	ID           string       `json:"id,omitempty"`
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	ID           string                   `json:"id,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Public struct {
@@ -61,7 +61,7 @@ type Public struct {
 }
 
 type Jwt struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Broker struct {
@@ -101,14 +101,6 @@ type Analytic struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Analytic) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Api struct {
 	Container    Container `json:"container,omitempty"`
@@ -119,14 +111,6 @@ type Api struct {
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
 	Database     Database  `json:"database,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Api) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Auth struct {
@@ -141,14 +125,6 @@ type Auth struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Auth) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Core struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -160,14 +136,6 @@ type Core struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Core) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Manager struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -176,14 +144,6 @@ type Manager struct {
 	Pod          Pod       `json:"pod,omitempty"`
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Manager) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Messages struct {
@@ -198,14 +158,6 @@ type Messages struct {
 	MailServer   MailServer `json:"mailServer,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Messages) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Vulnerability struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -217,14 +169,6 @@ type Vulnerability struct {
 	Database     Database  `json:"database,omitempty"`
 }
 
-//nolint:gocritic // [auto created]
-func (a Vulnerability) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
-}
-
 type Webhook struct {
 	Container    Container `json:"container,omitempty"`
 	ExtraEnv     []string  `json:"extraEnv,omitempty"`
@@ -234,14 +178,6 @@ type Webhook struct {
 	Port         Port      `json:"port,omitempty"`
 	ReplicaCount *int32    `json:"replicaCount,omitempty"`
 	Database     Database  `json:"database,omitempty"`
-}
-
-//nolint:gocritic // [auto created]
-func (a Webhook) GetReplicaCount() *int32 {
-	if !a.Pod.Autoscaling.Enabled {
-		return a.ReplicaCount
-	}
-	return nil
 }
 
 type Container struct {
@@ -268,31 +204,31 @@ type SecurityContext struct {
 }
 
 type Database struct {
-	Dialect  string   `json:"dialect,omitempty"`
-	Host     string   `json:"host,omitempty"`
-	LogMode  bool     `json:"logMode,omitempty"`
-	Name     string   `json:"name,omitempty"`
-	Password Password `json:"password,omitempty"`
-	Port     int      `json:"port,omitempty"`
-	SslMode  bool     `json:"sslMode,omitempty"`
-	User     User     `json:"user,omitempty"`
+	Dialect   string    `json:"dialect,omitempty"`
+	Host      string    `json:"host,omitempty"`
+	LogMode   bool      `json:"logMode,omitempty"`
+	Name      string    `json:"name,omitempty"`
+	Password  Password  `json:"password,omitempty"`
+	Port      int       `json:"port,omitempty"`
+	SslMode   bool      `json:"sslMode,omitempty"`
+	User      User      `json:"user,omitempty"`
+	Migration Migration `json:"migration,omitempty"`
+}
+
+type Migration struct {
+	Image Image `json:"image,omitempty"`
 }
 
 type Password struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type User struct {
-	SecretKeyRef SecretKeyRef `json:"secretKeyRef,omitempty"`
-}
-
-type SecretKeyRef struct {
-	Key  string `json:"key,omitempty"`
-	Name string `json:"name,omitempty"`
+	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Ingress struct {
-	Enabled bool   `json:"enabled,omitempty"`
+	Enabled *bool  `json:"enabled,omitempty"`
 	Host    string `json:"host,omitempty"`
 	Path    string `json:"path,omitempty"`
 	TLS     TLS    `json:"tls,omitempty"`

@@ -10,7 +10,6 @@ import (
 
 //nolint:funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	component := resource.GetManagerComponent()
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetManagerName(),
@@ -18,19 +17,19 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Labels:    resource.GetManagerLabels(),
 		},
 		Spec: appsv1.DeploymentSpec{
-			Replicas: component.GetReplicaCount(),
+			Replicas: resource.GetManagerReplicaCount(),
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetManagerLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetManagerLabels()},
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  resource.GetManagerName(),
-					Image: "docker.io/horuszup/horusec-manager:v2.12.1",
+					Image: resource.GetManagerImage(),
 					Env: []corev1.EnvVar{
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: ""},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_ANALYTIC", Value: ""},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_CORE", Value: ""},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_WEBHOOK", Value: ""},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_AUTH", Value: ""},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: resource.GetAPIEndpoint()},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_ANALYTIC", Value: resource.GetAnalyticEndpoint()},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_CORE", Value: resource.GetCoreEndpoint()},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_WEBHOOK", Value: resource.GetWebhookEndpoint()},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_AUTH", Value: resource.GetAuthEndpoint()},
 						{Name: "REACT_APP_KEYCLOAK_BASE_PATH", Value: ""},
 						{Name: "REACT_APP_KEYCLOAK_CLIENT_ID", Value: ""},
 						{Name: "REACT_APP_KEYCLOAK_REALM", Value: ""},

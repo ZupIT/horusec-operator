@@ -5,31 +5,27 @@ import (
 	"fmt"
 	"reflect"
 
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-
-	"k8s.io/api/networking/v1beta1"
-
-	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
-
-	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
-
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
 	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
 	"github.com/ZupIT/horusec-operator/internal/horusec/core"
+	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
 	"github.com/ZupIT/horusec-operator/internal/horusec/manager"
 	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
+	"github.com/ZupIT/horusec-operator/internal/horusec/migration"
+	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
-
-	coreV1 "k8s.io/api/core/v1"
-
-	appsv1 "k8s.io/api/apps/v1"
-	"k8s.io/apimachinery/pkg/runtime"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
-
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	appsv1 "k8s.io/api/apps/v1"
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+	v1 "k8s.io/api/batch/v1"
+	coreV1 "k8s.io/api/core/v1"
+	"k8s.io/api/networking/v1beta1"
+	"k8s.io/apimachinery/pkg/runtime"
+
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 type Adapter struct {
@@ -52,20 +48,27 @@ func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, 
 	return operation.StopProcessing()
 }
 
-func (a *Adapter) EnsureDatabaseConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureBrokerConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
-func (a *Adapter) EnsureSMTPConnectivity(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
-}
-
 func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error) {
-	panic("implement me") // TODO
+	existing, err := a.svc.ListJobs(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	if err != nil {
+		return nil, err
+	}
+
+	mdesired := migration.NewJob(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, &mdesired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", mdesired.GetName(), err)
+	}
+	adesired := analytic.NewJob(a.resource)
+	if err := controllerutil.SetControllerReference(a.resource, &adesired, a.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", adesired.GetName(), err)
+	}
+
+	inv := inventory.ForJobs(existing.Items, []v1.Job{mdesired, adesired})
+	if err := a.svc.Apply(ctx, inv); err != nil {
+		return nil, err
+	}
+
+	return operation.ContinueProcessing()
 }
 
 //nolint:funlen
@@ -98,7 +101,7 @@ func (a *Adapter) ensureDeployments(desired *appsv1.Deployment) error {
 	return nil
 }
 
-//nolint:funlen
+//nolint
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
 	if err != nil {
@@ -108,7 +111,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 	result := []autoScalingV2beta2.HorizontalPodAutoscaler{}
 
 	desired := a.listOfAutoscaling()
-	for index, _ := range desired {
+	for index := range desired {
 		if reflect.ValueOf(desired[index]).IsZero() {
 			continue
 		}
@@ -187,13 +190,16 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 	if err != nil {
 		return nil, err
 	}
-
-	desired := ingress.NewIngress(a.resource)
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
+	var desiredList []v1beta1.Ingress
+	if !a.resource.GetAllIngressIsDisabled() {
+		desired := ingress.NewIngress(a.resource)
+		if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+			return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
+		}
+		desiredList = append(desiredList, *desired)
 	}
 
-	inv := inventory.ForIngresses(existing.Items, []v1beta1.Ingress{*desired})
+	inv := inventory.ForIngresses(existing.Items, desiredList)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}

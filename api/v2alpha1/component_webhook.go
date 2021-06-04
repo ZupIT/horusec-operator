@@ -1,6 +1,9 @@
 package v2alpha1
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 func (h *HorusecPlatform) GetWebhookComponent() Webhook {
 	return h.Spec.Components.Webhook
@@ -35,4 +38,39 @@ func (h *HorusecPlatform) GetWebhookLabels() map[string]string {
 		"app.kubernetes.io/component":  "webhook",
 		"app.kubernetes.io/managed-by": "horusec",
 	}
+}
+func (h *HorusecPlatform) GetWebhookReplicaCount() *int32 {
+	if !h.GetWebhookAutoscaling().Enabled {
+		return h.GetWebhookComponent().ReplicaCount
+	}
+	return nil
+}
+func (h *HorusecPlatform) GetWebhookDefaultURL() string {
+	return fmt.Sprintf("http://%s:%v", h.GetWebhookName(), h.GetWebhookPortHTTP())
+}
+func (h *HorusecPlatform) GetWebhookImage() string {
+	image := h.GetWebhookComponent().Container.Image
+	if reflect.ValueOf(image).IsZero() {
+		return fmt.Sprintf("docker.io/horuszup/horusec-webhook:%s", h.GetLatestVersion())
+	}
+
+	return fmt.Sprintf("%s:%s", image.Registry, image.Tag)
+}
+
+func (h *HorusecPlatform) GetWebhookHost() string {
+	host := h.Spec.Components.Webhook.Ingress.Host
+	if host == "" {
+		return "webhook.local"
+	}
+
+	return host
+}
+
+func (h *HorusecPlatform) IsWebhookIngressEnabled() bool {
+	enabled := h.Spec.Components.Webhook.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
 }
