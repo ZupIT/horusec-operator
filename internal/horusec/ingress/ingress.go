@@ -51,7 +51,7 @@ func mapSecretsAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]string 
 		if value, ok := tlsMap[ingressConfig[index].TLS.SecretName]; ok && ingressConfig[index].Enabled {
 			tlsMap[ingressConfig[index].TLS.SecretName] = append(value, ingressConfig[index].Host)
 		} else {
-			tlsMap[ingressConfig[index].TLS.SecretName] = []string{ingressConfig[index].Host}
+			tlsMap[ingressConfig[index].TLS.SecretName] = append(tlsMap[ingressConfig[index].TLS.SecretName], ingressConfig[index].Host)
 		}
 	}
 
@@ -97,7 +97,9 @@ func mapRulesAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]v1beta1.H
 		if value, ok := rulesMap[ingressRules[index].Host]; ok {
 			rulesMap[ingressRules[index].Host] = append(value, ingressRules[0].IngressRuleValue.HTTP.Paths[0])
 		} else {
-			rulesMap[ingressRules[index].Host] = ingressRules[0].IngressRuleValue.HTTP.Paths
+			for _, value := range ingressRules[0].IngressRuleValue.HTTP.Paths {
+				rulesMap[ingressRules[index].Host] = append(rulesMap[ingressRules[index].Host], value)
+			}
 		}
 	}
 
