@@ -130,3 +130,12 @@ func (h *HorusecPlatform) GetAnalyticHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsAnalyticIngressEnabled() bool {
+	enabled := h.Spec.Components.Analytic.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

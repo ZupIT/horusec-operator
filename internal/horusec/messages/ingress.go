@@ -9,7 +9,7 @@ import (
 
 //nolint:funlen // improve in the future
 func NewIngressRule(resource *v2alpha1.HorusecPlatform, pathType v1beta1.PathType) v1beta1.IngressRule {
-	if !resource.Spec.Components.Messages.Ingress.Enabled {
+	if !resource.IsMessagesIngressEnabled() {
 		return v1beta1.IngressRule{}
 	}
 

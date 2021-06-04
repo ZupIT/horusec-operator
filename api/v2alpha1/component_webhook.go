@@ -65,3 +65,12 @@ func (h *HorusecPlatform) GetWebhookHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsWebhookIngressEnabled() bool {
+	enabled := h.Spec.Components.Webhook.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

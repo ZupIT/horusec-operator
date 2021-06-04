@@ -52,7 +52,7 @@ type Clients struct {
 }
 
 type Confidential struct {
-	ID           string       `json:"id,omitempty"`
+	ID           string                   `json:"id,omitempty"`
 	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
@@ -228,7 +228,7 @@ type User struct {
 }
 
 type Ingress struct {
-	Enabled bool   `json:"enabled,omitempty" default:"true"`
+	Enabled *bool  `json:"enabled,omitempty"`
 	Host    string `json:"host,omitempty"`
 	Path    string `json:"path,omitempty"`
 	TLS     TLS    `json:"tls,omitempty"`

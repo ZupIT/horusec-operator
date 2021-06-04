@@ -105,3 +105,12 @@ func (h *HorusecPlatform) GetManagerHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsManagerIngressEnabled() bool {
+	enabled := h.Spec.Components.Manager.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

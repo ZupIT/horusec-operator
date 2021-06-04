@@ -65,3 +65,12 @@ func (h *HorusecPlatform) GetCoreHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsCoreIngressEnabled() bool {
+	enabled := h.Spec.Components.Core.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

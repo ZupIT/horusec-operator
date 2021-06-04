@@ -91,3 +91,12 @@ func (h *HorusecPlatform) GetMessagesHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsMessagesIngressEnabled() bool {
+	enabled := h.Spec.Components.Messages.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

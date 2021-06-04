@@ -75,3 +75,12 @@ func (h *HorusecPlatform) GetAuthHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsAuthIngressEnabled() bool {
+	enabled := h.Spec.Components.Auth.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}

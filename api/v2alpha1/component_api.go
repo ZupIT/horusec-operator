@@ -65,3 +65,12 @@ func (h *HorusecPlatform) GetAPIHost() string {
 
 	return host
 }
+
+func (h *HorusecPlatform) IsAPIIngressEnabled() bool {
+	enabled := h.Spec.Components.Api.Ingress.Enabled
+	if enabled == nil {
+		return true
+	}
+
+	return *enabled
+}
