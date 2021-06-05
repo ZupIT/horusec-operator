@@ -11,9 +11,11 @@ import (
 func (h *HorusecPlatform) GetAnalyticComponent() Analytic {
 	return h.Spec.Components.Analytic
 }
+
 func (h *HorusecPlatform) GetAnalyticAutoscaling() Autoscaling {
 	return h.GetAnalyticComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetAnalyticName() string {
 	name := h.GetAnalyticComponent().Name
 	if name == "" {
@@ -21,6 +23,7 @@ func (h *HorusecPlatform) GetAnalyticName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetAnalyticPath() string {
 	path := h.GetAnalyticComponent().Ingress.Path
 	if path == "" {
@@ -28,6 +31,7 @@ func (h *HorusecPlatform) GetAnalyticPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetAnalyticPortHTTP() int {
 	port := h.GetAnalyticComponent().Port.HTTP
 	if port == 0 {
@@ -35,6 +39,7 @@ func (h *HorusecPlatform) GetAnalyticPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetAnalyticLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -42,15 +47,19 @@ func (h *HorusecPlatform) GetAnalyticLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetAnalyticReplicaCount() *int32 {
 	if !h.GetAnalyticAutoscaling().Enabled {
-		return h.GetAnalyticComponent().ReplicaCount
+		count := h.GetAnalyticComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetAnalyticDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAnalyticName(), h.GetAnalyticPortHTTP())
 }
+
 func (h *HorusecPlatform) GetAnalyticRegistry() string {
 	registry := h.GetAnalyticComponent().Container.Image.Registry
 	if registry == "" {
@@ -58,6 +67,7 @@ func (h *HorusecPlatform) GetAnalyticRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetAnalyticRepository() string {
 	repository := h.GetAnalyticComponent().Container.Image.Repository
 	if repository == "" {
@@ -65,6 +75,7 @@ func (h *HorusecPlatform) GetAnalyticRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetAnalyticTag() string {
 	tag := h.GetAnalyticComponent().Container.Image.Tag
 	if tag == "" {
@@ -72,9 +83,11 @@ func (h *HorusecPlatform) GetAnalyticTag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetAnalyticImage() string {
 	return fmt.Sprintf("%s%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticRepository(), h.GetAnalyticTag())
 }
+
 func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.GetAnalyticComponent().Database.User).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -83,9 +96,10 @@ func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelecto
 			Optional:             nil,
 		}
 	}
-	secret := h.GetAnalyticComponent().Database.User.SecretKeyRef
+	secret := h.GetAnalyticComponent().Database.User.KeyRef
 	return &secret
 }
+
 func (h *HorusecPlatform) GetAnalyticDatabasePassword() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.GetAnalyticComponent().Database.Password).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -94,7 +108,7 @@ func (h *HorusecPlatform) GetAnalyticDatabasePassword() *corev1.SecretKeySelecto
 			Optional:             nil,
 		}
 	}
-	secret := h.GetAnalyticComponent().Database.Password.SecretKeyRef
+	secret := h.GetAnalyticComponent().Database.Password.KeyRef
 	return &secret
 }
 

@@ -1,6 +1,7 @@
 package ingress
 
 import (
+	"k8s.io/api/extensions/v1beta1"
 	"k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -68,7 +69,7 @@ func mapSecretsAndHosts(resource *v2alpha1.HorusecPlatform) map[string][]string 
 func newIngressConfigList(resource *v2alpha1.HorusecPlatform) []v2alpha1.Ingress {
 	return []v2alpha1.Ingress{
 		resource.Spec.Components.Analytic.Ingress,
-		resource.Spec.Components.Api.Ingress,
+		resource.Spec.Components.API.Ingress,
 		resource.Spec.Components.Auth.Ingress,
 		resource.Spec.Components.Core.Ingress,
 		resource.Spec.Components.Manager.Ingress,

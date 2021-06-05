@@ -34,7 +34,7 @@ type Global struct {
 	Administrator Administrator `json:"administrator,omitempty"`
 	Broker        Broker        `json:"broker,omitempty"`
 	Database      Database      `json:"database,omitempty"`
-	Jwt           Jwt           `json:"jwt,omitempty"`
+	JWT           JWT           `json:"jwt,omitempty"`
 	Keycloak      Keycloak      `json:"keycloak,omitempty"`
 }
 
@@ -60,124 +60,50 @@ type Public struct {
 	ID string `json:"id,omitempty"`
 }
 
-type Jwt struct {
+type JWT struct {
 	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Broker struct {
-	Host     string   `json:"host,omitempty"`
-	Password Password `json:"password,omitempty"`
-	Port     int      `json:"port,omitempty"`
-	User     User     `json:"user,omitempty"`
+	Host        string `json:"host,omitempty"`
+	Port        int    `json:"port,omitempty"`
+	Credentials `json:",inline,omitempty"`
 }
 
 type Administrator struct {
-	Email    string   `json:"email,omitempty"`
-	Enabled  bool     `json:"enabled,omitempty"`
-	Password Password `json:"password,omitempty"`
-	User     User     `json:"user,omitempty"`
+	Email       string `json:"email,omitempty"`
+	Enabled     bool   `json:"enabled,omitempty"`
+	Credentials `json:",inline,omitempty"`
 }
 
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Components struct {
-	Analytic      Analytic      `json:"analytic,omitempty"`
-	Api           Api           `json:"api,omitempty"`
-	Auth          Auth          `json:"auth,omitempty"`
-	Core          Core          `json:"core,omitempty"`
-	Manager       Manager       `json:"manager,omitempty"`
-	Messages      Messages      `json:"messages,omitempty"`
-	Vulnerability Vulnerability `json:"vulnerability,omitempty"`
-	Webhook       Webhook       `json:"webhook,omitempty"`
+	Analytic      Analytic           `json:"analytic,omitempty"`
+	API           ExposableComponent `json:"api,omitempty"`
+	Auth          Auth               `json:"auth,omitempty"`
+	Core          ExposableComponent `json:"core,omitempty"`
+	Manager       ExposableComponent `json:"manager,omitempty"`
+	Messages      Messages           `json:"messages,omitempty"`
+	Vulnerability ExposableComponent `json:"vulnerability,omitempty"`
+	Webhook       ExposableComponent `json:"webhook,omitempty"`
 }
 
 type Analytic struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Database     Database  `json:"database,omitempty"`
-}
-
-//nolint:golint, stylecheck // no need to be API in uppercase
-type Api struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Database     Database  `json:"database,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
+	Database           Database `json:"database,omitempty"`
 }
 
 type Auth struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Type         string    `json:"type,omitempty"`
-	Database     Database  `json:"database,omitempty"`
+	Type               AuthType `json:"type,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
 }
 
-type Core struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Database     Database  `json:"database,omitempty"`
-}
-
-type Manager struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-}
+type AuthType string
 
 type Messages struct {
-	Container    Container  `json:"container,omitempty"`
-	ExtraEnv     []string   `json:"extraEnv,omitempty"`
-	Ingress      Ingress    `json:"ingress,omitempty"`
-	Name         string     `json:"name,omitempty"`
-	Pod          Pod        `json:"pod,omitempty"`
-	Port         Port       `json:"port,omitempty"`
-	ReplicaCount *int32     `json:"replicaCount,omitempty"`
-	Enabled      bool       `json:"enabled,omitempty"`
-	MailServer   MailServer `json:"mailServer,omitempty"`
-}
-
-type Vulnerability struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Database     Database  `json:"database,omitempty"`
-}
-
-type Webhook struct {
-	Container    Container `json:"container,omitempty"`
-	ExtraEnv     []string  `json:"extraEnv,omitempty"`
-	Ingress      Ingress   `json:"ingress,omitempty"`
-	Name         string    `json:"name,omitempty"`
-	Pod          Pod       `json:"pod,omitempty"`
-	Port         Port      `json:"port,omitempty"`
-	ReplicaCount *int32    `json:"replicaCount,omitempty"`
-	Database     Database  `json:"database,omitempty"`
+	Enabled            bool       `json:"enabled,omitempty"`
+	MailServer         MailServer `json:"mailServer,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
 }
 
 type Container struct {
@@ -185,7 +111,7 @@ type Container struct {
 	LivenessProbe   corev1.Probe                `json:"livenessProbe,omitempty"`
 	ReadinessProbe  corev1.Probe                `json:"readinessProbe,omitempty"`
 	Resources       corev1.ResourceRequirements `json:"resources,omitempty"`
-	SecurityContext SecurityContext             `json:"securityContext,omitempty"`
+	SecurityContext ContainerSecurityContext    `json:"securityContext,omitempty"`
 }
 
 type Image struct {
@@ -196,35 +122,29 @@ type Image struct {
 	Tag         string   `json:"tag,omitempty"`
 }
 
-type SecurityContext struct {
-	Enabled      bool `json:"enabled,omitempty"`
-	RunAsNonRoot bool `json:"runAsNonRoot,omitempty"`
-	RunAsUser    int  `json:"runAsUser,omitempty"`
-	FsGroup      int  `json:"fsGroup,omitempty"`
+type ContainerSecurityContext struct {
+	Enabled                bool `json:"enabled,omitempty"`
+	corev1.SecurityContext `json:",inline,omitempty"`
+}
+
+type PodSecurityContext struct {
+	Enabled                   bool `json:"enabled,omitempty"`
+	corev1.PodSecurityContext `json:",inline,omitempty"`
 }
 
 type Database struct {
-	Dialect   string    `json:"dialect,omitempty"`
-	Host      string    `json:"host,omitempty"`
-	LogMode   bool      `json:"logMode,omitempty"`
-	Name      string    `json:"name,omitempty"`
-	Password  Password  `json:"password,omitempty"`
-	Port      int       `json:"port,omitempty"`
-	SslMode   *bool     `json:"sslMode,omitempty"`
-	User      User      `json:"user,omitempty"`
-	Migration Migration `json:"migration,omitempty"`
+	Dialect     string    `json:"dialect,omitempty"`
+	Host        string    `json:"host,omitempty"`
+	LogMode     bool      `json:"logMode,omitempty"`
+	Name        string    `json:"name,omitempty"`
+	Port        int       `json:"port,omitempty"`
+	SslMode     *bool     `json:"sslMode,omitempty"`
+	Migration   Migration `json:"migration,omitempty"`
+	Credentials `json:",inline,omitempty"`
 }
 
 type Migration struct {
 	Image Image `json:"image,omitempty"`
-}
-
-type Password struct {
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
-}
-
-type User struct {
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
 }
 
 type Ingress struct {
@@ -239,8 +159,8 @@ type TLS struct {
 }
 
 type Pod struct {
-	Autoscaling     Autoscaling     `json:"autoscaling,omitempty"`
-	SecurityContext SecurityContext `json:"securityContext,omitempty"`
+	Autoscaling     Autoscaling        `json:"autoscaling,omitempty"`
+	SecurityContext PodSecurityContext `json:"securityContext,omitempty"`
 }
 
 type Autoscaling struct {
@@ -251,16 +171,38 @@ type Autoscaling struct {
 	TargetMemory *int32 `json:"targetMemory,omitempty"`
 }
 
-type Port struct {
+type Ports struct {
 	HTTP int `json:"http,omitempty"`
-	Grpc int `json:"grpc,omitempty"`
+	GRPC int `json:"grpc,omitempty"`
 }
 
 type MailServer struct {
-	Host     string   `json:"host,omitempty"`
-	Password Password `json:"password,omitempty"`
-	User     User     `json:"user,omitempty"`
-	Port     int      `json:"port,omitempty"`
+	Host        string `json:"host,omitempty"`
+	Port        int    `json:"port,omitempty"`
+	Credentials `json:",inline,omitempty"`
+}
+
+type Credentials struct {
+	User     SecretRef `json:"user,omitempty"`
+	Password SecretRef `json:"password,omitempty"`
+}
+
+type SecretRef struct {
+	KeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+}
+
+type Component struct {
+	Name         string          `json:"name,omitempty"`
+	Port         Ports           `json:"port,omitempty"`
+	ExtraEnv     []corev1.EnvVar `json:"extraEnv,omitempty"`
+	ReplicaCount int32           `json:"replicaCount,omitempty"`
+	Pod          Pod             `json:"pod,omitempty"`
+	Container    Container       `json:"container,omitempty"`
+}
+
+type ExposableComponent struct {
+	Component `json:",inline,omitempty"`
+	Ingress   Ingress `json:"ingress,omitempty"`
 }
 
 // HorusecPlatformStatus defines the observed state of HorusecPlatform

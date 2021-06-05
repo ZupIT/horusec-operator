@@ -7,9 +7,11 @@ import (
 func (h *HorusecPlatform) GetAuthComponent() Auth {
 	return h.Spec.Components.Auth
 }
+
 func (h *HorusecPlatform) GetAuthAutoscaling() Autoscaling {
 	return h.GetAuthComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetAuthName() string {
 	name := h.GetAuthComponent().Name
 	if name == "" {
@@ -17,6 +19,7 @@ func (h *HorusecPlatform) GetAuthName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetAuthPath() string {
 	path := h.GetAuthComponent().Ingress.Path
 	if path == "" {
@@ -24,6 +27,7 @@ func (h *HorusecPlatform) GetAuthPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetAuthPortHTTP() int {
 	port := h.GetAuthComponent().Port.HTTP
 	if port == 0 {
@@ -31,13 +35,15 @@ func (h *HorusecPlatform) GetAuthPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetAuthPortGRPC() int {
-	port := h.GetAuthComponent().Port.Grpc
+	port := h.GetAuthComponent().Port.GRPC
 	if port == 0 {
 		return 8007
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetAuthLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -45,18 +51,23 @@ func (h *HorusecPlatform) GetAuthLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetAuthReplicaCount() *int32 {
 	if !h.GetAuthAutoscaling().Enabled {
-		return h.GetAuthComponent().ReplicaCount
+		count := h.GetAuthComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetAuthDefaultHTTPURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAuthName(), h.GetAuthPortHTTP())
 }
+
 func (h *HorusecPlatform) GetAuthDefaultGRPCURL() string {
 	return fmt.Sprintf("%s:%v", h.GetAuthName(), h.GetAuthPortGRPC())
 }
+
 func (h *HorusecPlatform) GetAuthRegistry() string {
 	registry := h.GetAuthComponent().Container.Image.Registry
 	if registry == "" {
@@ -64,6 +75,7 @@ func (h *HorusecPlatform) GetAuthRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetAuthRepository() string {
 	repository := h.GetAuthComponent().Container.Image.Repository
 	if repository == "" {
@@ -71,6 +83,7 @@ func (h *HorusecPlatform) GetAuthRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetAuthTag() string {
 	tag := h.GetAuthComponent().Container.Image.Tag
 	if tag == "" {
@@ -78,6 +91,7 @@ func (h *HorusecPlatform) GetAuthTag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetAuthImage() string {
 	return fmt.Sprintf("%s%s:%s", h.GetAuthRegistry(), h.GetAuthRepository(), h.GetAuthTag())
 }

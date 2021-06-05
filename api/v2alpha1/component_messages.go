@@ -10,9 +10,11 @@ import (
 func (h *HorusecPlatform) GetMessagesComponent() Messages {
 	return h.Spec.Components.Messages
 }
+
 func (h *HorusecPlatform) GetMessagesAutoscaling() Autoscaling {
 	return h.GetMessagesComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetMessagesName() string {
 	name := h.GetMessagesComponent().Name
 	if name == "" {
@@ -20,6 +22,7 @@ func (h *HorusecPlatform) GetMessagesName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetMessagesPath() string {
 	path := h.GetMessagesComponent().Ingress.Path
 	if path == "" {
@@ -27,6 +30,7 @@ func (h *HorusecPlatform) GetMessagesPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetMessagesPortHTTP() int {
 	port := h.GetMessagesComponent().Port.HTTP
 	if port == 0 {
@@ -34,6 +38,7 @@ func (h *HorusecPlatform) GetMessagesPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetMessagesLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -41,15 +46,19 @@ func (h *HorusecPlatform) GetMessagesLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetMessagesReplicaCount() *int32 {
 	if !h.GetMessagesAutoscaling().Enabled {
-		return h.GetMessagesComponent().ReplicaCount
+		count := h.GetMessagesComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetMessagesDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetMessagesName(), h.GetMessagesPortHTTP())
 }
+
 func (h *HorusecPlatform) GetMessagesRegistry() string {
 	registry := h.GetMessagesComponent().Container.Image.Registry
 	if registry == "" {
@@ -57,6 +66,7 @@ func (h *HorusecPlatform) GetMessagesRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetMessagesRepository() string {
 	repository := h.GetMessagesComponent().Container.Image.Repository
 	if repository == "" {
@@ -64,6 +74,7 @@ func (h *HorusecPlatform) GetMessagesRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetMessagesTag() string {
 	tag := h.GetMessagesComponent().Container.Image.Tag
 	if tag == "" {
@@ -71,12 +82,15 @@ func (h *HorusecPlatform) GetMessagesTag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetMessagesImage() string {
 	return fmt.Sprintf("%s%s:%s", h.GetMessagesRegistry(), h.GetMessagesRepository(), h.GetMessagesTag())
 }
+
 func (h *HorusecPlatform) GetMessagesMailServer() MailServer {
 	return h.GetMessagesComponent().MailServer
 }
+
 func (h *HorusecPlatform) GetMessagesMailServerUsername() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.GetMessagesMailServer().User).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -85,9 +99,10 @@ func (h *HorusecPlatform) GetMessagesMailServerUsername() *corev1.SecretKeySelec
 			Optional:             nil,
 		}
 	}
-	value := h.GetMessagesMailServer().User.SecretKeyRef
+	value := h.GetMessagesMailServer().User.KeyRef
 	return &value
 }
+
 func (h *HorusecPlatform) GetMessagesMailServerPassword() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.GetMessagesMailServer().Password).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -96,7 +111,7 @@ func (h *HorusecPlatform) GetMessagesMailServerPassword() *corev1.SecretKeySelec
 			Optional:             nil,
 		}
 	}
-	value := h.GetMessagesMailServer().Password.SecretKeyRef
+	value := h.GetMessagesMailServer().Password.KeyRef
 	return &value
 }
 
