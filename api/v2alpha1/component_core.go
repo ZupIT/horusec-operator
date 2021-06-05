@@ -81,7 +81,7 @@ func (h *HorusecPlatform) GetCoreTag() string {
 }
 
 func (h *HorusecPlatform) GetCoreImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetCoreRegistry(), h.GetCoreRepository(), h.GetCoreTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetCoreRegistry(), h.GetCoreRepository(), h.GetCoreTag())
 }
 
 func (h *HorusecPlatform) GetCoreHost() string {

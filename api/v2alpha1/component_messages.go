@@ -84,7 +84,7 @@ func (h *HorusecPlatform) GetMessagesTag() string {
 }
 
 func (h *HorusecPlatform) GetMessagesImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetMessagesRegistry(), h.GetMessagesRepository(), h.GetMessagesTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetMessagesRegistry(), h.GetMessagesRepository(), h.GetMessagesTag())
 }
 
 func (h *HorusecPlatform) GetMessagesMailServer() MailServer {
@@ -125,7 +125,12 @@ func (h *HorusecPlatform) GetMessagesHost() string {
 }
 
 func (h *HorusecPlatform) IsMessagesIngressEnabled() bool {
-	enabled := h.Spec.Components.Messages.Ingress.Enabled
+	component := h.GetMessagesComponent()
+	if !component.Enabled {
+		return false
+	}
+
+	enabled := component.Ingress.Enabled
 	if enabled == nil {
 		return true
 	}

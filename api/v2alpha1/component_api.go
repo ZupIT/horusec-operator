@@ -81,7 +81,7 @@ func (h *HorusecPlatform) GetAPITag() string {
 }
 
 func (h *HorusecPlatform) GetAPIImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetAPIRegistry(), h.GetAPIRepository(), h.GetAPITag())
+	return fmt.Sprintf("%s/%s:%s", h.GetAPIRegistry(), h.GetAPIRepository(), h.GetAPITag())
 }
 
 func (h *HorusecPlatform) GetAPIHost() string {

@@ -93,7 +93,7 @@ func (h *HorusecPlatform) GetAuthTag() string {
 }
 
 func (h *HorusecPlatform) GetAuthImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetAuthRegistry(), h.GetAuthRepository(), h.GetAuthTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetAuthRegistry(), h.GetAuthRepository(), h.GetAuthTag())
 }
 
 func (h *HorusecPlatform) GetAuthHost() string {

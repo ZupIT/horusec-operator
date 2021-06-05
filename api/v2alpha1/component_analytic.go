@@ -85,7 +85,7 @@ func (h *HorusecPlatform) GetAnalyticTag() string {
 }
 
 func (h *HorusecPlatform) GetAnalyticImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticRepository(), h.GetAnalyticTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticRepository(), h.GetAnalyticTag())
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelector {

@@ -81,7 +81,7 @@ func (h *HorusecPlatform) GetManagerTag() string {
 }
 
 func (h *HorusecPlatform) GetManagerImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetManagerRegistry(), h.GetManagerRepository(), h.GetManagerTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetManagerRegistry(), h.GetManagerRepository(), h.GetManagerTag())
 }
 
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {

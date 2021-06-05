@@ -81,7 +81,7 @@ func (h *HorusecPlatform) GetWebhookTag() string {
 }
 
 func (h *HorusecPlatform) GetWebhookImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetWebhookRegistry(), h.GetWebhookRepository(), h.GetWebhookTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetWebhookRegistry(), h.GetWebhookRepository(), h.GetWebhookTag())
 }
 
 func (h *HorusecPlatform) GetWebhookHost() string {
