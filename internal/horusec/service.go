@@ -2,16 +2,19 @@ package horusec
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
+
 	appsv1 "k8s.io/api/apps/v1"
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
-	networkingv1 "k8s.io/api/networking/v1"
+	networkingv1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -31,7 +34,37 @@ func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) 
 	if err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to lookup resource: %w", err))
 	}
+
+	r, err = loadDefaults(r)
+	if err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to merge default values: %w", err))
+	}
+
 	return r, nil
+}
+
+func loadDefaults(b *v2alpha1.HorusecPlatform) (*v2alpha1.HorusecPlatform, error) {
+	data, err := ioutil.ReadFile("defaults.json")
+	if err != nil {
+		return nil, err
+	}
+
+	a := new(v2alpha1.HorusecPlatform)
+	if err = json.Unmarshal(data, &a.Spec); err != nil {
+		return nil, err
+	}
+
+	jb, err := json.Marshal(b)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(jb, &a)
+	if err != nil {
+		return nil, err
+	}
+
+	return a, nil
 }
 
 func (s *Service) UpdateHorusecPlatformStatus(ctx context.Context, resource *v2alpha1.HorusecPlatform) error {
