@@ -49,8 +49,10 @@ func newIngressTLS(resource *v2alpha1.HorusecPlatform) []networkingv1.IngressTLS
 }
 
 func newHTTPIngressPath(path, service string) networkingv1.HTTPIngressPath {
+	prefix := networkingv1.PathTypePrefix
 	return networkingv1.HTTPIngressPath{
-		Path: path,
+		Path:     path,
+		PathType: &prefix,
 		Backend: networkingv1.IngressBackend{
 			ServiceName: service,
 			ServicePort: intstr.FromString("http"),
