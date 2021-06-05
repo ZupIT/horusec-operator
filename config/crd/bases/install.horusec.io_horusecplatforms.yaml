@@ -491,8 +491,6 @@ spec:
                         type: object
                       database:
                         properties:
-                          dialect:
-                            type: string
                           host:
                             type: string
                           logMode:
@@ -6353,8 +6351,6 @@ spec:
                     type: object
                   database:
                     properties:
-                      dialect:
-                        type: string
                       host:
                         type: string
                       logMode:

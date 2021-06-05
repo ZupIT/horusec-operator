@@ -133,7 +133,6 @@ type PodSecurityContext struct {
 }
 
 type Database struct {
-	Dialect     string    `json:"dialect,omitempty"`
 	Host        string    `json:"host,omitempty"`
 	LogMode     bool      `json:"logMode,omitempty"`
 	Name        string    `json:"name,omitempty"`
