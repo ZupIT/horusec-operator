@@ -89,8 +89,8 @@ func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 	if host == "" {
 		return h.GetAnalyticHost()
 	}
-
-	return host
+	schema := h.GetAnalyticSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetAPIEndpoint() string {
@@ -98,8 +98,8 @@ func (h *HorusecPlatform) GetAPIEndpoint() string {
 	if host == "" {
 		return h.GetAPIHost()
 	}
-
-	return host
+	schema := h.GetAPISchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetAuthEndpoint() string {
@@ -107,8 +107,8 @@ func (h *HorusecPlatform) GetAuthEndpoint() string {
 	if host == "" {
 		return h.GetAuthHost()
 	}
-
-	return host
+	schema := h.GetAuthSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetCoreEndpoint() string {
@@ -116,8 +116,8 @@ func (h *HorusecPlatform) GetCoreEndpoint() string {
 	if host == "" {
 		return h.GetCoreHost()
 	}
-
-	return host
+	schema := h.GetCoreSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetWebhookEndpoint() string {
@@ -125,8 +125,8 @@ func (h *HorusecPlatform) GetWebhookEndpoint() string {
 	if host == "" {
 		return h.GetWebhookHost()
 	}
-
-	return host
+	schema := h.GetWebhookSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetManagerHost() string {
@@ -145,4 +145,44 @@ func (h *HorusecPlatform) IsManagerIngressEnabled() bool {
 	}
 
 	return *enabled
+}
+
+func (h *HorusecPlatform) GetAnalyticSchema() string {
+	component := h.Spec.Components.Analytic
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetAPISchema() string {
+	component := h.Spec.Components.API
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetAuthSchema() string {
+	component := h.Spec.Components.Auth
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetCoreSchema() string {
+	component := h.Spec.Components.Core
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetWebhookSchema() string {
+	component := h.Spec.Components.Webhook
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
 }
