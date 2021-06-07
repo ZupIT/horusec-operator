@@ -47,6 +47,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_ENABLE_APPLICATION_ADMIN", Value: strconv.FormatBool(resource.Spec.Components.Auth.EnableApplicationAdmin)},
 						{Name: "HORUSEC_ENABLE_DEFAULT_USER", Value: strconv.FormatBool(resource.Spec.Components.Auth.EnableDefaultUser)},
 						{Name: "HORUSEC_DEFAULT_USER_DATA", Value: resource.Spec.Components.Auth.DefaultUserData},
+						{Name: "HORUSEC_APPLICATION_ADMIN_DATA", Value: resource.Spec.Components.Auth.ApplicationAdminData},
 						{Name: "HORUSEC_MANAGER_URL", Value: resource.Spec.Components.Auth.ManagerUrl},
 						{Name: "HORUSEC_AUTH_URL", Value: resource.Spec.Components.Auth.AuthUrl},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),

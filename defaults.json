@@ -160,7 +160,25 @@
         "http": 8006
       },
       "replicaCount": 1,
-      "type": "horusec"
+      "type": "horusec",
+      "authUrl": "",
+      "managerUrl": "",
+      "defaultUserData": "",
+      "applicationAdminData": "",
+      "enableDefaultUser": false,
+      "enableApplicationAdmin": false,
+      "ldap": {
+        "base": "dc=wimpi,dc=net",
+        "host": "ldap",
+        "port": 10389,
+        "useSsl": false,
+        "skipTls": true,
+        "insecureSkipVerify": true,
+        "bindDn": "uid=admin,ou=system",
+        "bindPassword": "secret",
+        "userFilter": "(sAMAccountName=%s)",
+        "adminGroup": "admin"
+      }
     },
     "core": {
       "container": {
@@ -248,7 +266,10 @@
       "port": {
         "http": 8080
       },
-      "replicaCount": 1
+      "replicaCount": 1,
+      "managerPath": "\\/manager",
+      "microFrontendPublicPath": "",
+      "theme": ""
     },
     "messages": {
       "container": {

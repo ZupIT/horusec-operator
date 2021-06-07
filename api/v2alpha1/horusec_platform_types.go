@@ -96,7 +96,7 @@ type Components struct {
 	API           ExposableComponent `json:"api,omitempty"`
 	Auth          Auth               `json:"auth,omitempty"`
 	Core          ExposableComponent `json:"core,omitempty"`
-	Manager       ExposableComponent `json:"manager,omitempty"`
+	Manager       Manager            `json:"manager,omitempty"`
 	Messages      Messages           `json:"messages,omitempty"`
 	Vulnerability ExposableComponent `json:"vulnerability,omitempty"`
 	Webhook       Webhook            `json:"webhook,omitempty"`
@@ -121,6 +121,7 @@ type Auth struct {
 	DefaultUserData        string `json:"defaultUserData,omitempty"`
 	EnableDefaultUser      bool   `json:"enableDefaultUser,omitempty"`
 	EnableApplicationAdmin bool   `json:"enableApplicationAdmin,omitempty"`
+	ApplicationAdminData   string `json:"applicationAdminData,omitempty"`
 }
 
 type AuthType string
@@ -129,6 +130,13 @@ type Messages struct {
 	Enabled            bool       `json:"enabled,omitempty"`
 	MailServer         MailServer `json:"mailServer,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
+}
+
+type Manager struct {
+	ManagerPath             string `json:"managerPath,omitempty"`
+	MicroFrontendPublicPath string `json:"microFrontendPublicPath,omitempty"`
+	Theme                   string `json:"theme,omitempty"`
+	ExposableComponent      `json:",inline,omitempty"`
 }
 
 type Container struct {
