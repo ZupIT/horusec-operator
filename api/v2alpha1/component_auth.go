@@ -113,3 +113,25 @@ func (h *HorusecPlatform) IsAuthIngressEnabled() bool {
 
 	return *enabled
 }
+
+func (h *HorusecPlatform) GetAuthAdminData() string {
+	email := h.Spec.Global.Administrator.Email
+	if !h.Spec.Global.Administrator.Enabled || email == "" {
+		return ""
+	}
+
+	return fmt.Sprintf(
+		"{\"username\": \"$(HORUSEC_ADMIN_USERNAME)\", \"email\":\"%s\", \"password\":\"$(HORUSEC_ADMIN_PASSWORD)\"}",
+		email)
+}
+
+func (h *HorusecPlatform) GetAuthDefaultUserData() string {
+	email := h.Spec.Components.Auth.DefaultUser.Email
+	if !h.Spec.Global.Administrator.Enabled || email == "" {
+		return ""
+	}
+
+	return fmt.Sprintf(
+		"{\"username\": \"$(HORUSEC_DEFAULT_USER_USERNAME)\", \"email\":\"%s\", \"password\":\"$(HORUSEC_DEFAULT_USER_PASSWORD)\"}",
+		email)
+}

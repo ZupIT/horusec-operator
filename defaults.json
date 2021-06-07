@@ -163,21 +163,21 @@
       "type": "horusec",
       "authUrl": "",
       "managerUrl": "",
-      "defaultUserData": "",
-      "applicationAdminData": "",
-      "enableDefaultUser": false,
-      "enableApplicationAdmin": false,
-      "ldap": {
-        "base": "dc=wimpi,dc=net",
-        "host": "ldap",
-        "port": 10389,
-        "useSsl": false,
-        "skipTls": true,
-        "insecureSkipVerify": true,
-        "bindDn": "uid=admin,ou=system",
-        "bindPassword": "secret",
-        "userFilter": "(sAMAccountName=%s)",
-        "adminGroup": "admin"
+      "defaultUser": {
+        "email": "dev@example.com",
+        "enabled": false,
+        "password": {
+          "secretKeyRef": {
+            "key": "password",
+            "name": "horusec-default-user"
+          }
+        },
+        "user": {
+          "secretKeyRef": {
+            "key": "username",
+            "name": "horusec-default-user"
+          }
+        }
       }
     },
     "core": {
@@ -499,6 +499,18 @@
       "otp": false,
       "publicURL": "",
       "realm": "horusec"
+    },
+    "ldap": {
+      "base": "dc=wimpi,dc=net",
+      "host": "ldap",
+      "port": 10389,
+      "useSsl": false,
+      "skipTls": true,
+      "insecureSkipVerify": true,
+      "bindDn": "uid=admin,ou=system",
+      "bindPassword": "secret",
+      "userFilter": "(sAMAccountName=%s)",
+      "adminGroup": "admin"
     }
   }
 }

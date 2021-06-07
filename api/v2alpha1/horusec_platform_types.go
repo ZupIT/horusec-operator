@@ -36,6 +36,7 @@ type Global struct {
 	Database      Database      `json:"database,omitempty"`
 	JWT           JWT           `json:"jwt,omitempty"`
 	Keycloak      Keycloak      `json:"keycloak,omitempty"`
+	Ldap          Ldap          `json:"ldap,omitempty"`
 	GrpcUseCerts  bool          `json:"grpcUseCerts,omitempty"`
 }
 
@@ -90,6 +91,12 @@ type Administrator struct {
 	Credentials `json:",inline,omitempty"`
 }
 
+type DefaultUser struct {
+	Email       string `json:"email,omitempty"`
+	Enabled     bool   `json:"enabled,omitempty"`
+	Credentials `json:",inline,omitempty"`
+}
+
 //nolint:golint, stylecheck // no need to be API in uppercase
 type Components struct {
 	Analytic      Analytic           `json:"analytic,omitempty"`
@@ -115,13 +122,9 @@ type Analytic struct {
 type Auth struct {
 	Type                   AuthType `json:"type,omitempty"`
 	ExposableComponent     `json:",inline,omitempty"`
-	Ldap                   Ldap   `json:"ldap,omitempty"`
-	AuthUrl                string `json:"authUrl,omitempty"`
-	ManagerUrl             string `json:"managerUrl,omitempty"`
-	DefaultUserData        string `json:"defaultUserData,omitempty"`
-	EnableDefaultUser      bool   `json:"enableDefaultUser,omitempty"`
-	EnableApplicationAdmin bool   `json:"enableApplicationAdmin,omitempty"`
-	ApplicationAdminData   string `json:"applicationAdminData,omitempty"`
+	AuthUrl                string      `json:"authUrl,omitempty"`
+	ManagerUrl             string      `json:"managerUrl,omitempty"`
+	DefaultUser            DefaultUser `json:"defaultUser,omitempty"`
 }
 
 type AuthType string
