@@ -40,7 +40,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetGlobalDatabaseLogMode()},
 						{Name: "HORUSEC_DISABLED_EMAILS", Value: resource.IsEmailsEnabled()},
-						{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(resource.Spec.Components.Auth.GrpcUseCerts)},
+						{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(resource.Spec.Global.GrpcUseCerts)},
 						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
 						{Name: "HORUSEC_AUTH_TYPE", Value: string(resource.Spec.Components.Auth.Type)},

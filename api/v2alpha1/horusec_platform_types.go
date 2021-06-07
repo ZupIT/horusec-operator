@@ -36,6 +36,7 @@ type Global struct {
 	Database      Database      `json:"database,omitempty"`
 	JWT           JWT           `json:"jwt,omitempty"`
 	Keycloak      Keycloak      `json:"keycloak,omitempty"`
+	GrpcUseCerts  bool          `json:"grpcUseCerts,omitempty"`
 }
 
 type Keycloak struct {
@@ -98,7 +99,12 @@ type Components struct {
 	Manager       ExposableComponent `json:"manager,omitempty"`
 	Messages      Messages           `json:"messages,omitempty"`
 	Vulnerability ExposableComponent `json:"vulnerability,omitempty"`
-	Webhook       ExposableComponent `json:"webhook,omitempty"`
+	Webhook       Webhook            `json:"webhook,omitempty"`
+}
+
+type Webhook struct {
+	Timeout            int `json:"timeout,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
 }
 
 type Analytic struct {
@@ -115,7 +121,6 @@ type Auth struct {
 	DefaultUserData        string `json:"defaultUserData,omitempty"`
 	EnableDefaultUser      bool   `json:"enableDefaultUser,omitempty"`
 	EnableApplicationAdmin bool   `json:"enableApplicationAdmin,omitempty"`
-	GrpcUseCerts           bool   `json:"grpcUseCerts,omitempty"`
 }
 
 type AuthType string

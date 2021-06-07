@@ -38,7 +38,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAnalyticPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetAnalyticDatabaseLogMode()},
-						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
+						{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(resource.Spec.Global.GrpcUseCerts)},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},

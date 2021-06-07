@@ -38,10 +38,10 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetWebhookPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetGlobalDatabaseLogMode()},
-						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
+						{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(resource.Spec.Global.GrpcUseCerts)},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
-						{Name: "HORUSEC_HTTP_TIMEOUT", Value: "60"},
+						{Name: "HORUSEC_HTTP_TIMEOUT", Value: strconv.Itoa(resource.Spec.Components.Webhook.Timeout)},
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
