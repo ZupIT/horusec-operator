@@ -148,3 +148,12 @@ func (h *HorusecPlatform) GetAllIngressIsDisabled() bool {
 		!h.IsVulnerabilityIngressEnabled() &&
 		!h.IsWebhookIngressEnabled()
 }
+
+func (h *HorusecPlatform) IsEmailsEnabled() string {
+	enabled := h.Spec.Components.Messages.Enabled
+	if enabled {
+		return "true"
+	}
+
+	return "false"
+}

@@ -46,6 +46,19 @@ type Keycloak struct {
 	Realm       string  `json:"realm,omitempty"`
 }
 
+type Ldap struct {
+	Base               string `json:"base,omitempty"`
+	Host               string `json:"host,omitempty"`
+	Port               int    `json:"port,omitempty"`
+	UseSSL             bool   `json:"useSsl,omitempty"`
+	SkipTLS            bool   `json:"skipTls,omitempty"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty"`
+	BindDN             string `json:"bindDn,omitempty"`
+	BindPassword       string `json:"bindPassword,omitempty"`
+	UserFilter         string `json:"userFilter,omitempty"`
+	AdminGroup         string `json:"adminGroup,omitempty"`
+}
+
 type Clients struct {
 	Confidential Confidential `json:"clients,omitempty"`
 	Public       Public       `json:"public,omitempty"`
@@ -94,8 +107,15 @@ type Analytic struct {
 }
 
 type Auth struct {
-	Type               AuthType `json:"type,omitempty"`
-	ExposableComponent `json:",inline,omitempty"`
+	Type                   AuthType `json:"type,omitempty"`
+	ExposableComponent     `json:",inline,omitempty"`
+	Ldap                   Ldap   `json:"ldap,omitempty"`
+	AuthUrl                string `json:"authUrl,omitempty"`
+	ManagerUrl             string `json:"managerUrl,omitempty"`
+	DefaultUserData        string `json:"defaultUserData,omitempty"`
+	EnableDefaultUser      bool   `json:"enableDefaultUser,omitempty"`
+	EnableApplicationAdmin bool   `json:"enableApplicationAdmin,omitempty"`
+	GrpcUseCerts           bool   `json:"grpcUseCerts,omitempty"`
 }
 
 type AuthType string
