@@ -2,6 +2,7 @@ package v2alpha1
 
 import (
 	"fmt"
+	v1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) GetAuthComponent() Auth {
@@ -134,4 +135,55 @@ func (h *HorusecPlatform) GetAuthDefaultUserData() string {
 	return fmt.Sprintf(
 		"{\"username\": \"$(HORUSEC_DEFAULT_USER_USERNAME)\", \"email\":\"%s\", \"password\":\"$(HORUSEC_DEFAULT_USER_PASSWORD)\"}",
 		email)
+}
+
+func (h *HorusecPlatform) GetAuthAdminUsernameEnv() v1.EnvVar {
+	if h.Spec.Global.Administrator.Enabled {
+		return v1.EnvVar{}
+	}
+
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_USERNAME", &h.Spec.Global.Administrator.Credentials.User.KeyRef)
+}
+
+func (h *HorusecPlatform) GetAuthAdminPasswordEnv() v1.EnvVar {
+	if h.Spec.Global.Administrator.Enabled {
+		return v1.EnvVar{}
+	}
+
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_PASSWORD", &h.Spec.Global.Administrator.Credentials.Password.KeyRef)
+}
+
+func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
+	if h.Spec.Global.Administrator.Enabled {
+		return v1.EnvVar{}
+	}
+
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_USERNAME", &h.Spec.Components.Auth.DefaultUser.Credentials.User.KeyRef)
+}
+
+func (h *HorusecPlatform) GetAuthDefaultUserPassword() v1.EnvVar {
+	if h.Spec.Global.Administrator.Enabled {
+		return v1.EnvVar{}
+	}
+
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_PASSWORD", &h.Spec.Components.Auth.DefaultUser.Credentials.Password.KeyRef)
+}
+
+func (h *HorusecPlatform) GetAuthKeycloakClientSecret() v1.EnvVar {
+	if h.Spec.Global.Keycloak.Realm == "" || h.Spec.Global.Keycloak.PublicURL == "" ||
+		h.Spec.Global.Keycloak.InternalURL == "" {
+		return v1.EnvVar{}
+	}
+
+	return h.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", &h.Spec.Global.Keycloak.Clients.Confidential.SecretKeyRef)
+}
+
+func (h *HorusecPlatform) GetAuthOptionalEnvs() []v1.EnvVar {
+	return []v1.EnvVar{
+		h.GetAuthAdminUsernameEnv(),
+		h.GetAuthAdminPasswordEnv(),
+		h.GetAuthDefaultUserUsername(),
+		h.GetAuthDefaultUserPassword(),
+		h.GetAuthKeycloakClientSecret(),
+	}
 }
