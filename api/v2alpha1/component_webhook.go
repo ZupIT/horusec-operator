@@ -4,12 +4,14 @@ import (
 	"fmt"
 )
 
-func (h *HorusecPlatform) GetWebhookComponent() Webhook {
+func (h *HorusecPlatform) GetWebhookComponent() ExposableComponent {
 	return h.Spec.Components.Webhook
 }
+
 func (h *HorusecPlatform) GetWebhookAutoscaling() Autoscaling {
 	return h.GetWebhookComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetWebhookName() string {
 	name := h.GetWebhookComponent().Name
 	if name == "" {
@@ -17,6 +19,7 @@ func (h *HorusecPlatform) GetWebhookName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetWebhookPath() string {
 	path := h.GetWebhookComponent().Ingress.Path
 	if path == "" {
@@ -24,6 +27,7 @@ func (h *HorusecPlatform) GetWebhookPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetWebhookPortHTTP() int {
 	port := h.GetWebhookComponent().Port.HTTP
 	if port == 0 {
@@ -31,6 +35,7 @@ func (h *HorusecPlatform) GetWebhookPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetWebhookLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -38,15 +43,19 @@ func (h *HorusecPlatform) GetWebhookLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetWebhookReplicaCount() *int32 {
 	if !h.GetWebhookAutoscaling().Enabled {
-		return h.GetWebhookComponent().ReplicaCount
+		count := h.GetWebhookComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetWebhookDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetWebhookName(), h.GetWebhookPortHTTP())
 }
+
 func (h *HorusecPlatform) GetWebhookRegistry() string {
 	registry := h.GetWebhookComponent().Container.Image.Registry
 	if registry == "" {
@@ -54,6 +63,7 @@ func (h *HorusecPlatform) GetWebhookRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetWebhookRepository() string {
 	repository := h.GetWebhookComponent().Container.Image.Repository
 	if repository == "" {
@@ -61,6 +71,7 @@ func (h *HorusecPlatform) GetWebhookRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetWebhookTag() string {
 	tag := h.GetWebhookComponent().Container.Image.Tag
 	if tag == "" {
@@ -68,9 +79,11 @@ func (h *HorusecPlatform) GetWebhookTag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetWebhookImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetWebhookRegistry(), h.GetWebhookRepository(), h.GetWebhookTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetWebhookRegistry(), h.GetWebhookRepository(), h.GetWebhookTag())
 }
+
 func (h *HorusecPlatform) GetWebhookHost() string {
 	host := h.Spec.Components.Webhook.Ingress.Host
 	if host == "" {

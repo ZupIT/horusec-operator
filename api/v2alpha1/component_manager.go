@@ -4,12 +4,14 @@ import (
 	"fmt"
 )
 
-func (h *HorusecPlatform) GetManagerComponent() Manager {
+func (h *HorusecPlatform) GetManagerComponent() ExposableComponent {
 	return h.Spec.Components.Manager
 }
+
 func (h *HorusecPlatform) GetManagerAutoscaling() Autoscaling {
 	return h.GetManagerComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetManagerName() string {
 	name := h.GetManagerComponent().Name
 	if name == "" {
@@ -17,6 +19,7 @@ func (h *HorusecPlatform) GetManagerName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetManagerPath() string {
 	path := h.GetManagerComponent().Ingress.Path
 	if path == "" {
@@ -24,6 +27,7 @@ func (h *HorusecPlatform) GetManagerPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetManagerPortHTTP() int {
 	port := h.GetManagerComponent().Port.HTTP
 	if port == 0 {
@@ -31,6 +35,7 @@ func (h *HorusecPlatform) GetManagerPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetManagerLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -38,15 +43,19 @@ func (h *HorusecPlatform) GetManagerLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetManagerReplicaCount() *int32 {
 	if !h.GetManagerAutoscaling().Enabled {
-		return h.GetManagerComponent().ReplicaCount
+		count := h.GetManagerComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetManagerDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetManagerName(), h.GetManagerPortHTTP())
 }
+
 func (h *HorusecPlatform) GetManagerRegistry() string {
 	registry := h.GetManagerComponent().Container.Image.Registry
 	if registry == "" {
@@ -54,6 +63,7 @@ func (h *HorusecPlatform) GetManagerRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetManagerRepository() string {
 	repository := h.GetManagerComponent().Container.Image.Repository
 	if repository == "" {
@@ -61,6 +71,7 @@ func (h *HorusecPlatform) GetManagerRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetManagerTag() string {
 	tag := h.GetManagerComponent().Container.Image.Tag
 	if tag == "" {
@@ -68,48 +79,54 @@ func (h *HorusecPlatform) GetManagerTag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetManagerImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetManagerRegistry(), h.GetManagerRepository(), h.GetManagerTag())
+	return fmt.Sprintf("%s/%s:%s", h.GetManagerRegistry(), h.GetManagerRepository(), h.GetManagerTag())
 }
+
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {
 	host := h.GetAnalyticComponent().Ingress.Host
 	if host == "" {
 		return h.GetAnalyticHost()
 	}
-
-	return host
+	schema := h.GetAnalyticSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
+
 func (h *HorusecPlatform) GetAPIEndpoint() string {
 	host := h.GetAPIComponent().Ingress.Host
 	if host == "" {
 		return h.GetAPIHost()
 	}
-
-	return host
+	schema := h.GetAPISchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
+
 func (h *HorusecPlatform) GetAuthEndpoint() string {
 	host := h.GetAuthComponent().Ingress.Host
 	if host == "" {
 		return h.GetAuthHost()
 	}
-
-	return host
+	schema := h.GetAuthSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
+
 func (h *HorusecPlatform) GetCoreEndpoint() string {
 	host := h.GetCoreComponent().Ingress.Host
 	if host == "" {
 		return h.GetCoreHost()
 	}
-
-	return host
+	schema := h.GetCoreSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
+
 func (h *HorusecPlatform) GetWebhookEndpoint() string {
 	host := h.GetWebhookComponent().Ingress.Host
 	if host == "" {
 		return h.GetWebhookHost()
 	}
-
-	return host
+	schema := h.GetWebhookSchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetManagerHost() string {
@@ -128,4 +145,44 @@ func (h *HorusecPlatform) IsManagerIngressEnabled() bool {
 	}
 
 	return *enabled
+}
+
+func (h *HorusecPlatform) GetAnalyticSchema() string {
+	component := h.Spec.Components.Analytic
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetAPISchema() string {
+	component := h.Spec.Components.API
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetAuthSchema() string {
+	component := h.Spec.Components.Auth
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetCoreSchema() string {
+	component := h.Spec.Components.Core
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetWebhookSchema() string {
+	component := h.Spec.Components.Webhook
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
 }

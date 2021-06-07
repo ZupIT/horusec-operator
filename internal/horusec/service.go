@@ -2,19 +2,21 @@ package horusec
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-
-	v1 "k8s.io/api/apps/v1"
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-	batchv1 "k8s.io/api/batch/v1"
-	core "k8s.io/api/core/v1"
-	"k8s.io/api/networking/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8s "sigs.k8s.io/controller-runtime/pkg/client"
+	"io/ioutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
+
+	appsv1 "k8s.io/api/apps/v1"
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1beta1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	k8s "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 type Service struct{ client k8s.Client }
@@ -32,7 +34,37 @@ func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) 
 	if err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to lookup resource: %w", err))
 	}
+
+	r, err = loadDefaults(r)
+	if err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to merge default values: %w", err))
+	}
+
 	return r, nil
+}
+
+func loadDefaults(b *v2alpha1.HorusecPlatform) (*v2alpha1.HorusecPlatform, error) {
+	data, err := ioutil.ReadFile("defaults.json")
+	if err != nil {
+		return nil, err
+	}
+
+	a := new(v2alpha1.HorusecPlatform)
+	if err = json.Unmarshal(data, &a.Spec); err != nil {
+		return nil, err
+	}
+
+	jb, err := json.Marshal(b)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(jb, &a)
+	if err != nil {
+		return nil, err
+	}
+
+	return a, nil
 }
 
 func (s *Service) UpdateHorusecPlatformStatus(ctx context.Context, resource *v2alpha1.HorusecPlatform) error {
@@ -79,7 +111,7 @@ func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
 }
 
 func (s *Service) ListDeployments(ctx context.Context,
-	namespace string, matchingLabels map[string]string) (*v1.DeploymentList, error) {
+	namespace string, matchingLabels map[string]string) (*appsv1.DeploymentList, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
@@ -87,7 +119,7 @@ func (s *Service) ListDeployments(ctx context.Context,
 		k8s.InNamespace(namespace),
 		k8s.MatchingLabels(matchingLabels),
 	}
-	list := &v1.DeploymentList{}
+	list := &appsv1.DeploymentList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err))
 	}
@@ -111,7 +143,7 @@ func (s *Service) ListAutoscaling(ctx context.Context,
 }
 
 func (s *Service) ListServiceAccounts(
-	ctx context.Context, namespace, name string, labels map[string]string) (*core.ServiceAccountList, error) {
+	ctx context.Context, namespace, name string, labels map[string]string) (*corev1.ServiceAccountList, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
@@ -120,7 +152,7 @@ func (s *Service) ListServiceAccounts(
 		k8s.MatchingLabels(labels),
 	}
 
-	list := &core.ServiceAccountList{}
+	list := &corev1.ServiceAccountList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to list %s service accounts: %w", name, err))
 	}
@@ -129,7 +161,7 @@ func (s *Service) ListServiceAccounts(
 }
 
 func (s *Service) ListServices(
-	ctx context.Context, namespace, name string, labels map[string]string) (*core.ServiceList, error) {
+	ctx context.Context, namespace, name string, labels map[string]string) (*corev1.ServiceList, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
@@ -137,7 +169,7 @@ func (s *Service) ListServices(
 		k8s.InNamespace(namespace),
 		k8s.MatchingLabels(labels),
 	}
-	list := &core.ServiceList{}
+	list := &corev1.ServiceList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to list %s services: %w", name, err))
 	}
@@ -145,7 +177,7 @@ func (s *Service) ListServices(
 }
 
 func (s *Service) ListIngress(
-	ctx context.Context, namespace, name string, labels map[string]string) (*v1beta1.IngressList, error) {
+	ctx context.Context, namespace, name string, labels map[string]string) (*networkingv1.IngressList, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
@@ -154,7 +186,7 @@ func (s *Service) ListIngress(
 		k8s.MatchingLabels(labels),
 	}
 
-	list := &v1beta1.IngressList{}
+	list := &networkingv1.IngressList{}
 	if err := s.client.List(ctx, list, opts...); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to list %s ingress: %w", name, err))
 	}

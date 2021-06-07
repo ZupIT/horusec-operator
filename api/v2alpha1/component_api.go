@@ -4,12 +4,14 @@ import (
 	"fmt"
 )
 
-func (h *HorusecPlatform) GetAPIComponent() Api {
-	return h.Spec.Components.Api
+func (h *HorusecPlatform) GetAPIComponent() ExposableComponent {
+	return h.Spec.Components.API
 }
+
 func (h *HorusecPlatform) GetAPIAutoscaling() Autoscaling {
 	return h.GetAPIComponent().Pod.Autoscaling
 }
+
 func (h *HorusecPlatform) GetAPIName() string {
 	name := h.GetAPIComponent().Name
 	if name == "" {
@@ -17,6 +19,7 @@ func (h *HorusecPlatform) GetAPIName() string {
 	}
 	return name
 }
+
 func (h *HorusecPlatform) GetAPIPath() string {
 	path := h.GetAPIComponent().Ingress.Path
 	if path == "" {
@@ -24,6 +27,7 @@ func (h *HorusecPlatform) GetAPIPath() string {
 	}
 	return path
 }
+
 func (h *HorusecPlatform) GetAPIPortHTTP() int {
 	port := h.GetAPIComponent().Port.HTTP
 	if port == 0 {
@@ -31,6 +35,7 @@ func (h *HorusecPlatform) GetAPIPortHTTP() int {
 	}
 	return port
 }
+
 func (h *HorusecPlatform) GetApiLabels() map[string]string {
 	return map[string]string{
 		"app.kubernetes.io/name":       h.GetName(),
@@ -38,15 +43,19 @@ func (h *HorusecPlatform) GetApiLabels() map[string]string {
 		"app.kubernetes.io/managed-by": "horusec",
 	}
 }
+
 func (h *HorusecPlatform) GetAPIReplicaCount() *int32 {
 	if !h.GetAPIAutoscaling().Enabled {
-		return h.GetAPIComponent().ReplicaCount
+		count := h.GetAPIComponent().ReplicaCount
+		return &count
 	}
 	return nil
 }
+
 func (h *HorusecPlatform) GetAPIDefaultURL() string {
 	return fmt.Sprintf("http://%s:%v", h.GetAPIName(), h.GetAPIPortHTTP())
 }
+
 func (h *HorusecPlatform) GetAPIRegistry() string {
 	registry := h.GetAPIComponent().Container.Image.Registry
 	if registry == "" {
@@ -54,6 +63,7 @@ func (h *HorusecPlatform) GetAPIRegistry() string {
 	}
 	return registry
 }
+
 func (h *HorusecPlatform) GetAPIRepository() string {
 	repository := h.GetAPIComponent().Container.Image.Repository
 	if repository == "" {
@@ -61,6 +71,7 @@ func (h *HorusecPlatform) GetAPIRepository() string {
 	}
 	return repository
 }
+
 func (h *HorusecPlatform) GetAPITag() string {
 	tag := h.GetAPIComponent().Container.Image.Tag
 	if tag == "" {
@@ -68,11 +79,13 @@ func (h *HorusecPlatform) GetAPITag() string {
 	}
 	return tag
 }
+
 func (h *HorusecPlatform) GetAPIImage() string {
-	return fmt.Sprintf("%s%s:%s", h.GetAPIRegistry(), h.GetAPIRepository(), h.GetAPITag())
+	return fmt.Sprintf("%s/%s:%s", h.GetAPIRegistry(), h.GetAPIRepository(), h.GetAPITag())
 }
+
 func (h *HorusecPlatform) GetAPIHost() string {
-	host := h.Spec.Components.Api.Ingress.Host
+	host := h.Spec.Components.API.Ingress.Host
 	if host == "" {
 		return "api.local"
 	}
@@ -81,7 +94,7 @@ func (h *HorusecPlatform) GetAPIHost() string {
 }
 
 func (h *HorusecPlatform) IsAPIIngressEnabled() bool {
-	enabled := h.Spec.Components.Api.Ingress.Enabled
+	enabled := h.Spec.Components.API.Ingress.Enabled
 	if enabled == nil {
 		return true
 	}

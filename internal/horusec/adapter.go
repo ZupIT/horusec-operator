@@ -5,13 +5,6 @@ import (
 	"fmt"
 	"reflect"
 
-	appsv1 "k8s.io/api/apps/v1"
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-	v1 "k8s.io/api/batch/v1"
-	coreV1 "k8s.io/api/core/v1"
-	"k8s.io/api/networking/v1beta1"
-	"k8s.io/apimachinery/pkg/runtime"
-
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
 	"github.com/ZupIT/horusec-operator/internal/horusec/api"
@@ -25,6 +18,12 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	appsv1 "k8s.io/api/apps/v1"
+	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
+	batchv1 "k8s.io/api/batch/v1"
+	coreV1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1beta1"
+	"k8s.io/apimachinery/pkg/runtime"
 
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
@@ -64,7 +63,7 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 		return nil, fmt.Errorf("failed to set job %q owner reference: %v", adesired.GetName(), err)
 	}
 
-	inv := inventory.ForJobs(existing.Items, []v1.Job{mdesired, adesired})
+	inv := inventory.ForJobs(existing.Items, []batchv1.Job{mdesired, adesired})
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
@@ -164,16 +163,20 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 }
 
 func (a *Adapter) listServices() []coreV1.Service {
-	return []coreV1.Service{
+	services := []coreV1.Service{
 		analytic.NewService(a.resource),
 		api.NewService(a.resource),
 		auth.NewService(a.resource),
 		core.NewService(a.resource),
 		manager.NewService(a.resource),
-		messages.NewService(a.resource),
 		vulnerability.NewService(a.resource),
 		webhook.NewService(a.resource),
 	}
+	msg := a.resource.GetMessagesComponent()
+	if msg.Enabled {
+		services = append(services, messages.NewService(a.resource))
+	}
+	return services
 }
 
 func (a *Adapter) ensureServices(desired *coreV1.Service) error {
@@ -191,13 +194,13 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 	if err != nil {
 		return nil, err
 	}
-	var desiredList []v1beta1.Ingress
+	var desiredList []networkingv1.Ingress
 	if !a.resource.GetAllIngressIsDisabled() {
 		desired := ingress.NewIngress(a.resource)
-		if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
+		if err := controllerutil.SetControllerReference(a.resource, &desired, a.scheme); err != nil {
 			return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
 		}
-		desiredList = append(desiredList, *desired)
+		desiredList = append(desiredList, desired)
 	}
 
 	inv := inventory.ForIngresses(existing.Items, desiredList)
@@ -237,40 +240,52 @@ func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result,
 }
 
 func (a *Adapter) listServiceAccounts() []coreV1.ServiceAccount {
-	return []coreV1.ServiceAccount{
+	serviceAccounts := []coreV1.ServiceAccount{
 		analytic.NewServiceAccount(a.resource),
 		api.NewServiceAccount(a.resource),
 		auth.NewServiceAccount(a.resource),
 		core.NewServiceAccount(a.resource),
 		manager.NewServiceAccount(a.resource),
-		messages.NewServiceAccount(a.resource),
 		vulnerability.NewServiceAccount(a.resource),
 		webhook.NewServiceAccount(a.resource),
 	}
+	msg := a.resource.GetMessagesComponent()
+	if msg.Enabled {
+		serviceAccounts = append(serviceAccounts, messages.NewServiceAccount(a.resource))
+	}
+	return serviceAccounts
 }
 
 func (a *Adapter) listOfDeployments() []appsv1.Deployment {
-	return []appsv1.Deployment{
+	deployments := []appsv1.Deployment{
 		auth.NewDeployment(a.resource),
 		core.NewDeployment(a.resource),
 		api.NewDeployment(a.resource),
-		messages.NewDeployment(a.resource),
 		analytic.NewDeployment(a.resource),
 		manager.NewDeployment(a.resource),
 		vulnerability.NewDeployment(a.resource),
 		webhook.NewDeployment(a.resource),
 	}
+	msg := a.resource.GetMessagesComponent()
+	if msg.Enabled {
+		deployments = append(deployments, messages.NewDeployment(a.resource))
+	}
+	return deployments
 }
 
 func (a *Adapter) listOfAutoscaling() []autoScalingV2beta2.HorizontalPodAutoscaler {
-	return []autoScalingV2beta2.HorizontalPodAutoscaler{
+	autoscalers := []autoScalingV2beta2.HorizontalPodAutoscaler{
 		auth.NewAutoscaling(a.resource),
 		core.NewAutoscaling(a.resource),
 		api.NewAutoscaling(a.resource),
-		messages.NewAutoscaling(a.resource),
 		analytic.NewAutoscaling(a.resource),
 		manager.NewAutoscaling(a.resource),
 		vulnerability.NewAutoscaling(a.resource),
 		webhook.NewAutoscaling(a.resource),
 	}
+	msg := a.resource.GetMessagesComponent()
+	if msg.Enabled {
+		autoscalers = append(autoscalers, messages.NewAutoscaling(a.resource))
+	}
+	return autoscalers
 }

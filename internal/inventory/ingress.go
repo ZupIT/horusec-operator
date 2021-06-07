@@ -3,13 +3,12 @@ package inventory
 import (
 	"fmt"
 
+	networkingv1 "k8s.io/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-
-	"k8s.io/api/networking/v1beta1"
 )
 
 //nolint:gocritic, funlen // to improve in the future
-func ForIngresses(existing, desired []v1beta1.Ingress) Object {
+func ForIngresses(existing, desired []networkingv1.Ingress) Object {
 	update := []client.Object{}
 	mcreate := ingressMap(desired)
 	mdelete := ingressMap(existing)
@@ -43,8 +42,8 @@ func ForIngresses(existing, desired []v1beta1.Ingress) Object {
 }
 
 //nolint:gocritic // to improve in the future
-func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
-	m := map[string]v1beta1.Ingress{}
+func ingressMap(deps []networkingv1.Ingress) map[string]networkingv1.Ingress {
+	m := map[string]networkingv1.Ingress{}
 	for _, d := range deps {
 		m[fmt.Sprintf("%s.%s", d.Namespace, d.Name)] = d
 	}
@@ -52,7 +51,7 @@ func ingressMap(deps []v1beta1.Ingress) map[string]v1beta1.Ingress {
 }
 
 //nolint // to improve in the future
-func ingressList(m map[string]v1beta1.Ingress) []client.Object {
+func ingressList(m map[string]networkingv1.Ingress) []client.Object {
 	l := []client.Object{}
 	for _, v := range m {
 		obj := v

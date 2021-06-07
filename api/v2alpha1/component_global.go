@@ -34,8 +34,9 @@ func (h *HorusecPlatform) GetGlobalBrokerUsername() *corev1.SecretKeySelector {
 			Optional:             nil,
 		}
 	}
-	return &h.Spec.Global.Broker.User.SecretKeyRef
+	return &h.Spec.Global.Broker.User.KeyRef
 }
+
 func (h *HorusecPlatform) GetGlobalBrokerPassword() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.Spec.Global.Broker.Password).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -44,7 +45,7 @@ func (h *HorusecPlatform) GetGlobalBrokerPassword() *corev1.SecretKeySelector {
 			Optional:             nil,
 		}
 	}
-	return &h.Spec.Global.Broker.Password.SecretKeyRef
+	return &h.Spec.Global.Broker.Password.KeyRef
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseUsername() *corev1.SecretKeySelector {
@@ -55,8 +56,9 @@ func (h *HorusecPlatform) GetGlobalDatabaseUsername() *corev1.SecretKeySelector 
 			Optional:             nil,
 		}
 	}
-	return &h.Spec.Global.Database.User.SecretKeyRef
+	return &h.Spec.Global.Database.User.KeyRef
 }
+
 func (h *HorusecPlatform) GetGlobalDatabasePassword() *corev1.SecretKeySelector {
 	if reflect.ValueOf(h.Spec.Global.Database.Password).IsZero() {
 		return &corev1.SecretKeySelector{
@@ -65,8 +67,9 @@ func (h *HorusecPlatform) GetGlobalDatabasePassword() *corev1.SecretKeySelector 
 			Optional:             nil,
 		}
 	}
-	return &h.Spec.Global.Database.Password.SecretKeyRef
+	return &h.Spec.Global.Database.Password.KeyRef
 }
+
 func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {
 	if h.Spec.Global.Database.LogMode {
 		return "true"
@@ -74,6 +77,7 @@ func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {
 
 	return "false"
 }
+
 func (h *HorusecPlatform) GetGlobalDatabaseHost() string {
 	host := h.Spec.Global.Database.Host
 	if host == "" {
@@ -82,6 +86,7 @@ func (h *HorusecPlatform) GetGlobalDatabaseHost() string {
 
 	return host
 }
+
 func (h *HorusecPlatform) GetGlobalDatabasePort() string {
 	port := h.Spec.Global.Database.Port
 	if port <= 0 {
@@ -90,6 +95,7 @@ func (h *HorusecPlatform) GetGlobalDatabasePort() string {
 
 	return strconv.Itoa(port)
 }
+
 func (h *HorusecPlatform) GetGlobalDatabaseName() string {
 	name := h.Spec.Global.Database.Name
 	if name == "" {
@@ -98,6 +104,7 @@ func (h *HorusecPlatform) GetGlobalDatabaseName() string {
 
 	return name
 }
+
 func (h *HorusecPlatform) GetGlobalSSLMode() string {
 	mode := h.Spec.Global.Database.SslMode
 	if mode == nil || *mode {
@@ -106,6 +113,7 @@ func (h *HorusecPlatform) GetGlobalSSLMode() string {
 
 	return "?sslmode=disable"
 }
+
 func (h *HorusecPlatform) GetGlobalBrokerHost() string {
 	host := h.Spec.Global.Broker.Host
 	if host == "" {
@@ -114,6 +122,7 @@ func (h *HorusecPlatform) GetGlobalBrokerHost() string {
 
 	return host
 }
+
 func (h *HorusecPlatform) GetGlobalBrokerPort() string {
 	port := h.Spec.Global.Broker.Port
 	if port <= 0 {
