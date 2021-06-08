@@ -52,7 +52,7 @@ func (h *HorusecPlatform) GetGlobalDatabaseUsername() *corev1.SecretKeySelector 
 	if reflect.ValueOf(h.Spec.Global.Database.User).IsZero() {
 		return &corev1.SecretKeySelector{
 			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "user",
+			Key:                  "username",
 			Optional:             nil,
 		}
 	}

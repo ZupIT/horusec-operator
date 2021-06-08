@@ -92,7 +92,7 @@ func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelecto
 	if reflect.ValueOf(h.GetAnalyticComponent().Database.User).IsZero() {
 		return &corev1.SecretKeySelector{
 			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "user",
+			Key:                  "username",
 			Optional:             nil,
 		}
 	}
