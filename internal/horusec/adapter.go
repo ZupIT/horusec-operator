@@ -2,35 +2,15 @@ package horusec
 
 import (
 	"context"
-	"fmt"
-	"reflect"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
-	"github.com/ZupIT/horusec-operator/internal/horusec/api"
-	"github.com/ZupIT/horusec-operator/internal/horusec/auth"
-	"github.com/ZupIT/horusec-operator/internal/horusec/core"
-	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
-	"github.com/ZupIT/horusec-operator/internal/horusec/manager"
-	"github.com/ZupIT/horusec-operator/internal/horusec/messages"
-	"github.com/ZupIT/horusec-operator/internal/horusec/migration"
-	"github.com/ZupIT/horusec-operator/internal/horusec/vulnerability"
-	"github.com/ZupIT/horusec-operator/internal/horusec/webhook"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/operation"
-	appsv1 "k8s.io/api/apps/v1"
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-	batchv1 "k8s.io/api/batch/v1"
-	coreV1 "k8s.io/api/core/v1"
-	networkingv1 "k8s.io/api/networking/v1beta1"
-	"k8s.io/apimachinery/pkg/runtime"
-
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 type Adapter struct {
-	scheme *runtime.Scheme
-	svc    *Service
+	builder ResourceBuilder
+	svc     *Service
 
 	resource *v2alpha1.HorusecPlatform
 }
@@ -54,16 +34,12 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 		return nil, err
 	}
 
-	mdesired := migration.NewJob(a.resource)
-	if err := controllerutil.SetControllerReference(a.resource, &mdesired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set job %q owner reference: %v", mdesired.GetName(), err)
-	}
-	adesired := analytic.NewJob(a.resource)
-	if err := controllerutil.SetControllerReference(a.resource, &adesired, a.scheme); err != nil {
-		return nil, fmt.Errorf("failed to set job %q owner reference: %v", adesired.GetName(), err)
+	desired, err := a.builder.JobsFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
-	inv := inventory.ForJobs(existing.Items, []batchv1.Job{mdesired, adesired})
+	inv := inventory.ForJobs(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
@@ -78,11 +54,9 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 		return nil, err
 	}
 
-	desired := a.listOfDeployments()
-	for index := range desired {
-		if err := a.ensureDeployments(&desired[index]); err != nil {
-			return nil, err
-		}
+	desired, err := a.builder.DeploymentsFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
 	inv := inventory.ForDeployments(existing.Items, desired)
@@ -93,14 +67,6 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) ensureDeployments(desired *appsv1.Deployment) error {
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
-	}
-
-	return nil
-}
-
 //nolint
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
@@ -108,35 +74,17 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 		return nil, err
 	}
 
-	result := []autoScalingV2beta2.HorizontalPodAutoscaler{}
-
-	desired := a.listOfAutoscaling()
-	for index := range desired {
-		if reflect.ValueOf(desired[index]).IsZero() {
-			continue
-		}
-
-		if err := a.ensureAutoscaling(&desired[index]); err != nil {
-			return nil, err
-		}
-
-		result = append(result, desired[index])
+	desired, err := a.builder.AutoscalingFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
-	inv := inventory.ForHorizontalPodAutoscaling(existing.Items, result)
+	inv := inventory.ForHorizontalPodAutoscaling(existing.Items, desired)
 	if err := a.svc.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
 	return operation.ContinueProcessing()
-}
-
-func (a *Adapter) ensureAutoscaling(desired *autoScalingV2beta2.HorizontalPodAutoscaler) error {
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set autoscaling %q owner reference: %v", desired.GetName(), err)
-	}
-
-	return nil
 }
 
 //nolint:funlen // improve in the future
@@ -147,11 +95,9 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 		return nil, err
 	}
 
-	desired := a.listServices()
-	for index := range desired {
-		if err := a.ensureServices(&desired[index]); err != nil {
-			return nil, err
-		}
+	desired, err := a.builder.ServicesFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
 	inv := inventory.ForService(existing.Items, desired)
@@ -162,31 +108,6 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 	return operation.ContinueProcessing()
 }
 
-func (a *Adapter) listServices() []coreV1.Service {
-	services := []coreV1.Service{
-		analytic.NewService(a.resource),
-		api.NewService(a.resource),
-		auth.NewService(a.resource),
-		core.NewService(a.resource),
-		manager.NewService(a.resource),
-		vulnerability.NewService(a.resource),
-		webhook.NewService(a.resource),
-	}
-	msg := a.resource.GetMessagesComponent()
-	if msg.Enabled {
-		services = append(services, messages.NewService(a.resource))
-	}
-	return services
-}
-
-func (a *Adapter) ensureServices(desired *coreV1.Service) error {
-	if err := controllerutil.SetControllerReference(a.resource, desired, a.scheme); err != nil {
-		return fmt.Errorf("failed to set service %q owner reference: %v", desired.GetName(), err)
-	}
-
-	return nil
-}
-
 //nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
 	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
@@ -194,13 +115,10 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 	if err != nil {
 		return nil, err
 	}
-	var desiredList []networkingv1.Ingress
-	if !a.resource.GetAllIngressIsDisabled() {
-		desired := ingress.NewIngress(a.resource)
-		if err := controllerutil.SetControllerReference(a.resource, &desired, a.scheme); err != nil {
-			return nil, fmt.Errorf("failed to set ingress %q owner reference: %v", desired.GetName(), err)
-		}
-		desiredList = append(desiredList, desired)
+
+	desiredList, err := a.builder.IngressFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
 	inv := inventory.ForIngresses(existing.Items, desiredList)
@@ -223,12 +141,9 @@ func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result,
 		return nil, err
 	}
 
-	desired := a.listServiceAccounts()
-	for index := range desired {
-		desiredItem := &desired[index]
-		if err := controllerutil.SetControllerReference(a.resource, desiredItem, a.scheme); err != nil {
-			return nil, fmt.Errorf("failed to set service account %q owner reference: %v", desiredItem.GetName(), err)
-		}
+	desired, err := a.builder.ServiceAccountsFor(a.resource)
+	if err != nil {
+		return nil, err
 	}
 
 	inv := inventory.ForServiceAccount(existing.Items, desired)
@@ -237,55 +152,4 @@ func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result,
 	}
 
 	return operation.ContinueProcessing()
-}
-
-func (a *Adapter) listServiceAccounts() []coreV1.ServiceAccount {
-	serviceAccounts := []coreV1.ServiceAccount{
-		analytic.NewServiceAccount(a.resource),
-		api.NewServiceAccount(a.resource),
-		auth.NewServiceAccount(a.resource),
-		core.NewServiceAccount(a.resource),
-		manager.NewServiceAccount(a.resource),
-		vulnerability.NewServiceAccount(a.resource),
-		webhook.NewServiceAccount(a.resource),
-	}
-	msg := a.resource.GetMessagesComponent()
-	if msg.Enabled {
-		serviceAccounts = append(serviceAccounts, messages.NewServiceAccount(a.resource))
-	}
-	return serviceAccounts
-}
-
-func (a *Adapter) listOfDeployments() []appsv1.Deployment {
-	deployments := []appsv1.Deployment{
-		auth.NewDeployment(a.resource),
-		core.NewDeployment(a.resource),
-		api.NewDeployment(a.resource),
-		analytic.NewDeployment(a.resource),
-		manager.NewDeployment(a.resource),
-		vulnerability.NewDeployment(a.resource),
-		webhook.NewDeployment(a.resource),
-	}
-	msg := a.resource.GetMessagesComponent()
-	if msg.Enabled {
-		deployments = append(deployments, messages.NewDeployment(a.resource))
-	}
-	return deployments
-}
-
-func (a *Adapter) listOfAutoscaling() []autoScalingV2beta2.HorizontalPodAutoscaler {
-	autoscalers := []autoScalingV2beta2.HorizontalPodAutoscaler{
-		auth.NewAutoscaling(a.resource),
-		core.NewAutoscaling(a.resource),
-		api.NewAutoscaling(a.resource),
-		analytic.NewAutoscaling(a.resource),
-		manager.NewAutoscaling(a.resource),
-		vulnerability.NewAutoscaling(a.resource),
-		webhook.NewAutoscaling(a.resource),
-	}
-	msg := a.resource.GetMessagesComponent()
-	if msg.Enabled {
-		autoscalers = append(autoscalers, messages.NewAutoscaling(a.resource))
-	}
-	return autoscalers
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ZupIT/horusec-operator/internal/resources"
 	"github.com/google/wire"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/rest"
@@ -20,7 +21,9 @@ var providers = wire.NewSet(
 	controllers.NewHorusecPlatformReconciler,
 	horusec.NewAdapterFactory,
 	horusec.NewService,
+	resources.NewBuilder,
 	wire.Bind(new(controllers.AdapterFactory), new(*horusec.AdapterFactory)),
+	wire.Bind(new(horusec.ResourceBuilder), new(*resources.Builder)),
 )
 
 func extractScheme(mgr manager.Manager) *runtime.Scheme {
