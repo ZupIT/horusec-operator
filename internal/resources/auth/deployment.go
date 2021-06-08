@@ -35,26 +35,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 				Spec: corev1.PodSpec{Containers: []corev1.Container{{
 					Name:  resource.GetAuthName(),
 					Image: resource.GetAuthImage(),
-					Env: []corev1.EnvVar{
-						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
-						{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
-						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetGlobalDatabaseLogMode()},
-						{Name: "HORUSEC_DISABLED_EMAILS", Value: "false"},
-						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
-						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
-						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
-						{Name: "HORUSEC_AUTH_TYPE", Value: "horusec"},
-						{Name: "HORUSEC_ENABLE_APPLICATION_ADMIN", Value: "false"},
-						{Name: "HORUSEC_ENABLE_DEFAULT_USER", Value: "true"},
-						{Name: "HORUSEC_DEFAULT_USER_DATA", Value: "{\"username\": \"dev\", \"email\":\"dev@example.com\", \"password\":\"Devpass0*\"}"},
-						{Name: "HORUSEC_MANAGER_URL", Value: "http://0.0.0.0:8043"},
-						{Name: "HORUSEC_AUTH_URL", Value: "http://0.0.0.0:8006"},
-						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
-						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetGlobalDatabaseUsername()),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetGlobalDatabasePassword()),
-						{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
-					},
+					Env:   getEnvVars(resource),
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
 						{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
@@ -65,4 +46,54 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			},
 		},
 	}
+}
+
+func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
+	var envs []corev1.EnvVar
+
+	global := resource.Spec.Global
+	defaultEnvs := []corev1.EnvVar{
+		{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
+		{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
+		{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetGlobalDatabaseLogMode()},
+		{Name: "HORUSEC_DISABLED_EMAILS", Value: resource.IsEmailsEnabled()},
+		{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(global.GrpcUseCerts)},
+		{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
+		{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
+		{Name: "HORUSEC_AUTH_TYPE", Value: string(resource.Spec.Components.Auth.Type)},
+		{Name: "HORUSEC_ENABLE_APPLICATION_ADMIN", Value: strconv.FormatBool(resource.Spec.Components.Auth.User.Administrator.Enabled)},
+		{Name: "HORUSEC_ENABLE_DEFAULT_USER", Value: strconv.FormatBool(resource.Spec.Components.Auth.User.Default.Enabled)},
+		{Name: "HORUSEC_MANAGER_URL", Value: resource.GetManagerDefaultURL()},
+		{Name: "HORUSEC_AUTH_URL", Value: resource.GetAuthEndpoint()},
+		resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", global.Broker.User.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", global.Database.User.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", global.Database.Password.KeyRef),
+		{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_KEYCLOAK_BASE_PATH", Value: global.Keycloak.PublicURL},
+		{Name: "HORUSEC_KEYCLOAK_CLIENT_ID", Value: global.Keycloak.Clients.Public.ID},
+		{Name: "HORUSEC_KEYCLOAK_REALM", Value: global.Keycloak.Realm},
+		{Name: "HORUSEC_LDAP_BASE", Value: global.Ldap.Base},
+		{Name: "HORUSEC_LDAP_HOST", Value: global.Ldap.Host},
+		{Name: "HORUSEC_LDAP_PORT", Value: strconv.Itoa(global.Ldap.Port)},
+		{Name: "HORUSEC_LDAP_USESSL", Value: strconv.FormatBool(global.Ldap.UseSSL)},
+		{Name: "HORUSEC_LDAP_SKIP_TLS", Value: strconv.FormatBool(global.Ldap.SkipTLS)},
+		{Name: "HORUSEC_LDAP_INSECURE_SKIP_VERIFY", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_LDAP_BINDDN", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_LDAP_BINDPASSWORD", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_LDAP_USERFILTER", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_LDAP_ADMIN_GROUP", Value: resource.GetGlobalDatabaseURI()},
+		{Name: "HORUSEC_APPLICATION_ADMIN_DATA", Value: resource.GetAuthAdminData()},
+		{Name: "HORUSEC_DEFAULT_USER_DATA", Value: resource.GetAuthDefaultUserData()},
+	}
+
+	for _, envVar := range resource.GetAuthOptionalEnvs() {
+		if envVar.Value == "" {
+			continue
+		}
+
+		envs = append(envs, envVar)
+	}
+
+	return append(envs, defaultEnvs...)
 }

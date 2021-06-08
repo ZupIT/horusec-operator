@@ -21,6 +21,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			},
 		},
 	}
+	component := resource.Spec.Components.Analytic
+	global := resource.Spec.Global
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetAnalyticName(),
@@ -38,14 +40,14 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Env: []corev1.EnvVar{
 						{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAnalyticPortHTTP())},
 						{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetAnalyticDatabaseLogMode()},
-						{Name: "HORUSEC_GRPC_USE_CERTS", Value: "false"},
+						{Name: "HORUSEC_GRPC_USE_CERTS", Value: strconv.FormatBool(global.GrpcUseCerts)},
 						{Name: "HORUSEC_GRPC_AUTH_URL", Value: resource.GetAuthDefaultGRPCURL()},
 						{Name: "HORUSEC_BROKER_HOST", Value: resource.GetGlobalBrokerHost()},
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
-						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", resource.GetGlobalBrokerUsername()),
-						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", resource.GetGlobalBrokerPassword()),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetAnalyticDatabaseUsername()),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetAnalyticDatabasePassword()),
+						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", global.Broker.User.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", component.Database.User.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
 						{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetAnalyticDatabaseURI()},
 					},
 					Ports: []corev1.ContainerPort{

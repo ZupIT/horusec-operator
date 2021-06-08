@@ -31,11 +31,12 @@ type HorusecPlatformSpec struct {
 }
 
 type Global struct {
-	Administrator Administrator `json:"administrator,omitempty"`
-	Broker        Broker        `json:"broker,omitempty"`
-	Database      Database      `json:"database,omitempty"`
-	JWT           JWT           `json:"jwt,omitempty"`
-	Keycloak      Keycloak      `json:"keycloak,omitempty"`
+	Broker       Broker   `json:"broker,omitempty"`
+	Database     Database `json:"database,omitempty"`
+	JWT          JWT      `json:"jwt,omitempty"`
+	Keycloak     Keycloak `json:"keycloak,omitempty"`
+	Ldap         Ldap     `json:"ldap,omitempty"`
+	GrpcUseCerts bool     `json:"grpcUseCerts,omitempty"`
 }
 
 type Keycloak struct {
@@ -46,14 +47,27 @@ type Keycloak struct {
 	Realm       string  `json:"realm,omitempty"`
 }
 
+type Ldap struct {
+	Base               string `json:"base,omitempty"`
+	Host               string `json:"host,omitempty"`
+	Port               int    `json:"port,omitempty"`
+	UseSSL             bool   `json:"useSsl,omitempty"`
+	SkipTLS            bool   `json:"skipTls,omitempty"`
+	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty"`
+	BindDN             string `json:"bindDn,omitempty"`
+	BindPassword       string `json:"bindPassword,omitempty"`
+	UserFilter         string `json:"userFilter,omitempty"`
+	AdminGroup         string `json:"adminGroup,omitempty"`
+}
+
 type Clients struct {
 	Confidential Confidential `json:"clients,omitempty"`
 	Public       Public       `json:"public,omitempty"`
 }
 
 type Confidential struct {
-	ID           string                   `json:"id,omitempty"`
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	ID           string                    `json:"id,omitempty"`
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Public struct {
@@ -61,7 +75,7 @@ type Public struct {
 }
 
 type JWT struct {
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Broker struct {
@@ -70,7 +84,7 @@ type Broker struct {
 	Credentials `json:",inline,omitempty"`
 }
 
-type Administrator struct {
+type UserInfo struct {
 	Email       string `json:"email,omitempty"`
 	Enabled     bool   `json:"enabled,omitempty"`
 	Credentials `json:",inline,omitempty"`
@@ -85,7 +99,12 @@ type Components struct {
 	Manager       ExposableComponent `json:"manager,omitempty"`
 	Messages      Messages           `json:"messages,omitempty"`
 	Vulnerability ExposableComponent `json:"vulnerability,omitempty"`
-	Webhook       ExposableComponent `json:"webhook,omitempty"`
+	Webhook       Webhook            `json:"webhook,omitempty"`
+}
+
+type Webhook struct {
+	Timeout            int `json:"timeout,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
 }
 
 type Analytic struct {
@@ -95,7 +114,13 @@ type Analytic struct {
 
 type Auth struct {
 	Type               AuthType `json:"type,omitempty"`
+	User               User `json:"user,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
+}
+
+type User struct {
+	Administrator UserInfo `json:"administrator,omitempty"`
+	Default       UserInfo `json:"default,omitempty"`
 }
 
 type AuthType string
@@ -187,7 +212,7 @@ type Credentials struct {
 }
 
 type SecretRef struct {
-	KeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	KeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Component struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (h *HorusecPlatform) GetWebhookComponent() ExposableComponent {
+func (h *HorusecPlatform) GetWebhookComponent() Webhook {
 	return h.Spec.Components.Webhook
 }
 

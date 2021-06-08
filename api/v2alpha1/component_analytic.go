@@ -2,10 +2,7 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
-
-	corev1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) GetAnalyticComponent() Analytic {
@@ -86,30 +83,6 @@ func (h *HorusecPlatform) GetAnalyticTag() string {
 
 func (h *HorusecPlatform) GetAnalyticImage() string {
 	return fmt.Sprintf("%s/%s:%s", h.GetAnalyticRegistry(), h.GetAnalyticRepository(), h.GetAnalyticTag())
-}
-
-func (h *HorusecPlatform) GetAnalyticDatabaseUsername() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.GetAnalyticComponent().Database.User).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "user",
-			Optional:             nil,
-		}
-	}
-	secret := h.GetAnalyticComponent().Database.User.KeyRef
-	return &secret
-}
-
-func (h *HorusecPlatform) GetAnalyticDatabasePassword() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.GetAnalyticComponent().Database.Password).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "password",
-			Optional:             nil,
-		}
-	}
-	secret := h.GetAnalyticComponent().Database.Password.KeyRef
-	return &secret
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseLogMode() string {

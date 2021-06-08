@@ -21,11 +21,11 @@ export RABBITMQ_PASSWORD=$(kubectl get secret rabbitmq -o jsonpath="{.data.rabbi
 export JWT_SECRET="4ff42f67-5929-fc52-65f1-3afc77ad86d5"
 
 echo "Creating secrets of dependencies..."
-kubectl create secret generic horusec-database --from-literal="user=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
+kubectl create secret generic horusec-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
 kubectl create secret generic database-uri --from-literal=database-uri=postgresql://$POSTGRES_USERNAME:$POSTGRES_PASSWORD@postgresql:5432/horusec_db?sslmode=disable
 kubectl create secret generic database-analytic-uri --from-literal=database-uri=postgresql://$POSTGRES_USERNAME:$POSTGRES_PASSWORD@postgresql:5432/horusec_analytic_db?sslmode=disable
 
-kubectl create secret generic horusec-broker --from-literal="user=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
+kubectl create secret generic horusec-broker --from-literal="username=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
 
 kubectl create secret generic jwt-token --from-literal=jwt-token=$JWT_SECRET
 

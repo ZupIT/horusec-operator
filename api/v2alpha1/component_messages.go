@@ -2,9 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
-
-	corev1 "k8s.io/api/core/v1"
 )
 
 func (h *HorusecPlatform) GetMessagesComponent() Messages {
@@ -89,30 +86,6 @@ func (h *HorusecPlatform) GetMessagesImage() string {
 
 func (h *HorusecPlatform) GetMessagesMailServer() MailServer {
 	return h.GetMessagesComponent().MailServer
-}
-
-func (h *HorusecPlatform) GetMessagesMailServerUsername() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.GetMessagesMailServer().User).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-mail-server"},
-			Key:                  "user",
-			Optional:             nil,
-		}
-	}
-	value := h.GetMessagesMailServer().User.KeyRef
-	return &value
-}
-
-func (h *HorusecPlatform) GetMessagesMailServerPassword() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.GetMessagesMailServer().Password).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-mail-server"},
-			Key:                  "password",
-			Optional:             nil,
-		}
-	}
-	value := h.GetMessagesMailServer().Password.KeyRef
-	return &value
 }
 
 func (h *HorusecPlatform) GetMessagesHost() string {

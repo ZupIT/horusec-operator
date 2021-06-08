@@ -12,6 +12,7 @@ import (
 
 func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 	var terminationPeriod int64 = 30
+	component := resource.Spec.Components.Analytic
 	return batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
 			GenerateName: fmt.Sprintf("%s-analytic-migration-", resource.GetName()),
@@ -30,8 +31,8 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 							ImagePullPolicy: corev1.PullIfNotPresent,
 							Command:         []string{"migrate.sh"},
 							Env: []corev1.EnvVar{
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.GetAnalyticDatabaseUsername()),
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.GetAnalyticDatabasePassword()),
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", component.Database.User.KeyRef),
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
 								{Name: "MIGRATION_NAME", Value: "analytic"},
 								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetAnalyticDatabaseURI()},
 							},
