@@ -10,7 +10,7 @@ import (
 
 type Adapter struct {
 	builder ResourceBuilder
-	svc     *Service
+	client  KubernetesClient
 
 	resource *v2alpha1.HorusecPlatform
 }
@@ -21,7 +21,7 @@ func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, 
 	}
 	a.resource.Status.Conditions = []v2alpha1.Condition{}
 	a.resource.Status.State = v2alpha1.StatusPending
-	err := a.svc.UpdateHorusecPlatformStatus(ctx, a.resource)
+	err := a.client.UpdateHorusStatus(ctx, a.resource)
 	if err != nil {
 		return operation.RequeueWithError(err)
 	}
@@ -29,7 +29,7 @@ func (a *Adapter) EnsureInitialization(ctx context.Context) (*operation.Result, 
 }
 
 func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListJobs(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListJobsByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +39,8 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 		return nil, err
 	}
 
-	inv := inventory.ForJobs(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForJobs(existing, desired)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
@@ -49,7 +49,7 @@ func (a *Adapter) EnsureDatabaseMigrations(ctx context.Context) (*operation.Resu
 
 //nolint:funlen
 func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListDeployments(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListDeploymentsByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +59,8 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 		return nil, err
 	}
 
-	inv := inventory.ForDeployments(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForDeployments(existing, desired)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
@@ -69,7 +69,7 @@ func (a *Adapter) EnsureDeployments(ctx context.Context) (*operation.Result, err
 
 //nolint
 func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListAutoscaling(ctx, a.resource.GetNamespace(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListAutoscalingByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +79,8 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 		return nil, err
 	}
 
-	inv := inventory.ForHorizontalPodAutoscaling(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForHorizontalPodAutoscaling(existing, desired)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
@@ -89,8 +89,7 @@ func (a *Adapter) EnsureAutoscaling(ctx context.Context) (*operation.Result, err
 
 //nolint:funlen // improve in the future
 func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListServices(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListServicesByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +99,8 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 		return nil, err
 	}
 
-	inv := inventory.ForService(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForService(existing, desired)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
@@ -110,8 +109,7 @@ func (a *Adapter) EnsureServices(ctx context.Context) (*operation.Result, error)
 
 //nolint:funlen // to improve in the future
 func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListIngress(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListIngressByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -121,8 +119,8 @@ func (a *Adapter) EnsureIngressRules(ctx context.Context) (*operation.Result, er
 		return nil, err
 	}
 
-	inv := inventory.ForIngresses(existing.Items, desiredList)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForIngresses(existing, desiredList)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 
@@ -135,8 +133,7 @@ func (a *Adapter) EnsureEverythingIsRunning(ctx context.Context) (*operation.Res
 
 //nolint // to improve in the future
 func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result, error) {
-	existing, err := a.svc.ListServiceAccounts(ctx, a.resource.GetNamespace(),
-		a.resource.GetName(), a.resource.GetDefaultLabel())
+	existing, err := a.client.ListServiceAccountsByOwner(ctx, a.resource)
 	if err != nil {
 		return nil, err
 	}
@@ -146,8 +143,8 @@ func (a *Adapter) EnsureServiceAccounts(ctx context.Context) (*operation.Result,
 		return nil, err
 	}
 
-	inv := inventory.ForServiceAccount(existing.Items, desired)
-	if err := a.svc.Apply(ctx, inv); err != nil {
+	inv := inventory.ForServiceAccount(existing, desired)
+	if err := a.client.Apply(ctx, inv); err != nil {
 		return nil, err
 	}
 

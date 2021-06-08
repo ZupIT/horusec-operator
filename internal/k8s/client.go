@@ -1,212 +1,201 @@
-package horusec
+package k8s
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/inventory"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
-
-	appsv1 "k8s.io/api/apps/v1"
-	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
-	batchv1 "k8s.io/api/batch/v1"
-	corev1 "k8s.io/api/core/v1"
-	networkingv1 "k8s.io/api/networking/v1beta1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	k8s "sigs.k8s.io/controller-runtime/pkg/client"
+	apps "k8s.io/api/apps/v1"
+	autoscaling "k8s.io/api/autoscaling/v2beta2"
+	batch "k8s.io/api/batch/v1"
+	core "k8s.io/api/core/v1"
+	networking "k8s.io/api/networking/v1beta1"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-type Service struct{ client k8s.Client }
+type Client struct{ client.Client }
 
-func NewService(client k8s.Client) *Service {
-	return &Service{client: client}
+func NewClient(client client.Client) *Client {
+	return &Client{Client: client}
 }
 
-func (s *Service) LookupHorusecPlatform(ctx context.Context, key k8s.ObjectKey) (*v2alpha1.HorusecPlatform, error) {
+func (d *Client) Apply(ctx context.Context, objects Objects) error {
+	for _, obj := range objects.ToBeDeleted() {
+		if err := d.delete(ctx, obj); err != nil {
+			return err
+		}
+	}
+
+	for _, obj := range objects.ToBeUpdated() {
+		if err := d.update(ctx, obj); err != nil {
+			return err
+		}
+	}
+
+	for _, obj := range objects.ToBeUpdated() {
+		if err := d.create(ctx, obj); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (d *Client) GetHorus(ctx context.Context, namespacedName types.NamespacedName) (*v2alpha1.HorusecPlatform, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
-	r := new(v2alpha1.HorusecPlatform)
-	err := s.client.Get(ctx, key, r)
-	if err != nil {
+	horus := new(v2alpha1.HorusecPlatform)
+	if err := d.Get(ctx, namespacedName, horus); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to lookup resource: %w", err))
 	}
 
-	r, err = loadDefaults(r)
+	horus, err := v2alpha1.MergeWithDefaultValues(horus)
 	if err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to merge default values: %w", err))
 	}
 
-	return r, nil
+	return horus, nil
 }
 
-func loadDefaults(b *v2alpha1.HorusecPlatform) (*v2alpha1.HorusecPlatform, error) {
-	data, err := ioutil.ReadFile("defaults.json")
-	if err != nil {
-		return nil, err
-	}
-
-	a := new(v2alpha1.HorusecPlatform)
-	if err = json.Unmarshal(data, &a.Spec); err != nil {
-		return nil, err
-	}
-
-	jb, err := json.Marshal(b)
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal(jb, &a)
-	if err != nil {
-		return nil, err
-	}
-
-	return a, nil
-}
-
-func (s *Service) UpdateHorusecPlatformStatus(ctx context.Context, resource *v2alpha1.HorusecPlatform) error {
+func (d *Client) UpdateHorusStatus(ctx context.Context, horus *v2alpha1.HorusecPlatform) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
-	err := s.client.Status().Update(ctx, resource)
+	err := d.Status().Update(ctx, horus)
 	if err != nil {
 		return span.HandleError(err)
 	}
-	span.Logger().Info(fmt.Sprintf("%T %q status updated", resource, resource.GetName()))
+	span.Logger().Info(fmt.Sprintf("%T %q status updated", horus, horus.GetName()))
 	return nil
 }
 
-//nolint:funlen // to improve in the future
-func (s *Service) Apply(ctx context.Context, inv inventory.Object) error {
+func (d *Client) ListAutoscalingByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]autoscaling.HorizontalPodAutoscaler, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &autoscaling.HorizontalPodAutoscalerList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s Autoscaling: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) ListDeploymentsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]apps.Deployment, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &apps.DeploymentList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s deployments: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networking.Ingress, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &networking.IngressList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s ingress: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]batch.Job, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &batch.JobList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s jobs: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.ServiceAccount, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &core.ServiceAccountList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s service accounts: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) ListServicesByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Service, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &core.ServiceList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s services: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
+func (d *Client) delete(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 	log := span.Logger()
 
-	deleteOptions := []k8s.DeleteOption{k8s.PropagationPolicy(metav1.DeletePropagationBackground)}
-	for _, obj := range inv.Delete {
-		if err := s.client.Delete(ctx, obj, deleteOptions...); err != nil {
-			return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
-		}
-		log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
+	deleteOptions := []client.DeleteOption{client.PropagationPolicy(meta.DeletePropagationBackground)}
+	if err := d.Delete(ctx, obj, deleteOptions...); err != nil {
+		return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
 	}
-
-	for _, obj := range inv.Update {
-		if err := s.client.Update(ctx, obj); err != nil {
-			return span.HandleError(fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err))
-		}
-		log.Info(fmt.Sprintf("%T %q updated", obj, obj.GetName()))
-	}
-
-	for _, obj := range inv.Create {
-		if err := s.client.Create(ctx, obj); err != nil {
-			return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
-		}
-		log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
-	}
-
+	log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
 	return nil
 }
 
-func (s *Service) ListDeployments(ctx context.Context,
-	namespace string, matchingLabels map[string]string) (*appsv1.DeploymentList, error) {
+func (d *Client) update(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
+	log := span.Logger()
 
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(matchingLabels),
+	if err := d.Update(ctx, obj); err != nil {
+		return span.HandleError(fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err))
 	}
-	list := &appsv1.DeploymentList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list %s deployments: %w", matchingLabels["app.kubernetes.io/name"], err))
-	}
-	return list, nil
+	log.Info(fmt.Sprintf("%T %q updated", obj, obj.GetName()))
+	return nil
 }
 
-func (s *Service) ListAutoscaling(ctx context.Context,
-	namespace string, matchingLabels map[string]string) (*autoScalingV2beta2.HorizontalPodAutoscalerList, error) {
+func (d *Client) create(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
+	log := span.Logger()
 
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(matchingLabels),
+	if err := d.Create(ctx, obj); err != nil {
+		return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
 	}
-	list := &autoScalingV2beta2.HorizontalPodAutoscalerList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list %s Autoscaling: %w", matchingLabels["app.kubernetes.io/name"], err))
-	}
-	return list, nil
-}
-
-func (s *Service) ListServiceAccounts(
-	ctx context.Context, namespace, name string, labels map[string]string) (*corev1.ServiceAccountList, error) {
-	span, ctx := tracing.StartSpanFromContext(ctx)
-	defer span.Finish()
-
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels),
-	}
-
-	list := &corev1.ServiceAccountList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list %s service accounts: %w", name, err))
-	}
-
-	return list, nil
-}
-
-func (s *Service) ListServices(
-	ctx context.Context, namespace, name string, labels map[string]string) (*corev1.ServiceList, error) {
-	span, ctx := tracing.StartSpanFromContext(ctx)
-	defer span.Finish()
-
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels),
-	}
-	list := &corev1.ServiceList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list %s services: %w", name, err))
-	}
-	return list, nil
-}
-
-func (s *Service) ListIngress(
-	ctx context.Context, namespace, name string, labels map[string]string) (*networkingv1.IngressList, error) {
-	span, ctx := tracing.StartSpanFromContext(ctx)
-	defer span.Finish()
-
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels),
-	}
-
-	list := &networkingv1.IngressList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list %s ingress: %w", name, err))
-	}
-
-	return list, nil
-}
-
-func (s *Service) ListJobs(ctx context.Context, namespace string, labels map[string]string) (*batchv1.JobList, error) {
-	span, ctx := tracing.StartSpanFromContext(ctx)
-	defer span.Finish()
-
-	opts := []k8s.ListOption{
-		k8s.InNamespace(namespace),
-		k8s.MatchingLabels(labels),
-	}
-
-	list := &batchv1.JobList{}
-	if err := s.client.List(ctx, list, opts...); err != nil {
-		return nil, span.HandleError(fmt.Errorf("failed to list jobs: %w", err))
-	}
-
-	return list, nil
+	log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
+	return nil
 }
