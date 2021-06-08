@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec/analytic"
-	"github.com/ZupIT/horusec-operator/internal/horusec/migration"
+	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
+	"github.com/ZupIT/horusec-operator/internal/resources/migration"
 	batchv1 "k8s.io/api/batch/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )

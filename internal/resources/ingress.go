@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/horusec/ingress"
+	"github.com/ZupIT/horusec-operator/internal/resources/ingress"
 	networkingv1 "k8s.io/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
