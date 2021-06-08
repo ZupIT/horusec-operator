@@ -3,12 +3,14 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	networkingv1 "k8s.io/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:gocritic, funlen // to improve in the future
-func ForIngresses(existing, desired []networkingv1.Ingress) Object {
+func ForIngresses(existing, desired []networkingv1.Ingress) k8s.Objects {
 	update := []client.Object{}
 	mcreate := ingressMap(desired)
 	mdelete := ingressMap(existing)
@@ -34,7 +36,7 @@ func ForIngresses(existing, desired []networkingv1.Ingress) Object {
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: ingressList(mcreate),
 		Update: update,
 		Delete: ingressList(mdelete),

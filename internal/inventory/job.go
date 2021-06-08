@@ -3,6 +3,8 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	"github.com/google/go-cmp/cmp"
 	batchv1 "k8s.io/api/batch/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -28,7 +30,7 @@ var (
 )
 
 //nolint:gocritic, funlen // improve in the future
-func ForJobs(existing, desired []batchv1.Job) Object {
+func ForJobs(existing, desired []batchv1.Job) k8s.Objects {
 	var update []client.Object
 	mdelete := jobMap(existing)
 	mcreate := jobMap(desired)
@@ -43,7 +45,7 @@ func ForJobs(existing, desired []batchv1.Job) Object {
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: jobList(mcreate),
 		Update: update,
 		Delete: jobList(mdelete),

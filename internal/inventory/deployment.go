@@ -3,13 +3,15 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	appsv1 "k8s.io/api/apps/v1"
 )
 
 //nolint:funlen, gocritic // to improve in the future
-func ForDeployments(existing, desired []appsv1.Deployment) Object {
+func ForDeployments(existing, desired []appsv1.Deployment) k8s.Objects {
 	update := []client.Object{}
 	mcreate := deploymentMap(desired)
 	mdelete := deploymentMap(existing)
@@ -43,7 +45,7 @@ func ForDeployments(existing, desired []appsv1.Deployment) Object {
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: deploymentList(mcreate),
 		Update: update,
 		Delete: deploymentList(mdelete),
