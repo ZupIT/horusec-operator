@@ -122,8 +122,6 @@ type Analytic struct {
 type Auth struct {
 	Type               AuthType `json:"type,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
-	AuthUrl            string      `json:"authUrl,omitempty"`
-	ManagerUrl         string      `json:"managerUrl,omitempty"`
 	DefaultUser        DefaultUser `json:"defaultUser,omitempty"`
 }
 
@@ -136,9 +134,7 @@ type Messages struct {
 }
 
 type Manager struct {
-	ManagerPath             string `json:"managerPath,omitempty"`
 	MicroFrontendPublicPath string `json:"microFrontendPublicPath,omitempty"`
-	Theme                   string `json:"theme,omitempty"`
 	ExposableComponent      `json:",inline,omitempty"`
 }
 

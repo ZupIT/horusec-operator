@@ -161,8 +161,6 @@
       },
       "replicaCount": 1,
       "type": "horusec",
-      "authUrl": "",
-      "managerUrl": "",
       "defaultUser": {
         "email": "dev@example.com",
         "enabled": false,
@@ -267,9 +265,7 @@
         "http": 8080
       },
       "replicaCount": 1,
-      "managerPath": "\\/manager",
       "microFrontendPublicPath": "",
-      "theme": ""
     },
     "messages": {
       "container": {

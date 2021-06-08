@@ -129,7 +129,7 @@ func (h *HorusecPlatform) GetAuthAdminData() string {
 
 func (h *HorusecPlatform) GetAuthDefaultUserData() string {
 	email := h.Spec.Components.Auth.DefaultUser.Email
-	if !h.Spec.Global.Administrator.Enabled || email == "" {
+	if !h.Spec.Components.Auth.DefaultUser.Enabled || email == "" {
 		return ""
 	}
 
@@ -155,7 +155,7 @@ func (h *HorusecPlatform) GetAuthAdminPasswordEnv() v1.EnvVar {
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
-	if h.Spec.Global.Administrator.Enabled {
+	if h.Spec.Components.Auth.DefaultUser.Enabled {
 		return v1.EnvVar{}
 	}
 
@@ -163,7 +163,7 @@ func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserPassword() v1.EnvVar {
-	if h.Spec.Global.Administrator.Enabled {
+	if h.Spec.Components.Auth.DefaultUser.Enabled {
 		return v1.EnvVar{}
 	}
 
