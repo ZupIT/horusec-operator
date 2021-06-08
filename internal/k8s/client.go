@@ -35,7 +35,7 @@ func (d *Client) Apply(ctx context.Context, objects Objects) error {
 		}
 	}
 
-	for _, obj := range objects.ToBeUpdated() {
+	for _, obj := range objects.ToBeCreated() {
 		if err := d.create(ctx, obj); err != nil {
 			return err
 		}
