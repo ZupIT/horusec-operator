@@ -161,19 +161,37 @@
       },
       "replicaCount": 1,
       "type": "horusec",
-      "defaultUser": {
-        "email": "dev@example.com",
-        "enabled": false,
-        "password": {
-          "secretKeyRef": {
-            "key": "password",
-            "name": "horusec-default-user"
+      "user": {
+        "administrator": {
+          "email": "",
+          "enabled": false,
+          "password": {
+            "secretKeyRef": {
+              "key": "password",
+              "name": "horusec-administrator"
+            }
+          },
+          "user": {
+            "secretKeyRef": {
+              "key": "username",
+              "name": "horusec-administrator"
+            }
           }
         },
-        "user": {
-          "secretKeyRef": {
-            "key": "username",
-            "name": "horusec-default-user"
+        "default": {
+          "email": "dev@example.com",
+          "enabled": false,
+          "password": {
+            "secretKeyRef": {
+              "key": "password",
+              "name": "horusec-default-user"
+            }
+          },
+          "user": {
+            "secretKeyRef": {
+              "key": "username",
+              "name": "horusec-default-user"
+            }
           }
         }
       }
@@ -265,7 +283,7 @@
         "http": 8080
       },
       "replicaCount": 1,
-      "microFrontendPublicPath": "",
+      "microFrontendPublicPath": ""
     },
     "messages": {
       "container": {
@@ -412,22 +430,6 @@
     }
   },
   "global": {
-    "administrator": {
-      "email": "",
-      "enabled": false,
-      "password": {
-        "secretKeyRef": {
-          "key": "password",
-          "name": "horusec-administrator"
-        }
-      },
-      "user": {
-        "secretKeyRef": {
-          "key": "username",
-          "name": "horusec-administrator"
-        }
-      }
-    },
     "broker": {
       "host": "",
       "password": {
