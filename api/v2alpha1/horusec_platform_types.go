@@ -31,13 +31,12 @@ type HorusecPlatformSpec struct {
 }
 
 type Global struct {
-	Administrator Administrator `json:"administrator,omitempty"`
-	Broker        Broker        `json:"broker,omitempty"`
-	Database      Database      `json:"database,omitempty"`
-	JWT           JWT           `json:"jwt,omitempty"`
-	Keycloak      Keycloak      `json:"keycloak,omitempty"`
-	Ldap          Ldap          `json:"ldap,omitempty"`
-	GrpcUseCerts  bool          `json:"grpcUseCerts,omitempty"`
+	Broker       Broker   `json:"broker,omitempty"`
+	Database     Database `json:"database,omitempty"`
+	JWT          JWT      `json:"jwt,omitempty"`
+	Keycloak     Keycloak `json:"keycloak,omitempty"`
+	Ldap         Ldap     `json:"ldap,omitempty"`
+	GrpcUseCerts bool     `json:"grpcUseCerts,omitempty"`
 }
 
 type Keycloak struct {
@@ -85,13 +84,7 @@ type Broker struct {
 	Credentials `json:",inline,omitempty"`
 }
 
-type Administrator struct {
-	Email       string `json:"email,omitempty"`
-	Enabled     bool   `json:"enabled,omitempty"`
-	Credentials `json:",inline,omitempty"`
-}
-
-type DefaultUser struct {
+type UserInfo struct {
 	Email       string `json:"email,omitempty"`
 	Enabled     bool   `json:"enabled,omitempty"`
 	Credentials `json:",inline,omitempty"`
@@ -103,7 +96,7 @@ type Components struct {
 	API           ExposableComponent `json:"api,omitempty"`
 	Auth          Auth               `json:"auth,omitempty"`
 	Core          ExposableComponent `json:"core,omitempty"`
-	Manager       Manager            `json:"manager,omitempty"`
+	Manager       ExposableComponent `json:"manager,omitempty"`
 	Messages      Messages           `json:"messages,omitempty"`
 	Vulnerability ExposableComponent `json:"vulnerability,omitempty"`
 	Webhook       Webhook            `json:"webhook,omitempty"`
@@ -121,8 +114,13 @@ type Analytic struct {
 
 type Auth struct {
 	Type               AuthType `json:"type,omitempty"`
+	User               User `json:"user,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
-	DefaultUser        DefaultUser `json:"defaultUser,omitempty"`
+}
+
+type User struct {
+	Administrator UserInfo `json:"administrator,omitempty"`
+	Default       UserInfo `json:"default,omitempty"`
 }
 
 type AuthType string
@@ -131,11 +129,6 @@ type Messages struct {
 	Enabled            bool       `json:"enabled,omitempty"`
 	MailServer         MailServer `json:"mailServer,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
-}
-
-type Manager struct {
-	MicroFrontendPublicPath string `json:"microFrontendPublicPath,omitempty"`
-	ExposableComponent      `json:",inline,omitempty"`
 }
 
 type Container struct {

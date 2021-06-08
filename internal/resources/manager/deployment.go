@@ -34,7 +34,6 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "REACT_APP_KEYCLOAK_BASE_PATH", Value: resource.Spec.Global.Keycloak.PublicURL},
 						{Name: "REACT_APP_KEYCLOAK_CLIENT_ID", Value: resource.Spec.Global.Keycloak.Clients.Public.ID},
 						{Name: "REACT_APP_KEYCLOAK_REALM", Value: resource.Spec.Global.Keycloak.Realm},
-						{Name: "REACT_APP_MICROFRONTEND_PUBLIC_PATH", Value: resource.Spec.Components.Manager.MicroFrontendPublicPath},
 					},
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},

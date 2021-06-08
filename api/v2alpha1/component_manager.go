@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func (h *HorusecPlatform) GetManagerComponent() Manager {
+func (h *HorusecPlatform) GetManagerComponent() ExposableComponent {
 	return h.Spec.Components.Manager
 }
 

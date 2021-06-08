@@ -117,8 +117,8 @@ func (h *HorusecPlatform) IsAuthIngressEnabled() bool {
 }
 
 func (h *HorusecPlatform) GetAuthAdminData() string {
-	email := h.Spec.Global.Administrator.Email
-	if !h.Spec.Global.Administrator.Enabled || email == "" {
+	email := h.Spec.Components.Auth.User.Administrator.Email
+	if !h.Spec.Components.Auth.User.Administrator.Enabled || email == "" {
 		return ""
 	}
 
@@ -128,8 +128,8 @@ func (h *HorusecPlatform) GetAuthAdminData() string {
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserData() string {
-	email := h.Spec.Components.Auth.DefaultUser.Email
-	if !h.Spec.Components.Auth.DefaultUser.Enabled || email == "" {
+	email := h.Spec.Components.Auth.User.Default.Email
+	if !h.Spec.Components.Auth.User.Default.Enabled || email == "" {
 		return ""
 	}
 
@@ -139,35 +139,35 @@ func (h *HorusecPlatform) GetAuthDefaultUserData() string {
 }
 
 func (h *HorusecPlatform) GetAuthAdminUsernameEnv() v1.EnvVar {
-	if h.Spec.Global.Administrator.Enabled {
+	if h.Spec.Components.Auth.User.Administrator.Enabled {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_ADMIN_USERNAME", h.Spec.Global.Administrator.Credentials.User.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_USERNAME", h.Spec.Components.Auth.User.Administrator.Credentials.User.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthAdminPasswordEnv() v1.EnvVar {
-	if h.Spec.Global.Administrator.Enabled {
+	if h.Spec.Components.Auth.User.Administrator.Enabled {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_ADMIN_PASSWORD", h.Spec.Global.Administrator.Credentials.Password.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_PASSWORD", h.Spec.Components.Auth.User.Administrator.Credentials.Password.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
-	if h.Spec.Components.Auth.DefaultUser.Enabled {
+	if h.Spec.Components.Auth.User.Default.Enabled {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_USERNAME", h.Spec.Components.Auth.DefaultUser.Credentials.User.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_USERNAME", h.Spec.Components.Auth.User.Default.Credentials.User.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserPassword() v1.EnvVar {
-	if h.Spec.Components.Auth.DefaultUser.Enabled {
+	if h.Spec.Components.Auth.User.Default.Enabled {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_PASSWORD", h.Spec.Components.Auth.DefaultUser.Credentials.Password.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_PASSWORD", h.Spec.Components.Auth.User.Default.Credentials.Password.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthKeycloakClientSecret() v1.EnvVar {
