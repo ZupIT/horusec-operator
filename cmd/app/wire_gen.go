@@ -8,6 +8,7 @@ package main
 import (
 	"github.com/ZupIT/horusec-operator/controllers"
 	"github.com/ZupIT/horusec-operator/internal/horusec"
+	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/ZupIT/horusec-operator/internal/resources"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
@@ -22,8 +23,8 @@ func newHorusecPlatformReconciler(mgr manager.Manager) (*controllers.HorusecPlat
 	runtimeScheme := extractScheme(mgr)
 	builder := resources.NewBuilder(runtimeScheme)
 	client := extractClient(mgr)
-	service := horusec.NewService(client)
-	adapterFactory := horusec.NewAdapterFactory(builder, service)
+	k8sClient := k8s.NewClient(client)
+	adapterFactory := horusec.NewAdapterFactory(builder, k8sClient)
 	horusecPlatformReconciler := controllers.NewHorusecPlatformReconciler(adapterFactory)
 	return horusecPlatformReconciler, nil
 }
