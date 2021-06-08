@@ -2,7 +2,6 @@ package v2alpha1
 
 import (
 	"fmt"
-	"reflect"
 	"strconv"
 
 	corev1 "k8s.io/api/core/v1"
@@ -24,50 +23,6 @@ func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 
 func (h *HorusecPlatform) GetLatestVersion() string {
 	return "v2.12.1"
-}
-
-func (h *HorusecPlatform) GetGlobalBrokerUsername() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.Spec.Global.Broker.User).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-broker"},
-			Key:                  "user",
-			Optional:             nil,
-		}
-	}
-	return &h.Spec.Global.Broker.User.KeyRef
-}
-
-func (h *HorusecPlatform) GetGlobalBrokerPassword() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.Spec.Global.Broker.Password).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-broker"},
-			Key:                  "password",
-			Optional:             nil,
-		}
-	}
-	return &h.Spec.Global.Broker.Password.KeyRef
-}
-
-func (h *HorusecPlatform) GetGlobalDatabaseUsername() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.Spec.Global.Database.User).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "username",
-			Optional:             nil,
-		}
-	}
-	return &h.Spec.Global.Database.User.KeyRef
-}
-
-func (h *HorusecPlatform) GetGlobalDatabasePassword() *corev1.SecretKeySelector {
-	if reflect.ValueOf(h.Spec.Global.Database.Password).IsZero() {
-		return &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: "horusec-database"},
-			Key:                  "password",
-			Optional:             nil,
-		}
-	}
-	return &h.Spec.Global.Database.Password.KeyRef
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {

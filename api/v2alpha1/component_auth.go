@@ -2,6 +2,7 @@ package v2alpha1
 
 import (
 	"fmt"
+
 	v1 "k8s.io/api/core/v1"
 )
 
@@ -142,7 +143,7 @@ func (h *HorusecPlatform) GetAuthAdminUsernameEnv() v1.EnvVar {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_ADMIN_USERNAME", &h.Spec.Global.Administrator.Credentials.User.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_USERNAME", h.Spec.Global.Administrator.Credentials.User.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthAdminPasswordEnv() v1.EnvVar {
@@ -150,7 +151,7 @@ func (h *HorusecPlatform) GetAuthAdminPasswordEnv() v1.EnvVar {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_ADMIN_PASSWORD", &h.Spec.Global.Administrator.Credentials.Password.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_ADMIN_PASSWORD", h.Spec.Global.Administrator.Credentials.Password.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
@@ -158,7 +159,7 @@ func (h *HorusecPlatform) GetAuthDefaultUserUsername() v1.EnvVar {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_USERNAME", &h.Spec.Components.Auth.DefaultUser.Credentials.User.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_USERNAME", h.Spec.Components.Auth.DefaultUser.Credentials.User.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthDefaultUserPassword() v1.EnvVar {
@@ -166,7 +167,7 @@ func (h *HorusecPlatform) GetAuthDefaultUserPassword() v1.EnvVar {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_PASSWORD", &h.Spec.Components.Auth.DefaultUser.Credentials.Password.KeyRef)
+	return h.NewEnvFromSecret("HORUSEC_DEFAULT_USER_PASSWORD", h.Spec.Components.Auth.DefaultUser.Credentials.Password.KeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthKeycloakClientSecret() v1.EnvVar {
@@ -175,7 +176,7 @@ func (h *HorusecPlatform) GetAuthKeycloakClientSecret() v1.EnvVar {
 		return v1.EnvVar{}
 	}
 
-	return h.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", &h.Spec.Global.Keycloak.Clients.Confidential.SecretKeyRef)
+	return h.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", h.Spec.Global.Keycloak.Clients.Confidential.SecretKeyRef)
 }
 
 func (h *HorusecPlatform) GetAuthOptionalEnvs() []v1.EnvVar {

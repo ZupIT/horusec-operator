@@ -67,8 +67,8 @@ type Clients struct {
 }
 
 type Confidential struct {
-	ID           string                   `json:"id,omitempty"`
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	ID           string                    `json:"id,omitempty"`
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Public struct {
@@ -76,7 +76,7 @@ type Public struct {
 }
 
 type JWT struct {
-	SecretKeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Broker struct {
@@ -120,11 +120,11 @@ type Analytic struct {
 }
 
 type Auth struct {
-	Type                   AuthType `json:"type,omitempty"`
-	ExposableComponent     `json:",inline,omitempty"`
-	AuthUrl                string      `json:"authUrl,omitempty"`
-	ManagerUrl             string      `json:"managerUrl,omitempty"`
-	DefaultUser            DefaultUser `json:"defaultUser,omitempty"`
+	Type               AuthType `json:"type,omitempty"`
+	ExposableComponent `json:",inline,omitempty"`
+	AuthUrl            string      `json:"authUrl,omitempty"`
+	ManagerUrl         string      `json:"managerUrl,omitempty"`
+	DefaultUser        DefaultUser `json:"defaultUser,omitempty"`
 }
 
 type AuthType string
@@ -223,7 +223,7 @@ type Credentials struct {
 }
 
 type SecretRef struct {
-	KeyRef corev1.SecretKeySelector `json:"secretKeyRef,omitempty"`
+	KeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Component struct {
