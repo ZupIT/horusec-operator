@@ -30,7 +30,7 @@
             "tag": "v2.12.1"
           }
         },
-        "name": "analytic_db",
+        "name": "horusec_analytic_db",
         "password": {
           "secretKeyRef": {
             "key": "password",
