@@ -3,12 +3,14 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	v1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:gocritic, funlen // improve in the future
-func ForService(existing, desired []v1.Service) Object {
+func ForService(existing, desired []v1.Service) k8s.Objects {
 	var update []client.Object
 	mdelete := serviceMap(existing)
 	mcreate := serviceMap(desired)
@@ -37,7 +39,7 @@ func ForService(existing, desired []v1.Service) Object {
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: serviceList(mcreate),
 		Update: update,
 		Delete: serviceList(mdelete),

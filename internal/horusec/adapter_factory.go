@@ -9,20 +9,18 @@ import (
 
 type AdapterFactory struct {
 	builder ResourceBuilder
-	svc     *Service
+	client  KubernetesClient
 }
 
-func NewAdapterFactory(builder ResourceBuilder, svc *Service) *AdapterFactory {
-	return &AdapterFactory{builder: builder, svc: svc}
+func NewAdapterFactory(builder ResourceBuilder, client KubernetesClient) *AdapterFactory {
+	return &AdapterFactory{builder: builder, client: client}
 }
 
 func (a *AdapterFactory) CreateHorusecPlatformAdapter(
 	ctx context.Context, key client.ObjectKey) (controllers.HorusecPlatformAdapter, error) {
-	svc := a.svc
-	builder := a.builder
-	resource, err := svc.LookupHorusecPlatform(ctx, key)
+	resource, err := a.client.GetHorus(ctx, key)
 	if err != nil {
 		return nil, err
 	}
-	return &Adapter{builder: builder, svc: svc, resource: resource}, err
+	return &Adapter{builder: a.builder, client: a.client, resource: resource}, err
 }

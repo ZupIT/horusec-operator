@@ -3,12 +3,14 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:funlen, gocritic // to improve in the future
-func ForServiceAccount(existing, desired []corev1.ServiceAccount) Object {
+func ForServiceAccount(existing, desired []corev1.ServiceAccount) k8s.Objects {
 	update := []client.Object{}
 	mcreate := serviceAccountMap(desired)
 	mdelete := serviceAccountMap(existing)
@@ -34,7 +36,7 @@ func ForServiceAccount(existing, desired []corev1.ServiceAccount) Object {
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: serviceAccountList(mcreate),
 		Update: update,
 		Delete: serviceAccountList(mdelete),

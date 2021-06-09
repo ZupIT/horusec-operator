@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/ZupIT/horusec-operator/internal/resources"
 	"github.com/google/wire"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -20,9 +21,10 @@ var providers = wire.NewSet(
 
 	controllers.NewHorusecPlatformReconciler,
 	horusec.NewAdapterFactory,
-	horusec.NewService,
+	k8s.NewClient,
 	resources.NewBuilder,
 	wire.Bind(new(controllers.AdapterFactory), new(*horusec.AdapterFactory)),
+	wire.Bind(new(horusec.KubernetesClient), new(*k8s.Client)),
 	wire.Bind(new(horusec.ResourceBuilder), new(*resources.Builder)),
 )
 

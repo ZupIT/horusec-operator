@@ -3,13 +3,15 @@ package inventory
 import (
 	"fmt"
 
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+
 	autoScalingV2beta2 "k8s.io/api/autoscaling/v2beta2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:funlen,gocritic // to improve in the future
 func ForHorizontalPodAutoscaling(existing []autoScalingV2beta2.HorizontalPodAutoscaler,
-	desired []autoScalingV2beta2.HorizontalPodAutoscaler) Object {
+	desired []autoScalingV2beta2.HorizontalPodAutoscaler) k8s.Objects {
 	update := []client.Object{}
 	mcreate := hpaMap(desired)
 	mdelete := hpaMap(existing)
@@ -42,7 +44,7 @@ func ForHorizontalPodAutoscaling(existing []autoScalingV2beta2.HorizontalPodAuto
 		}
 	}
 
-	return Object{
+	return &Object{
 		Create: hpaList(mcreate),
 		Update: update,
 		Delete: hpaList(mdelete),

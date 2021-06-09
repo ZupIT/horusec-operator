@@ -2401,6 +2401,119 @@ spec:
                         type: integer
                       type:
                         type: string
+                      user:
+                        properties:
+                          administrator:
+                            properties:
+                              email:
+                                type: string
+                              enabled:
+                                type: boolean
+                              password:
+                                properties:
+                                  secretKeyRef:
+                                    description: SecretKeySelector selects a key of
+                                      a Secret.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                type: object
+                              user:
+                                properties:
+                                  secretKeyRef:
+                                    description: SecretKeySelector selects a key of
+                                      a Secret.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                type: object
+                            type: object
+                          default:
+                            properties:
+                              email:
+                                type: string
+                              enabled:
+                                type: boolean
+                              password:
+                                properties:
+                                  secretKeyRef:
+                                    description: SecretKeySelector selects a key of
+                                      a Secret.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                type: object
+                              user:
+                                properties:
+                                  secretKeyRef:
+                                    description: SecretKeySelector selects a key of
+                                      a Secret.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                type: object
+                            type: object
+                        type: object
                     type: object
                   core:
                     properties:
@@ -6243,61 +6356,12 @@ spec:
                       replicaCount:
                         format: int32
                         type: integer
+                      timeout:
+                        type: integer
                     type: object
                 type: object
               global:
                 properties:
-                  administrator:
-                    properties:
-                      email:
-                        type: string
-                      enabled:
-                        type: boolean
-                      password:
-                        properties:
-                          secretKeyRef:
-                            description: SecretKeySelector selects a key of a Secret.
-                            properties:
-                              key:
-                                description: The key of the secret to select from.  Must
-                                  be a valid secret key.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the Secret or its key
-                                  must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                        type: object
-                      user:
-                        properties:
-                          secretKeyRef:
-                            description: SecretKeySelector selects a key of a Secret.
-                            properties:
-                              key:
-                                description: The key of the secret to select from.  Must
-                                  be a valid secret key.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the Secret or its key
-                                  must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                        type: object
-                    type: object
                   broker:
                     properties:
                       host:
@@ -6424,6 +6488,8 @@ spec:
                             type: object
                         type: object
                     type: object
+                  grpcUseCerts:
+                    type: boolean
                   jwt:
                     properties:
                       secretKeyRef:
@@ -6488,6 +6554,29 @@ spec:
                       publicURL:
                         type: string
                       realm:
+                        type: string
+                    type: object
+                  ldap:
+                    properties:
+                      adminGroup:
+                        type: string
+                      base:
+                        type: string
+                      bindDn:
+                        type: string
+                      bindPassword:
+                        type: string
+                      host:
+                        type: string
+                      insecureSkipVerify:
+                        type: boolean
+                      port:
+                        type: integer
+                      skipTls:
+                        type: boolean
+                      useSsl:
+                        type: boolean
+                      userFilter:
                         type: string
                     type: object
                 type: object
