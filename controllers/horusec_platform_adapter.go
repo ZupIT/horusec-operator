@@ -17,22 +17,17 @@ package controllers
 import (
 	"context"
 
-	k8s "sigs.k8s.io/controller-runtime/pkg/client"
-
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
-type AdapterFactory interface {
-	CreateHorusecPlatformAdapter(ctx context.Context, key k8s.ObjectKey) (HorusecPlatformAdapter, error)
-}
-
 type HorusecPlatformAdapter interface {
-	EnsureInitialization(ctx context.Context) (*operation.Result, error)
-	EnsureDatabaseMigrations(ctx context.Context) (*operation.Result, error)
-	EnsureDeployments(ctx context.Context) (*operation.Result, error)
-	EnsureAutoscaling(ctx context.Context) (*operation.Result, error)
-	EnsureServices(ctx context.Context) (*operation.Result, error)
-	EnsureIngressRules(ctx context.Context) (*operation.Result, error)
-	EnsureEverythingIsRunning(ctx context.Context) (*operation.Result, error)
-	EnsureServiceAccounts(ctx context.Context) (*operation.Result, error)
+	EnsureInitialization(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureDatabaseMigrations(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureDeployments(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureAutoscaling(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureServices(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureIngressRules(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureEverythingIsRunning(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureServiceAccounts(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 }

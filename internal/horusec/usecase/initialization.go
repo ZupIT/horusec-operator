@@ -12,36 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package operation
+package usecase
 
 import (
 	"context"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/requeue"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
-type Handler struct {
-	operations []Func
+type Initialization struct {
+	client KubernetesClient
 }
 
-func NewHandler(operations ...Func) *Handler {
-	return &Handler{operations: operations}
+func NewInitialization(client KubernetesClient) *Initialization {
+	return &Initialization{client: client}
 }
 
-func (h *Handler) Handle(ctx context.Context, resource *v2alpha1.HorusecPlatform) (reconcile.Result, error) {
-	for _, op := range h.operations {
-		result, err := op(ctx, resource)
-		if err != nil {
-			return requeue.OnErr(err)
-		}
-		if result == nil || result.CancelRequest {
-			return requeue.Not()
-		}
-		if result.RequeueRequest {
-			return requeue.After(result.RequeueDelay, err)
-		}
+func (i *Initialization) EnsureInitialization(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	if resource.Status.Conditions != nil {
+		return operation.ContinueProcessing()
 	}
-	return requeue.Not()
+	resource.Status.Conditions = []v2alpha1.Condition{}
+	resource.Status.State = v2alpha1.StatusPending
+	err := i.client.UpdateHorusStatus(ctx, resource)
+	if err != nil {
+		return operation.RequeueWithError(err)
+	}
+	return operation.StopProcessing()
 }

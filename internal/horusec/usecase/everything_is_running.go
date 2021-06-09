@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package auth
+package usecase
 
 import (
-	core "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"context"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/operation"
 )
 
-func NewServiceAccount(resource *v2alpha1.HorusecPlatform) core.ServiceAccount {
-	return core.ServiceAccount{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetAuthName(),
-			Namespace: resource.GetNamespace(),
-			Labels:    resource.GetAuthLabels(),
-		},
-	}
+type EverythingIsRunning struct{}
+
+func NewEverythingIsRunning() *EverythingIsRunning {
+	return &EverythingIsRunning{}
+}
+
+func (e *EverythingIsRunning) EnsureEverythingIsRunning(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	return operation.StopProcessing()
 }

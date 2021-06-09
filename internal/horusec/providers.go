@@ -12,21 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package auth
+package horusec
 
 import (
-	core "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+	"github.com/google/wire"
 )
 
-func NewServiceAccount(resource *v2alpha1.HorusecPlatform) core.ServiceAccount {
-	return core.ServiceAccount{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      resource.GetAuthName(),
-			Namespace: resource.GetNamespace(),
-			Labels:    resource.GetAuthLabels(),
-		},
-	}
-}
+var providers = wire.NewSet(
+	usecase.NewAutoscaling,
+	usecase.NewDatabaseMigrations,
+	usecase.NewDeployments,
+	usecase.NewEverythingIsRunning,
+	usecase.NewIngressRules,
+	usecase.NewInitialization,
+	usecase.NewServiceAccounts,
+	usecase.NewServices,
+	wire.Struct(new(Adapter), "*"),
+)
