@@ -23,7 +23,7 @@ import (
 )
 
 // Initialize create an instance of Jaeger Tracer and sets it as GlobalTracer.
-func Initialize(service string, module string) (io.Closer, error) {
+func Initialize(service, module string) (io.Closer, error) {
 	mod = module
 	cfg, err := (&config.Configuration{ServiceName: service}).FromEnv()
 	if err != nil {
