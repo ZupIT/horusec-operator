@@ -17,10 +17,12 @@ package operation
 import (
 	"context"
 	"time"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 type (
-	Func   func(ctx context.Context) (*Result, error)
+	Func   func(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*Result, error)
 	Result struct {
 		RequeueDelay   time.Duration
 		RequeueRequest bool

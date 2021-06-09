@@ -12,36 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package operation
+package controllers
 
 import (
 	"context"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/requeue"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+	"k8s.io/apimachinery/pkg/types"
 )
 
-type Handler struct {
-	operations []Func
-}
-
-func NewHandler(operations ...Func) *Handler {
-	return &Handler{operations: operations}
-}
-
-func (h *Handler) Handle(ctx context.Context, resource *v2alpha1.HorusecPlatform) (reconcile.Result, error) {
-	for _, op := range h.operations {
-		result, err := op(ctx, resource)
-		if err != nil {
-			return requeue.OnErr(err)
-		}
-		if result == nil || result.CancelRequest {
-			return requeue.Not()
-		}
-		if result.RequeueRequest {
-			return requeue.After(result.RequeueDelay, err)
-		}
-	}
-	return requeue.Not()
+type HorusecPlatformClient interface {
+	GetHorus(ctx context.Context, namespacedName types.NamespacedName) (*v2alpha1.HorusecPlatform, error)
 }

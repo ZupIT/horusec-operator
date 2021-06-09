@@ -15,6 +15,9 @@
 package main
 
 import (
+	"github.com/ZupIT/horusec-operator/controllers"
+	"github.com/ZupIT/horusec-operator/internal/horusec"
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/ZupIT/horusec-operator/internal/resources"
 	"github.com/google/wire"
@@ -22,9 +25,6 @@ import (
 	"k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-
-	"github.com/ZupIT/horusec-operator/controllers"
-	"github.com/ZupIT/horusec-operator/internal/horusec"
 )
 
 // nolint:deadcode,unused,varcheck // used for dependency injection container generation
@@ -34,12 +34,13 @@ var providers = wire.NewSet(
 	extractScheme,
 
 	controllers.NewHorusecPlatformReconciler,
-	horusec.NewAdapterFactory,
+	horusec.NewAdapter,
 	k8s.NewClient,
 	resources.NewBuilder,
-	wire.Bind(new(controllers.AdapterFactory), new(*horusec.AdapterFactory)),
-	wire.Bind(new(horusec.KubernetesClient), new(*k8s.Client)),
-	wire.Bind(new(horusec.ResourceBuilder), new(*resources.Builder)),
+	wire.Bind(new(controllers.HorusecPlatformAdapter), new(*horusec.Adapter)),
+	wire.Bind(new(controllers.HorusecPlatformClient), new(*k8s.Client)),
+	wire.Bind(new(usecase.KubernetesClient), new(*k8s.Client)),
+	wire.Bind(new(usecase.ResourceBuilder), new(*resources.Builder)),
 )
 
 func extractScheme(mgr manager.Manager) *runtime.Scheme {

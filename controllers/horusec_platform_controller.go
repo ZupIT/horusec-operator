@@ -17,22 +17,22 @@ package controllers
 import (
 	"context"
 
-	"k8s.io/apimachinery/pkg/api/errors"
-	ctrl "sigs.k8s.io/controller-runtime"
-
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/internal/requeue"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
+	"k8s.io/apimachinery/pkg/api/errors"
+	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object
 type HorusecPlatformReconciler struct {
-	factory AdapterFactory
+	adapter HorusecPlatformAdapter
+	client  HorusecPlatformClient
 }
 
-func NewHorusecPlatformReconciler(factory AdapterFactory) *HorusecPlatformReconciler {
-	return &HorusecPlatformReconciler{factory: factory}
+func NewHorusecPlatformReconciler(adapter HorusecPlatformAdapter, client HorusecPlatformClient) *HorusecPlatformReconciler {
+	return &HorusecPlatformReconciler{adapter: adapter, client: client}
 }
 
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms,verbs=get;list;watch;create;update;patch;delete
@@ -62,7 +62,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	log := span.Logger()
 	log.Info("reconciling")
 
-	adapter, err := r.factory.CreateHorusecPlatformAdapter(ctx, req.NamespacedName)
+	resource, err := r.client.GetHorus(ctx, req.NamespacedName)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			return requeue.Not()
@@ -72,14 +72,14 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	}
 
 	result, err := operation.NewHandler(
-		adapter.EnsureInitialization,
-		adapter.EnsureServiceAccounts,
-		adapter.EnsureDatabaseMigrations,
-		adapter.EnsureServices,
-		adapter.EnsureDeployments,
-		adapter.EnsureAutoscaling,
-		adapter.EnsureIngressRules,
-	).Handle(ctx)
+		r.adapter.EnsureInitialization,
+		r.adapter.EnsureServiceAccounts,
+		r.adapter.EnsureDatabaseMigrations,
+		r.adapter.EnsureServices,
+		r.adapter.EnsureDeployments,
+		r.adapter.EnsureAutoscaling,
+		r.adapter.EnsureIngressRules,
+	).Handle(ctx, resource)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
 		Info("finished reconcile")
