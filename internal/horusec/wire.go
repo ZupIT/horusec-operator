@@ -12,29 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+//+build wireinject
+
 package horusec
 
 import (
-	"context"
-
-	"github.com/ZupIT/horusec-operator/controllers"
-	"sigs.k8s.io/controller-runtime/pkg/client"
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+	"github.com/google/wire"
 )
 
-type AdapterFactory struct {
-	builder ResourceBuilder
-	client  KubernetesClient
-}
-
-func NewAdapterFactory(builder ResourceBuilder, client KubernetesClient) *AdapterFactory {
-	return &AdapterFactory{builder: builder, client: client}
-}
-
-func (a *AdapterFactory) CreateHorusecPlatformAdapter(
-	ctx context.Context, key client.ObjectKey) (controllers.HorusecPlatformAdapter, error) {
-	resource, err := a.client.GetHorus(ctx, key)
-	if err != nil {
-		return nil, err
-	}
-	return &Adapter{builder: a.builder, client: a.client, resource: resource}, err
+func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder) *Adapter {
+	wire.Build(providers)
+	return nil
 }

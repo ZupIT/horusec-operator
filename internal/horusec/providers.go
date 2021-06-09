@@ -14,15 +14,19 @@
 
 package horusec
 
-import "github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+import (
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+	"github.com/google/wire"
+)
 
-type Adapter struct {
-	*usecase.Autoscaling
-	*usecase.DatabaseMigrations
-	*usecase.Deployments
-	*usecase.EverythingIsRunning
-	*usecase.IngressRules
-	*usecase.Initialization
-	*usecase.ServiceAccounts
-	*usecase.Services
-}
+var providers = wire.NewSet(
+	usecase.NewAutoscaling,
+	usecase.NewDatabaseMigrations,
+	usecase.NewDeployments,
+	usecase.NewEverythingIsRunning,
+	usecase.NewIngressRules,
+	usecase.NewInitialization,
+	usecase.NewServiceAccounts,
+	usecase.NewServices,
+	wire.Struct(new(Adapter), "*"),
+)

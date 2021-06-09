@@ -12,17 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package horusec
+package usecase
 
-import "github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+import (
+	"context"
 
-type Adapter struct {
-	*usecase.Autoscaling
-	*usecase.DatabaseMigrations
-	*usecase.Deployments
-	*usecase.EverythingIsRunning
-	*usecase.IngressRules
-	*usecase.Initialization
-	*usecase.ServiceAccounts
-	*usecase.Services
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/operation"
+)
+
+type EverythingIsRunning struct{}
+
+func NewEverythingIsRunning() *EverythingIsRunning {
+	return &EverythingIsRunning{}
+}
+
+func (e *EverythingIsRunning) EnsureEverythingIsRunning(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	return operation.StopProcessing()
 }
