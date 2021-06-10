@@ -20,6 +20,19 @@ export RABBITMQ_USERNAME="user"
 export RABBITMQ_PASSWORD=$(kubectl get secret rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)
 export JWT_SECRET="4ff42f67-5929-fc52-65f1-3afc77ad86d5"
 
+createAnalyticDB() {
+    echo "Creating horusec_analytic_db..."
+
+    if ! kubectl run postgresql-client --rm --tty -i --restart='Never' --image docker.io/bitnami/postgresql --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U $POSTGRES_USERNAME -d horusec_db -p 5432 --no-password -c "create database horusec_analytic_db;"; then
+        sleep 10
+        createAnalyticDB
+    fi
+
+    echo "horusec_analytic_db created"
+}
+
+createAnalyticDB
+
 echo "Creating secrets of dependencies..."
 kubectl create secret generic horusec-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
 kubectl create secret generic database-uri --from-literal=database-uri=postgresql://$POSTGRES_USERNAME:$POSTGRES_PASSWORD@postgresql:5432/horusec_db?sslmode=disable

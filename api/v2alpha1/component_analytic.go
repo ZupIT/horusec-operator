@@ -59,6 +59,14 @@ func (h *HorusecPlatform) GetAnalyticLabels() map[string]string {
 	}
 }
 
+func (h *HorusecPlatform) GetAnalyticV1ToV2Labels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "analytic-v1-2-v2",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
+}
+
 func (h *HorusecPlatform) GetAnalyticReplicaCount() *int32 {
 	if !h.GetAnalyticAutoscaling().Enabled {
 		count := h.GetAnalyticComponent().ReplicaCount

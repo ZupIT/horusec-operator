@@ -33,6 +33,10 @@ func (b *Builder) JobsFor(resource *v2alpha1.HorusecPlatform) ([]batchv1.Job, er
 	if err := controllerutil.SetControllerReference(resource, &adesired, b.scheme); err != nil {
 		return nil, fmt.Errorf("failed to set job %q owner reference: %v", adesired.GetName(), err)
 	}
+	vdesired := analytic.NewV1ToV2Job(resource)
+	if err := controllerutil.SetControllerReference(resource, &vdesired, b.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", vdesired.GetName(), err)
+	}
 
-	return []batchv1.Job{mdesired, adesired}, nil
+	return []batchv1.Job{mdesired, adesired, vdesired}, nil
 }

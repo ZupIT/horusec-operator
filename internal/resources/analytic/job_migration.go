@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package migration
+package analytic
 
 import (
 	"fmt"
@@ -26,12 +26,12 @@ import (
 
 func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 	var terminationPeriod int64 = 30
-	global := resource.Spec.Global
+	component := resource.Spec.Components.Analytic
 	return batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-platform-migration-", resource.GetName()),
+			GenerateName: fmt.Sprintf("%s-analytic-migration-", resource.GetName()),
 			Namespace:    resource.GetNamespace(),
-			Labels:       resource.GetDefaultLabel(),
+			Labels:       resource.GetAnalyticLabels(),
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
@@ -40,15 +40,15 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 					TerminationGracePeriodSeconds: &terminationPeriod,
 					Containers: []corev1.Container{
 						{
-							Name:            "horusec-platform-database-migration",
+							Name:            "horusec-analytic-database-migration",
 							Image:           resource.GetDatabaseMigrationImage(),
 							ImagePullPolicy: corev1.PullIfNotPresent,
 							Command:         []string{"migrate.sh"},
 							Env: []corev1.EnvVar{
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", global.Database.User.KeyRef),
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", global.Database.Password.KeyRef),
-								{Name: "MIGRATION_NAME", Value: "platform"},
-								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", component.Database.User.KeyRef),
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
+								{Name: "MIGRATION_NAME", Value: "analytic"},
+								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetAnalyticDatabaseURI()},
 							},
 						},
 					},

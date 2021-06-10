@@ -7,7 +7,7 @@ spec:
   components:
     analytic:
       database:
-        host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
+        host: ""
         name: horusec_analytic_db
         password:
           secretKeyRef:
@@ -83,8 +83,8 @@ spec:
           key: username
           name: horusec-broker
     database:
-      host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
-      name: horusdb
+      host: ""
+      name: horusec_db
       password:
         secretKeyRef:
           key: password
