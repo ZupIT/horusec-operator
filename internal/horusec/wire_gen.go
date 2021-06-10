@@ -15,20 +15,20 @@ func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder
 	autoscaling := usecase.NewAutoscaling(client, builder)
 	databaseMigrations := usecase.NewDatabaseMigrations(client, builder)
 	deployments := usecase.NewDeployments(client, builder)
-	everythingIsRunning := usecase.NewEverythingIsRunning()
+	deploymentsAvailability := usecase.NewDeploymentsAvailability(client)
 	ingressRules := usecase.NewIngressRules(client, builder)
-	initialization := usecase.NewInitialization(client)
+	currentState := usecase.NewCurrentState(client)
 	serviceAccounts := usecase.NewServiceAccounts(client, builder)
 	services := usecase.NewServices(client, builder)
 	adapter := &Adapter{
-		Autoscaling:         autoscaling,
-		DatabaseMigrations:  databaseMigrations,
-		Deployments:         deployments,
-		EverythingIsRunning: everythingIsRunning,
-		IngressRules:        ingressRules,
-		Initialization:      initialization,
-		ServiceAccounts:     serviceAccounts,
-		Services:            services,
+		Autoscaling:             autoscaling,
+		DatabaseMigrations:      databaseMigrations,
+		Deployments:             deployments,
+		DeploymentsAvailability: deploymentsAvailability,
+		IngressRules:            ingressRules,
+		CurrentState:            currentState,
+		ServiceAccounts:         serviceAccounts,
+		Services:                services,
 	}
 	return adapter
 }

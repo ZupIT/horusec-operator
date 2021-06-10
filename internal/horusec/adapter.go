@@ -20,9 +20,9 @@ type Adapter struct {
 	*usecase.Autoscaling
 	*usecase.DatabaseMigrations
 	*usecase.Deployments
-	*usecase.EverythingIsRunning
+	*usecase.DeploymentsAvailability
 	*usecase.IngressRules
-	*usecase.Initialization
+	*usecase.CurrentState
 	*usecase.ServiceAccounts
 	*usecase.Services
 }

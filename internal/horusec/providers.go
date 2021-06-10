@@ -21,11 +21,11 @@ import (
 
 var providers = wire.NewSet(
 	usecase.NewAutoscaling,
+	usecase.NewCurrentState,
 	usecase.NewDatabaseMigrations,
 	usecase.NewDeployments,
-	usecase.NewEverythingIsRunning,
+	usecase.NewDeploymentsAvailability,
 	usecase.NewIngressRules,
-	usecase.NewInitialization,
 	usecase.NewServiceAccounts,
 	usecase.NewServices,
 	wire.Struct(new(Adapter), "*"),
