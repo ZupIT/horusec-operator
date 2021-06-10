@@ -15,6 +15,7 @@
 package v2alpha1
 
 import (
+	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -231,24 +232,9 @@ type ExposableComponent struct {
 
 // HorusecPlatformStatus defines the observed state of HorusecPlatform
 type HorusecPlatformStatus struct {
-	Conditions []metav1.Condition   `json:"conditions"`
-	State      HorusecPlatformState `json:"state"`
+	Conditions []metav1.Condition `json:"conditions"`
+	State      state.Type         `json:"state"`
 }
-
-const (
-	ReadyCondition   string = "Ready"
-	PendingCondition        = "Pending"
-	ErrorCondition          = "Error"
-	InvalidCondition        = "Invalid"
-)
-
-type HorusecPlatformState string
-
-const (
-	PendingStatus HorusecPlatformState = "Pending"
-	ReadyStatus                        = "Ready"
-	ErrorStatus                        = "Error"
-)
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
