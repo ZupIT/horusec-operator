@@ -132,6 +132,21 @@ func (d *Client) ListIngressByOwner(ctx context.Context, owner *v2alpha1.Horusec
 	return list.Items, nil
 }
 
+func (d *Client) ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Pod, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	opts := []client.ListOption{
+		client.InNamespace(owner.GetNamespace()),
+		client.MatchingLabels(owner.GetDefaultLabel()),
+	}
+	list := &core.PodList{}
+	if err := d.List(ctx, list, opts...); err != nil {
+		return nil, span.HandleError(fmt.Errorf("failed to list %s pods: %w", owner.GetName(), err))
+	}
+	return list.Items, nil
+}
+
 func (d *Client) ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]batch.Job, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
