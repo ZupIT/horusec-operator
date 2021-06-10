@@ -22,12 +22,12 @@ import (
 )
 
 type HorusecPlatformAdapter interface {
-	EnsureInitialization(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureCurrentState(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureDatabaseMigrations(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureDeployments(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureAutoscaling(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureServices(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureIngressRules(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
-	EnsureEverythingIsRunning(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureServiceAccounts(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureDeploymentsAvailable(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 }
