@@ -17,6 +17,8 @@ package usecase
 import (
 	"context"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 )
@@ -33,8 +35,8 @@ func (i *Initialization) EnsureInitialization(ctx context.Context, resource *v2a
 	if resource.Status.Conditions != nil {
 		return operation.ContinueProcessing()
 	}
-	resource.Status.Conditions = []v2alpha1.Condition{}
-	resource.Status.State = v2alpha1.StatusPending
+	resource.Status.Conditions = []metav1.Condition{}
+	resource.Status.State = v2alpha1.PendingStatus
 	err := i.client.UpdateHorusStatus(ctx, resource)
 	if err != nil {
 		return operation.RequeueWithError(err)

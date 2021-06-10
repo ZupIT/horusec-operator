@@ -114,7 +114,7 @@ type Analytic struct {
 
 type Auth struct {
 	Type               AuthType `json:"type,omitempty"`
-	User               User `json:"user,omitempty"`
+	User               User     `json:"user,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
 }
 
@@ -231,38 +231,23 @@ type ExposableComponent struct {
 
 // HorusecPlatformStatus defines the observed state of HorusecPlatform
 type HorusecPlatformStatus struct {
-	Conditions []Condition `json:"conditions"`
-	State      Status      `json:"state"`
+	Conditions []metav1.Condition   `json:"conditions"`
+	State      HorusecPlatformState `json:"state"`
 }
-
-type Condition struct {
-	Type   ConditionType          `json:"type"`
-	Status corev1.ConditionStatus `json:"status"`
-	// +optional
-	LastProbeTime metav1.Time `json:"lastProbeTime,omitempty"`
-	// +optional
-	LastTransitionTime metav1.Time `json:"lastTransitionTime,omitempty"`
-	// +optional
-	Reason string `json:"reason,omitempty"`
-	// +optional
-	Message string `json:"message,omitempty"`
-}
-
-type ConditionType string
 
 const (
-	ConditionReady   ConditionType = "Ready"
-	ConditionPending ConditionType = "Pending"
-	ConditionError   ConditionType = "Error"
-	ConditionInvalid ConditionType = "Invalid"
+	ReadyCondition   string = "Ready"
+	PendingCondition        = "Pending"
+	ErrorCondition          = "Error"
+	InvalidCondition        = "Invalid"
 )
 
-type Status string
+type HorusecPlatformState string
 
 const (
-	StatusPending Status = "Pending"
-	StatusReady   Status = "Ready"
-	StatusError   Status = "Error"
+	PendingStatus HorusecPlatformState = "Pending"
+	ReadyStatus                        = "Ready"
+	ErrorStatus                        = "Error"
 )
 
 //+kubebuilder:object:root=true
