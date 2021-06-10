@@ -12,11 +12,11 @@ spec:
         password:
           secretKeyRef:
             key: password
-            name: horusec-database
+            name: horusec-analytic-database
         user:
           secretKeyRef:
             key: username
-            name: horusec-database
+            name: horusec-analytic-database
       ingress:
         host: manager.horus.dev.zup.corp
         tls:
@@ -88,8 +88,8 @@ spec:
       password:
         secretKeyRef:
           key: password
-          name: horusec-database
+          name: horusec-platform-database
       user:
         secretKeyRef:
           key: username
-          name: horusec-database
+          name: horusec-platform-database

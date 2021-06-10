@@ -45,8 +45,8 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 							ImagePullPolicy: corev1.PullIfNotPresent,
 							Command:         []string{"migrate.sh"},
 							Env: []corev1.EnvVar{
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", global.Database.User.KeyRef),
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", global.Database.Password.KeyRef),
+								resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_USERNAME", global.Database.User.KeyRef),
+								resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_PASSWORD", global.Database.Password.KeyRef),
 								{Name: "MIGRATION_NAME", Value: "platform"},
 								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 							},
