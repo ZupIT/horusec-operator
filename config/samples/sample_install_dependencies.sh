@@ -34,9 +34,8 @@ createAnalyticDB() {
 createAnalyticDB
 
 echo "Creating secrets of dependencies..."
-kubectl create secret generic horusec-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
-kubectl create secret generic database-uri --from-literal=database-uri=postgresql://$POSTGRES_USERNAME:$POSTGRES_PASSWORD@postgresql:5432/horusec_db?sslmode=disable
-kubectl create secret generic database-analytic-uri --from-literal=database-uri=postgresql://$POSTGRES_USERNAME:$POSTGRES_PASSWORD@postgresql:5432/horusec_analytic_db?sslmode=disable
+kubectl create secret generic horusec-platform-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
+kubectl create secret generic horusec-analytic-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
 
 kubectl create secret generic horusec-broker --from-literal="username=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
 

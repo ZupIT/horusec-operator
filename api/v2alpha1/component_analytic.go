@@ -152,7 +152,7 @@ func (h *HorusecPlatform) GetAnalyticSSLMode() string {
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
+	return fmt.Sprintf("postgresql://$(HORUSEC_ANALYTIC_DATABASE_USERNAME):$(HORUSEC_ANALYTIC_DATABASE_PASSWORD)@%s:%s/%s%s",
 		h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName(), h.GetAnalyticSSLMode())
 }
 
