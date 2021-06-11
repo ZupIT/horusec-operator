@@ -12,21 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package usecase
+package state
 
-import (
-	"context"
+type Type string
 
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/operation"
+const (
+	Pending Type = "Pending"
+	Ready        = "Ready"
+	Error        = "Error"
 )
-
-type EverythingIsRunning struct{}
-
-func NewEverythingIsRunning() *EverythingIsRunning {
-	return &EverythingIsRunning{}
-}
-
-func (e *EverythingIsRunning) EnsureEverythingIsRunning(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
-	return operation.StopProcessing()
-}

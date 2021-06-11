@@ -12,17 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package horusec
+package condition
 
-import "github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+type Type string
 
-type Adapter struct {
-	*usecase.Autoscaling
-	*usecase.DatabaseMigrations
-	*usecase.Deployments
-	*usecase.DeploymentsAvailability
-	*usecase.IngressRules
-	*usecase.CurrentState
-	*usecase.ServiceAccounts
-	*usecase.Services
-}
+const (
+	DeploymentsAvailable Type = "DeploymentsAvailable"
+)

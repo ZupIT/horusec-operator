@@ -33,6 +33,7 @@ type KubernetesClient interface {
 	ListDeploymentsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]apps.Deployment, error)
 	ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networking.Ingress, error)
 	ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]batch.Job, error)
+	ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Pod, error)
 	ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.ServiceAccount, error)
 	ListServicesByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Service, error)
 }
