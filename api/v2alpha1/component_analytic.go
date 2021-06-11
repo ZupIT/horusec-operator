@@ -59,6 +59,14 @@ func (h *HorusecPlatform) GetAnalyticLabels() map[string]string {
 	}
 }
 
+func (h *HorusecPlatform) GetAnalyticV1ToV2Labels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "analytic-v1-2-v2",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
+}
+
 func (h *HorusecPlatform) GetAnalyticReplicaCount() *int32 {
 	if !h.GetAnalyticAutoscaling().Enabled {
 		count := h.GetAnalyticComponent().ReplicaCount
@@ -144,7 +152,7 @@ func (h *HorusecPlatform) GetAnalyticSSLMode() string {
 }
 
 func (h *HorusecPlatform) GetAnalyticDatabaseURI() string {
-	return fmt.Sprintf("postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
+	return fmt.Sprintf("postgresql://$(HORUSEC_ANALYTIC_DATABASE_USERNAME):$(HORUSEC_ANALYTIC_DATABASE_PASSWORD)@%s:%s/%s%s",
 		h.GetAnalyticDatabaseHost(), h.GetAnalyticDatabasePort(), h.GetAnalyticDatabaseName(), h.GetAnalyticSSLMode())
 }
 

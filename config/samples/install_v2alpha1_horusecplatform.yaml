@@ -7,16 +7,16 @@ spec:
   components:
     analytic:
       database:
-        host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
+        host: ""
         name: horusec_analytic_db
         password:
           secretKeyRef:
             key: password
-            name: horusec-database
+            name: horusec-analytic-database
         user:
           secretKeyRef:
             key: username
-            name: horusec-database
+            name: horusec-analytic-database
       ingress:
         host: manager.horus.dev.zup.corp
         tls:
@@ -83,13 +83,13 @@ spec:
           key: username
           name: horusec-broker
     database:
-      host: horusdb.ce9hgcglmgxg.us-east-1.rds.amazonaws.com
-      name: horusdb
+      host: ""
+      name: horusec_db
       password:
         secretKeyRef:
           key: password
-          name: horusec-database
+          name: horusec-platform-database
       user:
         secretKeyRef:
           key: username
-          name: horusec-database
+          name: horusec-platform-database

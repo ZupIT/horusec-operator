@@ -58,6 +58,14 @@ func (h *HorusecPlatform) GetApiLabels() map[string]string {
 	}
 }
 
+func (h *HorusecPlatform) GetApiV1ToV2Labels() map[string]string {
+	return map[string]string{
+		"app.kubernetes.io/name":       h.GetName(),
+		"app.kubernetes.io/component":  "api-v1-2-v2",
+		"app.kubernetes.io/managed-by": "horusec",
+	}
+}
+
 func (h *HorusecPlatform) GetAPIReplicaCount() *int32 {
 	if !h.GetAPIAutoscaling().Enabled {
 		count := h.GetAPIComponent().ReplicaCount

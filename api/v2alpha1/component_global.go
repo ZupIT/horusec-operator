@@ -36,7 +36,7 @@ func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 }
 
 func (h *HorusecPlatform) GetLatestVersion() string {
-	return "v2.12.1"
+	return "v2.13.1-alpha.1"
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {
@@ -103,7 +103,7 @@ func (h *HorusecPlatform) GetGlobalBrokerPort() string {
 
 func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 	return fmt.Sprintf(
-		"postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@%s:%s/%s%s",
+		"postgresql://$(HORUSEC_PLATFORM_DATABASE_USERNAME):$(HORUSEC_PLATFORM_DATABASE_PASSWORD)@%s:%s/%s%s",
 		h.GetGlobalDatabaseHost(), h.GetGlobalDatabasePort(), h.GetGlobalDatabaseName(), h.GetGlobalSSLMode())
 }
 

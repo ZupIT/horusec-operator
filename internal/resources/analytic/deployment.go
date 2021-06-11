@@ -60,8 +60,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", global.Broker.User.KeyRef),
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", component.Database.User.KeyRef),
-						resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_ANALYTIC_DATABASE_USERNAME", component.Database.User.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_ANALYTIC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
 						{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetAnalyticDatabaseURI()},
 					},
 					Ports: []corev1.ContainerPort{
