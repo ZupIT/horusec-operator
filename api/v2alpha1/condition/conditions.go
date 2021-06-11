@@ -17,5 +17,28 @@ package condition
 type Type string
 
 const (
-	DeploymentsAvailable Type = "DeploymentsAvailable"
+	AnalyticAvailable      Type = "AnalyticAvailable"
+	APIAvailable                = "APIAvailable"
+	AuthAvailable               = "AuthAvailable"
+	CoreAvailable               = "CoreAvailable"
+	ManagerAvailable            = "ManagerAvailable"
+	VulnerabilityAvailable      = "VulnerabilityAvailable"
+	WebhookAvailable            = "WebhookAvailable"
 )
+
+type Reason struct {
+	Type    string
+	Message string
+}
+
+func DatabaseReason(message string) *Reason {
+	return &Reason{Type: "DatabaseError", Message: message}
+}
+
+func BrokerReason(message string) *Reason {
+	return &Reason{Type: "BrokerError", Message: message}
+}
+
+func SecretReason(message string) *Reason {
+	return &Reason{Type: "SecretNotFound", Message: message}
+}

@@ -37,34 +37,60 @@ func (in *HorusecPlatform) IsStatusConditionTrue(conditionType condition.Type) b
 	return meta.IsStatusConditionTrue(in.Status.Conditions, string(conditionType))
 }
 
-func (in *HorusecPlatform) SetStatusConditionFalse(conditionType condition.Type) bool {
-	if !in.IsStatusConditionFalse(conditionType) {
-		switch conditionType {
-		case condition.DeploymentsAvailable:
-			meta.SetStatusCondition(&in.Status.Conditions, metav1.Condition{
-				Type:    string(conditionType),
-				Status:  metav1.ConditionFalse,
-				Reason:  "UnavailableReplicas",
-				Message: "Deployment has unavailable replicas.",
-			})
-			return true
-		}
+func (in *HorusecPlatform) SetStatusConditionFalse(conditionType condition.Type, reason *condition.Reason) bool {
+	c := meta.FindStatusCondition(in.Status.Conditions, string(conditionType))
+	if c == nil {
+		meta.SetStatusCondition(&in.Status.Conditions, unavailableCondition(conditionType, reason))
+		return true
+	}
+	if c.Status != metav1.ConditionFalse || c.Reason != reason.Type || c.Message != reason.Message {
+		meta.SetStatusCondition(&in.Status.Conditions, unavailableCondition(conditionType, reason))
+		return true
 	}
 	return false
 }
 
 func (in *HorusecPlatform) SetStatusConditionTrue(conditionType condition.Type) bool {
 	if !in.IsStatusConditionTrue(conditionType) {
-		switch conditionType {
-		case condition.DeploymentsAvailable:
-			meta.SetStatusCondition(&in.Status.Conditions, metav1.Condition{
-				Type:    string(conditionType),
-				Status:  metav1.ConditionTrue,
-				Reason:  "AvailableReplicas",
-				Message: "Deployment has minimum availability.",
-			})
-			return true
-		}
+		meta.SetStatusCondition(&in.Status.Conditions, availableCondition(conditionType))
+		return true
 	}
 	return false
+}
+
+func (in *HorusecPlatform) SetStatusConditionUnknown(conditionType condition.Type) bool {
+	if meta.IsStatusConditionPresentAndEqual(in.Status.Conditions, string(conditionType), metav1.ConditionUnknown) ||
+		meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType)) {
+		return false
+	}
+
+	meta.SetStatusCondition(&in.Status.Conditions, unknownCondition(conditionType))
+	return true
+}
+
+func availableCondition(conditionType condition.Type) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionTrue,
+		Reason:  "AvailableReplicas",
+		Message: "Deployment has minimum availability.",
+	}
+}
+
+func unavailableCondition(conditionType condition.Type, reason *condition.Reason) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionFalse,
+		Reason:  reason.Type,
+		Message: reason.Message,
+	}
+}
+
+func unknownCondition(conditionType condition.Type) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionUnknown,
+		Reason:  "UnavailableReplicas",
+		Message: "Deployment is unavailable but we could not discover the cause.",
+	}
 }
