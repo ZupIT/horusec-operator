@@ -16,13 +16,8 @@ package usecase
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
-	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
 	"github.com/ZupIT/horusec-operator/internal/operation"
-	"github.com/ZupIT/horusec-operator/internal/tracing"
 )
 
 type CurrentState struct {
@@ -34,28 +29,8 @@ func NewCurrentState(client KubernetesClient) *CurrentState {
 }
 
 func (i *CurrentState) EnsureCurrentState(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
-	span := tracing.SpanFromContext(ctx)
-	log := span.Logger()
-
-	if resource.Status.State == "" && resource.SetState(state.Pending) {
-		log.Info(fmt.Sprintf("Updating status to %q", state.Pending))
+	if resource.UpdateState() {
 		return operation.RequeueWithError(i.client.UpdateHorusStatus(ctx, resource))
-	}
-
-	if resource.IsStatusConditionTrue(condition.DeploymentsAvailable) {
-		if resource.SetState(state.Ready) {
-			log.Info(fmt.Sprintf("Updating status to %q", state.Ready))
-			return operation.RequeueWithError(i.client.UpdateHorusStatus(ctx, resource))
-		}
-		return operation.ContinueProcessing()
-	}
-
-	if resource.IsStatusConditionFalse(condition.DeploymentsAvailable) {
-		if resource.SetState(state.Pending) {
-			log.Info(fmt.Sprintf("Updating status to %q", state.Pending))
-			return operation.RequeueWithError(i.client.UpdateHorusStatus(ctx, resource))
-		}
-		return operation.ContinueProcessing()
 	}
 
 	return operation.ContinueProcessing()
