@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package migration
+package api
 
 import (
 	"fmt"
@@ -24,14 +24,13 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
-func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
+func NewV1ToV2Job(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 	var terminationPeriod int64 = 30
-	global := resource.Spec.Global
 	return batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-platform-migration-", resource.GetName()),
+			GenerateName: fmt.Sprintf("%s-api-v1-2-v2-", resource.GetName()),
 			Namespace:    resource.GetNamespace(),
-			Labels:       resource.GetDefaultLabel(),
+			Labels:       resource.GetApiV1ToV2Labels(),
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
@@ -40,14 +39,13 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 					TerminationGracePeriodSeconds: &terminationPeriod,
 					Containers: []corev1.Container{
 						{
-							Name:            "horusec-platform-database-migration",
-							Image:           resource.GetDatabaseMigrationImage(),
+							Name:            "horusec-api-v1-2-v2",
+							Image:           resource.GetAPIImage(),
 							ImagePullPolicy: corev1.PullIfNotPresent,
-							Command:         []string{"migrate.sh"},
+							Command:         []string{"/horusec-api-v1-to-v2-migrate"},
 							Env: []corev1.EnvVar{
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", global.Database.User.KeyRef),
-								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", global.Database.Password.KeyRef),
-								{Name: "MIGRATION_NAME", Value: "platform"},
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", resource.Spec.Global.Database.User.KeyRef),
+								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", resource.Spec.Global.Database.Password.KeyRef),
 								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 							},
 						},

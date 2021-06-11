@@ -49,7 +49,7 @@ func (in *HorusecPlatform) GetGlobalDatabaseMigrationImageTag() string {
 	if tag != "" {
 		return tag
 	}
-	return "v2.12.1"
+	return "v2.13.1-alpha.1"
 }
 
 func (h *HorusecPlatform) GetDatabaseMigrationLabels() map[string]string {

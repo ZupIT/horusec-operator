@@ -19,6 +19,7 @@ import (
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
+	"github.com/ZupIT/horusec-operator/internal/resources/api"
 	"github.com/ZupIT/horusec-operator/internal/resources/migration"
 	batchv1 "k8s.io/api/batch/v1"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
@@ -33,6 +34,14 @@ func (b *Builder) JobsFor(resource *v2alpha1.HorusecPlatform) ([]batchv1.Job, er
 	if err := controllerutil.SetControllerReference(resource, &adesired, b.scheme); err != nil {
 		return nil, fmt.Errorf("failed to set job %q owner reference: %v", adesired.GetName(), err)
 	}
+	analyticV1ToV2Desired := analytic.NewV1ToV2Job(resource)
+	if err := controllerutil.SetControllerReference(resource, &analyticV1ToV2Desired, b.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", analyticV1ToV2Desired.GetName(), err)
+	}
+	APIV1ToV2Desided := api.NewV1ToV2Job(resource)
+	if err := controllerutil.SetControllerReference(resource, &APIV1ToV2Desided, b.scheme); err != nil {
+		return nil, fmt.Errorf("failed to set job %q owner reference: %v", APIV1ToV2Desided.GetName(), err)
+	}
 
-	return []batchv1.Job{mdesired, adesired}, nil
+	return []batchv1.Job{mdesired, adesired, analyticV1ToV2Desired, APIV1ToV2Desided}, nil
 }

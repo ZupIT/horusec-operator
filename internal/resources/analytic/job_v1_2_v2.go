@@ -24,14 +24,14 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
-func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
+func NewV1ToV2Job(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 	var terminationPeriod int64 = 30
 	component := resource.Spec.Components.Analytic
 	return batchv1.Job{
 		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: fmt.Sprintf("%s-analytic-migration-", resource.GetName()),
+			GenerateName: fmt.Sprintf("%s-analytic-v1-2-v2-", resource.GetName()),
 			Namespace:    resource.GetNamespace(),
-			Labels:       resource.GetAnalyticLabels(),
+			Labels:       resource.GetAnalyticV1ToV2Labels(),
 		},
 		Spec: batchv1.JobSpec{
 			Template: corev1.PodTemplateSpec{
@@ -40,15 +40,15 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 					TerminationGracePeriodSeconds: &terminationPeriod,
 					Containers: []corev1.Container{
 						{
-							Name:            "horusec-database-migration",
-							Image:           resource.GetDatabaseMigrationImage(),
+							Name:            "horusec-analytic-v1-2-v2",
+							Image:           resource.GetAnalyticImage(),
 							ImagePullPolicy: corev1.PullIfNotPresent,
-							Command:         []string{"migrate.sh"},
+							Command:         []string{"/horusec-analytic-v1-to-v2-migrate"},
 							Env: []corev1.EnvVar{
 								resource.NewEnvFromSecret("HORUSEC_DATABASE_USERNAME", component.Database.User.KeyRef),
 								resource.NewEnvFromSecret("HORUSEC_DATABASE_PASSWORD", component.Database.Password.KeyRef),
-								{Name: "MIGRATION_NAME", Value: "analytic"},
 								{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetAnalyticDatabaseURI()},
+								{Name: "HORUSEC_DATABASE_HORUSEC_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 							},
 						},
 					},
