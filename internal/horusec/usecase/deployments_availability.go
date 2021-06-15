@@ -81,11 +81,12 @@ func (ds *deployStatuses) UpdateConditions(resource *v2alpha1.HorusecPlatform) *
 	}
 
 	for component, conditionType := range ds.conditions {
-		c := condition.Unknown(conditionType, reason)
-		if ds.checkAvailabilityOf(component) {
-			c = condition.True(conditionType)
+		if ds.checkAvailabilityOf(component) && resource.SetStatusCondition(condition.True(conditionType)) {
+			ds.changed = true
+			continue
 		}
-		if resource.SetStatusCondition(c) {
+
+		if !resource.IsStatusConditionFalse(conditionType) && resource.SetStatusCondition(condition.Unknown(conditionType, reason)) {
 			ds.changed = true
 		}
 	}
@@ -99,7 +100,7 @@ func (ds *deployStatuses) HasChanges() bool {
 
 func (ds *deployStatuses) checkAvailabilityOf(component string) bool {
 	if status, ok := ds.items[component]; ok {
-		return status.HasUnavailableReplicas()
+		return !status.HasUnavailableReplicas()
 	}
 	return false
 }
