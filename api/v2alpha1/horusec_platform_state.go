@@ -17,6 +17,7 @@ package v2alpha1
 import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (in *HorusecPlatform) UpdateState() bool {
@@ -33,6 +34,9 @@ func (in *HorusecPlatform) UpdateState() bool {
 }
 
 func (in *HorusecPlatform) setState(state state.Type) bool {
+	if in.Status.Conditions == nil {
+		in.Status.Conditions = make([]metav1.Condition, 0)
+	}
 	if in.Status.State != state {
 		in.Status.State = state
 		return true
