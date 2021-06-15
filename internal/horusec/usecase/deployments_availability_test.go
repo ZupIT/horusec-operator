@@ -2,15 +2,13 @@ package usecase
 
 import (
 	"context"
+	"testing"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/test"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/yaml.v3"
-	"io/ioutil"
-	appsv1 "k8s.io/api/apps/v1"
-	"testing"
 )
 
 func TestDeploymentsAvailability_EnsureDeploymentsAvailable(t *testing.T) {
@@ -31,17 +29,13 @@ func setupToEnsureDeploymentsAvailable(t *testing.T) (*DeploymentsAvailability, 
 	ctrl := gomock.NewController(t)
 	client := test.NewMockKubernetesClient(ctrl)
 
-	data, err := ioutil.ReadFile("/home/tiagoangelo/wrkspc/github.com/ZupIT/horusec-operator/test/data/deployments_availability_test.yaml")
-	assert.NoError(t, err)
-
-	var deploys appsv1.DeploymentList
-	err = yaml.Unmarshal(data, &deploys)
+	deps, err := test.DeploymentsWithStatus()
 	assert.NoError(t, err)
 
 	client.EXPECT().
 		ListDeploymentsByOwner(gomock.Any(), gomock.Any()).
 		Times(1).
-		Return(deploys.Items, nil)
+		Return(deps, nil)
 
 	return NewDeploymentsAvailability(client), ctrl
 }
