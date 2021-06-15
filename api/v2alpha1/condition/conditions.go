@@ -14,6 +14,8 @@
 
 package condition
 
+import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 type Type string
 
 const (
@@ -41,4 +43,31 @@ func BrokerReason(message string) *Reason {
 
 func SecretReason(message string) *Reason {
 	return &Reason{Type: "SecretNotFound", Message: message}
+}
+
+func True(conditionType Type) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionTrue,
+		Reason:  "AvailableReplicas",
+		Message: "Deployment has minimum availability.",
+	}
+}
+
+func False(conditionType Type, reason Reason) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionFalse,
+		Reason:  reason.Type,
+		Message: reason.Message,
+	}
+}
+
+func Unknown(conditionType Type, reason Reason) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionUnknown,
+		Reason:  "UnavailableReplicas",
+		Message: "Deployment is unavailable but we could not discover the cause.",
+	}
 }
