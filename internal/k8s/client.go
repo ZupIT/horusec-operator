@@ -77,13 +77,24 @@ func (d *Client) GetHorus(ctx context.Context, namespacedName types.NamespacedNa
 
 func (d *Client) UpdateHorusStatus(ctx context.Context, horus *v2alpha1.HorusecPlatform) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
+	log := span.Logger()
 	defer span.Finish()
+
+	conditions := make([]interface{}, 0, 0)
+	for _, condition := range horus.Status.Conditions {
+		conditions = append(conditions, "condition."+condition.Type, string(condition.Status))
+		span.SetTag("horus.condition."+condition.Type, condition.Status)
+	}
+	span.SetTag("horus.condition.state", horus.Status.State)
 
 	err := d.Status().Update(ctx, horus)
 	if err != nil {
 		return span.HandleError(err)
 	}
-	span.Logger().Info(fmt.Sprintf("%T %q status updated", horus, horus.GetName()))
+	log.V(1).
+		WithValues("condition.state", horus.Status.State).
+		WithValues(conditions...).
+		Info(fmt.Sprintf("%T %q status updated", horus, horus.GetName()))
 	return nil
 }
 
@@ -195,7 +206,7 @@ func (d *Client) ListServicesByOwner(ctx context.Context, owner *v2alpha1.Horuse
 func (d *Client) delete(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
-	log := span.Logger()
+	log := span.Logger().V(1)
 
 	deleteOptions := []client.DeleteOption{client.PropagationPolicy(meta.DeletePropagationBackground)}
 	if err := d.Delete(ctx, obj, deleteOptions...); err != nil {
@@ -208,7 +219,7 @@ func (d *Client) delete(ctx context.Context, obj client.Object) error {
 func (d *Client) update(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
-	log := span.Logger()
+	log := span.Logger().V(1)
 
 	if err := d.Update(ctx, obj); err != nil {
 		return span.HandleError(fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err))
@@ -220,7 +231,7 @@ func (d *Client) update(ctx context.Context, obj client.Object) error {
 func (d *Client) create(ctx context.Context, obj client.Object) error {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
-	log := span.Logger()
+	log := span.Logger().V(1)
 
 	if err := d.Create(ctx, obj); err != nil {
 		return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
