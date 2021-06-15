@@ -16,6 +16,7 @@ package usecase
 
 import (
 	"context"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
@@ -32,6 +33,9 @@ func NewDeploymentsAvailability(client KubernetesClient) *DeploymentsAvailabilit
 }
 
 func (e *DeploymentsAvailability) EnsureDeploymentsAvailable(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
 	d, err := e.client.ListDeploymentsByOwner(ctx, resource)
 	if err != nil {
 		return nil, err

@@ -18,6 +18,7 @@ import (
 	"context"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 )
 
 type CurrentState struct {
@@ -29,6 +30,9 @@ func NewCurrentState(client KubernetesClient) *CurrentState {
 }
 
 func (i *CurrentState) EnsureCurrentState(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
 	if resource.UpdateState() {
 		return operation.RequeueWithError(i.client.UpdateHorusStatus(ctx, resource))
 	}
