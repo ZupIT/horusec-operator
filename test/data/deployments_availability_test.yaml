@@ -1,0 +1,2325 @@
+apiVersion: v1
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "6"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 6
+      labels:
+        app.kubernetes.io/component: analytic
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"analytic"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_GRPC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8005,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:11:30Z"
+      name: analytic
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "347032"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/analytic
+      uid: 3862fb3a-eb8e-43fe-b005-c22b87772e15
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: analytic
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: analytic
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8005"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_GRPC_AUTH_URL
+                  value: auth:8007
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: username
+                      name: analytic-database
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: analytic-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/analytic_db?sslmode=disable
+              image: docker.io/horuszup/horusec-analytic:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /analytic/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: analytic
+              ports:
+                - containerPort: 8005
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /analytic/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-10T13:22:49Z"
+          lastUpdateTime: "2021-06-10T14:25:58Z"
+          message: ReplicaSet "analytic-79776776ff" has successfully progressed.
+          reason: NewReplicaSetAvailable
+          status: "True"
+          type: Progressing
+        - lastTransitionTime: "2021-06-14T12:11:30Z"
+          lastUpdateTime: "2021-06-14T12:11:30Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+      observedGeneration: 6
+      readyReplicas: 1
+      replicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "7"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 7
+      labels:
+        app.kubernetes.io/component: api
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"api"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_GRPC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8000,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:unavailableReplicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:11:38Z"
+      name: api
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "348825"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/api
+      uid: edea1ac6-56f0-4bc5-85bf-47b83ed92c44
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: api
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: api
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8000"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_GRPC_AUTH_URL
+                  value: auth:8007
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: platform-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+              image: docker.io/horuszup/horusec-api:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /api/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: api
+              ports:
+                - containerPort: 8000
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /api/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-14T12:11:38Z"
+          lastUpdateTime: "2021-06-14T12:11:38Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-14T12:21:39Z"
+          lastUpdateTime: "2021-06-14T12:21:39Z"
+          message: ReplicaSet "api-5686776d7f" has timed out progressing.
+          reason: ProgressDeadlineExceeded
+          status: "False"
+          type: Progressing
+      observedGeneration: 7
+      readyReplicas: 1
+      replicas: 2
+      unavailableReplicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "7"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 7
+      labels:
+        app.kubernetes.io/component: auth
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"auth"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_APPLICATION_ADMIN_DATA"}:
+                          .: { }
+                          f:name: { }
+                        k:{"name":"HORUSEC_AUTH_TYPE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DEFAULT_USER_DATA"}:
+                          .: { }
+                          f:name: { }
+                        k:{"name":"HORUSEC_DISABLED_EMAILS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_ENABLE_APPLICATION_ADMIN"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_ENABLE_DEFAULT_USER"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_KEYCLOAK_BASE_PATH"}:
+                          .: { }
+                          f:name: { }
+                        k:{"name":"HORUSEC_KEYCLOAK_CLIENT_ID"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_KEYCLOAK_REALM"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_ADMIN_GROUP"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_BASE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_BINDDN"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_BINDPASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_INSECURE_SKIP_VERIFY"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_SKIP_TLS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_USERFILTER"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_LDAP_USESSL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_MANAGER_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8006,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                        k:{"containerPort":8007,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:unavailableReplicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:10:56Z"
+      name: auth
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "348693"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/auth
+      uid: d9da1df8-ee09-4724-8f1a-1f04eb67378b
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: auth
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: auth
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8006"
+                - name: HORUSEC_GRPC_PORT
+                  value: "8007"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_DISABLED_EMAILS
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_AUTH_TYPE
+                  value: horusec
+                - name: HORUSEC_ENABLE_APPLICATION_ADMIN
+                  value: "false"
+                - name: HORUSEC_ENABLE_DEFAULT_USER
+                  value: "false"
+                - name: HORUSEC_MANAGER_URL
+                  value: http://manager:8080
+                - name: HORUSEC_AUTH_URL
+                  value: http:\/\/manager.horus.local
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: platform-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_KEYCLOAK_BASE_PATH
+                - name: HORUSEC_KEYCLOAK_CLIENT_ID
+                  value: manager
+                - name: HORUSEC_KEYCLOAK_REALM
+                  value: horusec
+                - name: HORUSEC_LDAP_BASE
+                  value: dc=wimpi,dc=net
+                - name: HORUSEC_LDAP_HOST
+                  value: ldap
+                - name: HORUSEC_LDAP_PORT
+                  value: "10389"
+                - name: HORUSEC_LDAP_USESSL
+                  value: "false"
+                - name: HORUSEC_LDAP_SKIP_TLS
+                  value: "true"
+                - name: HORUSEC_LDAP_INSECURE_SKIP_VERIFY
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_LDAP_BINDDN
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_LDAP_BINDPASSWORD
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_LDAP_USERFILTER
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_LDAP_ADMIN_GROUP
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                - name: HORUSEC_APPLICATION_ADMIN_DATA
+                - name: HORUSEC_DEFAULT_USER_DATA
+              image: docker.io/horuszup/horusec-auth:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /auth/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: auth
+              ports:
+                - containerPort: 8006
+                  name: http
+                  protocol: TCP
+                - containerPort: 8007
+                  name: grpc
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /auth/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-14T12:10:56Z"
+          lastUpdateTime: "2021-06-14T12:10:56Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-14T12:20:57Z"
+          lastUpdateTime: "2021-06-14T12:20:57Z"
+          message: ReplicaSet "auth-74c8c7ff57" has timed out progressing.
+          reason: ProgressDeadlineExceeded
+          status: "False"
+          type: Progressing
+      observedGeneration: 7
+      readyReplicas: 1
+      replicas: 2
+      unavailableReplicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "7"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 7
+      labels:
+        app.kubernetes.io/component: core
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"auth"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_GRPC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8003,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:unavailableReplicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:11:00Z"
+      name: core
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "348707"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/core
+      uid: e9ebfa1c-ca0d-4694-a7c8-4637890a6899
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: core
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: core
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8003"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_GRPC_AUTH_URL
+                  value: auth:8007
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: platform-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+              image: docker.io/horuszup/horusec-core:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /core/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: auth
+              ports:
+                - containerPort: 8003
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /core/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-14T12:11:00Z"
+          lastUpdateTime: "2021-06-14T12:11:00Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-14T12:21:01Z"
+          lastUpdateTime: "2021-06-14T12:21:01Z"
+          message: ReplicaSet "core-5cfcb6d46c" has timed out progressing.
+          reason: ProgressDeadlineExceeded
+          status: "False"
+          type: Progressing
+      observedGeneration: 7
+      readyReplicas: 1
+      replicas: 2
+      unavailableReplicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "5"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 5
+      labels:
+        app.kubernetes.io/component: manager
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"manager"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"REACT_APP_HORUSEC_ENDPOINT_ANALYTIC"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_HORUSEC_ENDPOINT_API"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_HORUSEC_ENDPOINT_AUTH"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_HORUSEC_ENDPOINT_CORE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_HORUSEC_ENDPOINT_WEBHOOK"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_HORUSEC_MANAGER_PATH"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_KEYCLOAK_BASE_PATH"}:
+                          .: { }
+                          f:name: { }
+                        k:{"name":"REACT_APP_KEYCLOAK_CLIENT_ID"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"REACT_APP_KEYCLOAK_REALM"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8080,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-10T13:30:17Z"
+      name: manager
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "21184"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/manager
+      uid: eafa2cfb-13c2-4fce-84e2-7554eb05f4b0
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: manager
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: manager
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: REACT_APP_HORUSEC_ENDPOINT_API
+                  value: http:\/\/manager.horus.local
+                - name: REACT_APP_HORUSEC_ENDPOINT_ANALYTIC
+                  value: http:\/\/manager.horus.local
+                - name: REACT_APP_HORUSEC_ENDPOINT_CORE
+                  value: http:\/\/manager.horus.local
+                - name: REACT_APP_HORUSEC_ENDPOINT_WEBHOOK
+                  value: http:\/\/manager.horus.local
+                - name: REACT_APP_HORUSEC_ENDPOINT_AUTH
+                  value: http:\/\/manager.horus.local
+                - name: REACT_APP_HORUSEC_MANAGER_PATH
+                  value: \/manager
+                - name: REACT_APP_KEYCLOAK_BASE_PATH
+                - name: REACT_APP_KEYCLOAK_CLIENT_ID
+                  value: manager
+                - name: REACT_APP_KEYCLOAK_REALM
+                  value: horusec
+              image: docker.io/horuszup/horusec-manager:v2.12.1
+              imagePullPolicy: IfNotPresent
+              name: manager
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-10T12:20:24Z"
+          lastUpdateTime: "2021-06-10T12:20:24Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-10T12:20:20Z"
+          lastUpdateTime: "2021-06-10T13:30:17Z"
+          message: ReplicaSet "manager-75b869f465" has successfully progressed.
+          reason: NewReplicaSetAvailable
+          status: "True"
+          type: Progressing
+      observedGeneration: 5
+      readyReplicas: 1
+      replicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "7"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 7
+      labels:
+        app.kubernetes.io/component: vulnerability
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"vulnerability"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_GRPC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8003,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:unavailableReplicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:10:59Z"
+      name: vulnerability
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "348703"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/vulnerability
+      uid: 72b52431-2d40-4353-aeb5-e9401d3addda
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: vulnerability
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: vulnerability
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8003"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_GRPC_AUTH_URL
+                  value: auth:8007
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: platform-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+              image: docker.io/horuszup/horusec-vulnerability:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /vulnerability/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: vulnerability
+              ports:
+                - containerPort: 8003
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /vulnerability/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-14T12:10:59Z"
+          lastUpdateTime: "2021-06-14T12:10:59Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-14T12:21:00Z"
+          lastUpdateTime: "2021-06-14T12:21:00Z"
+          message: ReplicaSet "vulnerability-764645ccc" has timed out progressing.
+          reason: ProgressDeadlineExceeded
+          status: "False"
+          type: Progressing
+      observedGeneration: 7
+      readyReplicas: 1
+      replicas: 2
+      unavailableReplicas: 1
+      updatedReplicas: 1
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+        deployment.kubernetes.io/revision: "7"
+      creationTimestamp: "2021-06-10T12:20:20Z"
+      generation: 7
+      labels:
+        app.kubernetes.io/component: webhook
+        app.kubernetes.io/managed-by: horusec
+        app.kubernetes.io/name: horusecplatform-sample
+      managedFields:
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:labels:
+                .: { }
+                f:app.kubernetes.io/component: { }
+                f:app.kubernetes.io/managed-by: { }
+                f:app.kubernetes.io/name: { }
+              f:ownerReferences:
+                .: { }
+                k:{"uid":"1cc61836-1b80-4a61-8809-7b5b62747806"}:
+                  .: { }
+                  f:apiVersion: { }
+                  f:blockOwnerDeletion: { }
+                  f:controller: { }
+                  f:kind: { }
+                  f:name: { }
+                  f:uid: { }
+            f:spec:
+              f:progressDeadlineSeconds: { }
+              f:replicas: { }
+              f:revisionHistoryLimit: { }
+              f:selector:
+                f:matchLabels:
+                  .: { }
+                  f:app.kubernetes.io/component: { }
+                  f:app.kubernetes.io/managed-by: { }
+                  f:app.kubernetes.io/name: { }
+              f:strategy:
+                f:rollingUpdate:
+                  .: { }
+                  f:maxSurge: { }
+                  f:maxUnavailable: { }
+                f:type: { }
+              f:template:
+                f:metadata:
+                  f:labels:
+                    .: { }
+                    f:app.kubernetes.io/component: { }
+                    f:app.kubernetes.io/managed-by: { }
+                    f:app.kubernetes.io/name: { }
+                f:spec:
+                  f:containers:
+                    k:{"name":"webhook"}:
+                      .: { }
+                      f:env:
+                        .: { }
+                        k:{"name":"HORUSEC_BROKER_HOST"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_BROKER_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_BROKER_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_PASSWORD"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_LOG_MODE"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_SQL_URI"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_DATABASE_USERNAME"}:
+                          .: { }
+                          f:name: { }
+                          f:valueFrom:
+                            .: { }
+                            f:secretKeyRef:
+                              .: { }
+                              f:key: { }
+                              f:name: { }
+                        k:{"name":"HORUSEC_GRPC_AUTH_URL"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_GRPC_USE_CERTS"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_HTTP_TIMEOUT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                        k:{"name":"HORUSEC_PORT"}:
+                          .: { }
+                          f:name: { }
+                          f:value: { }
+                      f:image: { }
+                      f:imagePullPolicy: { }
+                      f:livenessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:name: { }
+                      f:ports:
+                        .: { }
+                        k:{"containerPort":8005,"protocol":"TCP"}:
+                          .: { }
+                          f:containerPort: { }
+                          f:name: { }
+                          f:protocol: { }
+                      f:readinessProbe:
+                        .: { }
+                        f:failureThreshold: { }
+                        f:httpGet:
+                          .: { }
+                          f:path: { }
+                          f:port: { }
+                          f:scheme: { }
+                        f:periodSeconds: { }
+                        f:successThreshold: { }
+                        f:timeoutSeconds: { }
+                      f:resources: { }
+                      f:terminationMessagePath: { }
+                      f:terminationMessagePolicy: { }
+                  f:dnsPolicy: { }
+                  f:restartPolicy: { }
+                  f:schedulerName: { }
+                  f:securityContext: { }
+                  f:terminationGracePeriodSeconds: { }
+          manager: ___1go_build_github_com_ZupIT_horusec_operator_cmd_app
+          operation: Update
+          time: "2021-06-10T12:20:20Z"
+        - apiVersion: apps/v1
+          fieldsType: FieldsV1
+          fieldsV1:
+            f:metadata:
+              f:annotations:
+                .: { }
+                f:deployment.kubernetes.io/revision: { }
+            f:status:
+              f:availableReplicas: { }
+              f:conditions:
+                .: { }
+                k:{"type":"Available"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+                k:{"type":"Progressing"}:
+                  .: { }
+                  f:lastTransitionTime: { }
+                  f:lastUpdateTime: { }
+                  f:message: { }
+                  f:reason: { }
+                  f:status: { }
+                  f:type: { }
+              f:observedGeneration: { }
+              f:readyReplicas: { }
+              f:replicas: { }
+              f:unavailableReplicas: { }
+              f:updatedReplicas: { }
+          manager: kube-controller-manager
+          operation: Update
+          time: "2021-06-14T12:10:59Z"
+      name: webhook
+      namespace: horusec
+      ownerReferences:
+        - apiVersion: install.horusec.io/v2alpha1
+          blockOwnerDeletion: true
+          controller: true
+          kind: HorusecPlatform
+          name: horusecplatform-sample
+          uid: 1cc61836-1b80-4a61-8809-7b5b62747806
+      resourceVersion: "348704"
+      selfLink: /apis/apps/v1/namespaces/horusec/deployments/webhook
+      uid: 77657750-3ae3-452b-82f2-38dfa527be1e
+    spec:
+      progressDeadlineSeconds: 600
+      replicas: 1
+      revisionHistoryLimit: 10
+      selector:
+        matchLabels:
+          app.kubernetes.io/component: webhook
+          app.kubernetes.io/managed-by: horusec
+          app.kubernetes.io/name: horusecplatform-sample
+      strategy:
+        rollingUpdate:
+          maxSurge: 25%
+          maxUnavailable: 25%
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app.kubernetes.io/component: webhook
+            app.kubernetes.io/managed-by: horusec
+            app.kubernetes.io/name: horusecplatform-sample
+        spec:
+          containers:
+            - env:
+                - name: HORUSEC_PORT
+                  value: "8005"
+                - name: HORUSEC_DATABASE_SQL_LOG_MODE
+                  value: "false"
+                - name: HORUSEC_GRPC_USE_CERTS
+                  value: "false"
+                - name: HORUSEC_GRPC_AUTH_URL
+                  value: auth:8007
+                - name: HORUSEC_BROKER_HOST
+                  value: rabbitmq
+                - name: HORUSEC_HTTP_TIMEOUT
+                  value: "0"
+                - name: HORUSEC_BROKER_PORT
+                  value: "5672"
+                - name: HORUSEC_BROKER_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_BROKER_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: rabbitmq-password
+                      name: rabbitmq
+                - name: HORUSEC_DATABASE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      key: broker-username
+                      name: broker-username
+                - name: HORUSEC_DATABASE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      key: password
+                      name: platform-database
+                - name: HORUSEC_DATABASE_SQL_URI
+                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+              image: docker.io/horuszup/horusec-webhook:v2.12.1
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /webhook/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              name: webhook
+              ports:
+                - containerPort: 8005
+                  name: http
+                  protocol: TCP
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /webhook/health
+                  port: http
+                  scheme: HTTP
+                periodSeconds: 10
+                successThreshold: 1
+                timeoutSeconds: 1
+              resources: { }
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: { }
+          terminationGracePeriodSeconds: 30
+    status:
+      availableReplicas: 1
+      conditions:
+        - lastTransitionTime: "2021-06-14T12:10:59Z"
+          lastUpdateTime: "2021-06-14T12:10:59Z"
+          message: Deployment has minimum availability.
+          reason: MinimumReplicasAvailable
+          status: "True"
+          type: Available
+        - lastTransitionTime: "2021-06-14T12:21:00Z"
+          lastUpdateTime: "2021-06-14T12:21:00Z"
+          message: ReplicaSet "webhook-58656cc68f" has timed out progressing.
+          reason: ProgressDeadlineExceeded
+          status: "False"
+          type: Progressing
+      observedGeneration: 7
+      readyReplicas: 1
+      replicas: 2
+      unavailableReplicas: 1
+      updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""
