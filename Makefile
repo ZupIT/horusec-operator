@@ -108,3 +108,6 @@ deploy: manifests kustomize
 
 undeploy:
 	$(KUSTOMIZE) build config/default | kubectl delete -f -
+
+mock: # generate source code for a mock
+	mockgen -package=test -destination test/kubernetes_client.go -source=internal/horusec/usecase/kubeclient.go KubernetesClient
