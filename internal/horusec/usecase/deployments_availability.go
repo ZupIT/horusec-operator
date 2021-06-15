@@ -16,11 +16,12 @@ package usecase
 
 import (
 	"context"
-	"github.com/ZupIT/horusec-operator/internal/tracing"
+	"time"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 	appsv1 "k8s.io/api/apps/v1"
 )
 
@@ -46,10 +47,10 @@ func (e *DeploymentsAvailability) EnsureDeploymentsAvailable(ctx context.Context
 		return operation.RequeueOnErrorOrStop(e.client.UpdateHorusStatus(ctx, resource))
 	}
 
-	return operation.ContinueProcessing()
+	return operation.RequeueAfter(10*time.Second, nil)
 }
 
-type deployStatus struct{ item appsv1.DeploymentStatus }
+type deployStatus struct{ item *appsv1.DeploymentStatus }
 
 func (ps *deployStatus) HasUnavailableReplicas() bool {
 	return ps.item.UnavailableReplicas > 0
@@ -65,7 +66,7 @@ func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
 	items := make(map[string]*deployStatus, len(deployments))
 	for _, deploy := range deployments {
 		if component, ok := deploy.Labels["app.kubernetes.io/component"]; ok {
-			items[component] = &deployStatus{item: deploy.Status}
+			items[component] = &deployStatus{item: &deploy.Status}
 		}
 	}
 	return &deployStatuses{
@@ -85,13 +86,15 @@ func (ds *deployStatuses) UpdateConditions(resource *v2alpha1.HorusecPlatform) *
 	}
 
 	for component, conditionType := range ds.conditions {
-		if ds.checkAvailabilityOf(component) && resource.SetStatusCondition(condition.True(conditionType)) {
-			ds.changed = true
-			continue
-		}
-
-		if !resource.IsStatusConditionFalse(conditionType) && resource.SetStatusCondition(condition.Unknown(conditionType, reason)) {
-			ds.changed = true
+		isAvailable := ds.checkAvailabilityOf(component)
+		if isAvailable {
+			if resource.SetStatusCondition(condition.True(conditionType)) {
+				ds.changed = true
+			}
+		} else if !resource.IsStatusConditionFalse(conditionType) {
+			if resource.SetStatusCondition(condition.Unknown(conditionType, reason)) {
+				ds.changed = true
+			}
 		}
 	}
 
