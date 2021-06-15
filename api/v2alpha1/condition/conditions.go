@@ -67,7 +67,7 @@ func Unknown(conditionType Type, reason Reason) metav1.Condition {
 	return metav1.Condition{
 		Type:    string(conditionType),
 		Status:  metav1.ConditionUnknown,
-		Reason:  "UnavailableReplicas",
-		Message: "Deployment is unavailable but we could not discover the cause.",
+		Reason:  reason.Type,
+		Message: reason.Message,
 	}
 }
