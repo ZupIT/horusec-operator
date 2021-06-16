@@ -16,6 +16,7 @@ package usecase
 
 import (
 	"context"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/inventory"
@@ -32,6 +33,9 @@ func NewServices(client KubernetesClient, builder ResourceBuilder) *Services {
 }
 
 func (s *Services) EnsureServices(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
 	existing, err := s.client.ListServicesByOwner(ctx, resource)
 	if err != nil {
 		return nil, err

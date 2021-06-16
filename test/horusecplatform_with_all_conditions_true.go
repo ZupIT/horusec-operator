@@ -12,30 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package usecase
+package test
 
 import (
-	"context"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/operation"
-	"github.com/ZupIT/horusec-operator/internal/tracing"
+	"k8s.io/apimachinery/pkg/util/yaml"
+	"os"
+	"path"
+	"runtime"
 )
 
-type CurrentState struct {
-	client KubernetesClient
-}
-
-func NewCurrentState(client KubernetesClient) *CurrentState {
-	return &CurrentState{client: client}
-}
-
-func (i *CurrentState) EnsureCurrentState(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
-	span, ctx := tracing.StartSpanFromContext(ctx)
-	defer span.Finish()
-
-	if resource.UpdateState() {
-		return operation.RequeueWithError(i.client.UpdateHorusStatus(ctx, resource))
+func HorusecPlatformWithAllConditionsTrue() (*v2alpha1.HorusecPlatform, error) {
+	_, filepath, _, _ := runtime.Caller(0)
+	data, err := os.Open(path.Join(path.Dir(filepath), "data/horusecplatform_with_all_conditions_true.yaml"))
+	if err != nil {
+		return nil, err
 	}
 
-	return operation.ContinueProcessing()
+	var resource v2alpha1.HorusecPlatform
+	if err = yaml.NewYAMLOrJSONDecoder(data, 100).Decode(&resource); err != nil {
+		return nil, err
+	}
+
+	return &resource, nil
 }
