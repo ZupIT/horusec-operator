@@ -1,0 +1,575 @@
+apiVersion: install.horusec.io/v2alpha1
+kind: HorusecPlatform
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"install.horusec.io/v2alpha1","kind":"HorusecPlatform","metadata":{"annotations":{},"name":"hm","namespace":"horusec-system"},"spec":{"components":{"analytic":{"database":{"host":"postgresql.database.svc.cluster.local","name":"analytic_db","password":{"secretKeyRef":{"key":"postgresql-password","name":"analytic-db"}},"user":{"secretKeyRef":{"key":"postgresql-username","name":"analytic-db"}}}}},"global":{"broker":{"host":"rabbitmq.queue.svc.cluster.local","password":{"secretKeyRef":{"key":"password","name":"horusec-broker"}},"user":{"secretKeyRef":{"key":"username","name":"horusec-broker"}}},"database":{"host":"postgresql.database.svc.cluster.local","password":{"secretKeyRef":{"key":"postgresql-password","name":"platform-db"}},"user":{"secretKeyRef":{"key":"postgresql-username","name":"platform-db"}}}}}}
+  creationTimestamp: "2021-06-16T12:21:00Z"
+  generation: 5
+  managedFields:
+  - apiVersion: install.horusec.io/v2alpha1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:components:
+          f:analytic:
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:database:
+              f:migration:
+                .: {}
+                f:image:
+                  .: {}
+                  f:pullPolicy: {}
+                  f:registry: {}
+                  f:repository: {}
+                  f:tag: {}
+              f:port: {}
+              f:sslMode: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:api:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:auth:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:grpc: {}
+              f:http: {}
+            f:replicaCount: {}
+            f:type: {}
+            f:user:
+              .: {}
+              f:administrator:
+                .: {}
+                f:password:
+                  .: {}
+                  f:secretKeyRef:
+                    .: {}
+                    f:key: {}
+                    f:name: {}
+                f:user:
+                  .: {}
+                  f:secretKeyRef:
+                    .: {}
+                    f:key: {}
+                    f:name: {}
+              f:default:
+                .: {}
+                f:email: {}
+                f:password:
+                  .: {}
+                  f:secretKeyRef:
+                    .: {}
+                    f:key: {}
+                    f:name: {}
+                f:user:
+                  .: {}
+                  f:secretKeyRef:
+                    .: {}
+                    f:key: {}
+                    f:name: {}
+          f:core:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:manager:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:messages:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:mailServer:
+              .: {}
+              f:host: {}
+              f:password:
+                .: {}
+                f:secretKeyRef:
+                  .: {}
+                  f:key: {}
+                  f:name: {}
+              f:port: {}
+              f:user:
+                .: {}
+                f:secretKeyRef:
+                  .: {}
+                  f:key: {}
+                  f:name: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:vulnerability:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:enabled: {}
+              f:host: {}
+              f:path: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+          f:webhook:
+            .: {}
+            f:container:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+              f:livenessProbe: {}
+              f:readinessProbe: {}
+              f:resources: {}
+              f:securityContext:
+                .: {}
+                f:runAsNonRoot: {}
+                f:runAsUser: {}
+            f:ingress:
+              .: {}
+              f:tls: {}
+            f:name: {}
+            f:pod:
+              .: {}
+              f:autoscaling:
+                .: {}
+                f:maxReplicas: {}
+                f:minReplicas: {}
+                f:targetCPU: {}
+                f:targetMemory: {}
+              f:securityContext:
+                .: {}
+                f:fsGroup: {}
+            f:port:
+              .: {}
+              f:http: {}
+            f:replicaCount: {}
+        f:global:
+          f:broker:
+            f:port: {}
+          f:database:
+            f:migration:
+              .: {}
+              f:image:
+                .: {}
+                f:pullPolicy: {}
+                f:registry: {}
+                f:repository: {}
+                f:tag: {}
+            f:name: {}
+            f:port: {}
+            f:sslMode: {}
+          f:jwt:
+            .: {}
+            f:secretKeyRef:
+              .: {}
+              f:key: {}
+              f:name: {}
+          f:keycloak:
+            .: {}
+            f:clients:
+              .: {}
+              f:clients:
+                .: {}
+                f:secretKeyRef:
+                  .: {}
+                  f:key: {}
+              f:public:
+                .: {}
+                f:id: {}
+            f:realm: {}
+          f:ldap:
+            .: {}
+            f:adminGroup: {}
+            f:base: {}
+            f:bindDn: {}
+            f:bindPassword: {}
+            f:host: {}
+            f:insecureSkipVerify: {}
+            f:port: {}
+            f:skipTls: {}
+            f:userFilter: {}
+      f:status:
+        .: {}
+        f:conditions: {}
+        f:state: {}
+    manager: manager
+    operation: Update
+    time: "2021-06-16T12:31:32Z"
+  - apiVersion: install.horusec.io/v2alpha1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+      f:spec:
+        .: {}
+        f:components:
+          .: {}
+          f:analytic:
+            .: {}
+            f:database:
+              .: {}
+              f:host: {}
+              f:name: {}
+              f:password:
+                .: {}
+                f:secretKeyRef:
+                  .: {}
+                  f:key: {}
+                  f:name: {}
+              f:user:
+                .: {}
+                f:secretKeyRef:
+                  .: {}
+                  f:key: {}
+                  f:name: {}
+        f:global:
+          .: {}
+          f:broker:
+            .: {}
+            f:host: {}
+            f:password:
+              .: {}
+              f:secretKeyRef:
+                .: {}
+                f:key: {}
+                f:name: {}
+            f:user:
+              .: {}
+              f:secretKeyRef:
+                .: {}
+                f:key: {}
+                f:name: {}
+          f:database:
+            .: {}
+            f:host: {}
+            f:password:
+              .: {}
+              f:secretKeyRef:
+                .: {}
+                f:key: {}
+                f:name: {}
+            f:user:
+              .: {}
+              f:secretKeyRef:
+                .: {}
+                f:key: {}
+                f:name: {}
+    manager: kubectl-client-side-apply
+    operation: Update
+    time: "2021-06-16T12:51:54Z"
+  name: hm
+  namespace: horusec-system
+  resourceVersion: "11757"
+  uid: fdf7996a-d907-49de-a50a-25b44b069a73
+spec:
+  components:
+    analytic:
+      database:
+        host: postgresql.database.svc.cluster.local
+        name: analytic_db
+        password:
+          secretKeyRef:
+            key: postgresql-password
+            name: analytic-db
+        user:
+          secretKeyRef:
+            key: postgresql-username
+            name: analytic-db
+  global:
+    broker:
+      host: rabbitmq.queue.svc.cluster.local
+      password:
+        secretKeyRef:
+          key: password
+          name: horusec-broker
+      user:
+        secretKeyRef:
+          key: username
+          name: horusec-broker
+    database:
+      host: postgresql.database.svc.cluster.local
+      password:
+        secretKeyRef:
+          key: postgresql-password
+          name: platform-db
+      user:
+        secretKeyRef:
+          key: postgresql-username
+          name: platform-db
+status:
+  conditions:
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: VulnerabilityAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: WebhookAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: AnalyticAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: APIAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: AuthAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: CoreAvailable
+  - lastTransitionTime: "2021-06-16T12:51:26Z"
+    message: Deployment has minimum availability.
+    reason: AvailableReplicas
+    status: "True"
+    type: ManagerAvailable
+  state: Ready

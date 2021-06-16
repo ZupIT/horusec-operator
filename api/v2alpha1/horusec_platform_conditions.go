@@ -16,55 +16,45 @@ package v2alpha1
 
 import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
-	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-func (in *HorusecPlatform) SetState(state state.Type) bool {
-	if in.Status.State != state {
-		in.Status.State = state
-		return true
-	}
-	return false
-}
-
-func (in *HorusecPlatform) IsStatusConditionFalse(conditionType condition.Type) bool {
-	return meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType))
-}
-
-func (in *HorusecPlatform) IsStatusConditionTrue(conditionType condition.Type) bool {
-	return meta.IsStatusConditionTrue(in.Status.Conditions, string(conditionType))
-}
-
-func (in *HorusecPlatform) SetStatusConditionFalse(conditionType condition.Type) bool {
-	if !in.IsStatusConditionFalse(conditionType) {
-		switch conditionType {
-		case condition.DeploymentsAvailable:
-			meta.SetStatusCondition(&in.Status.Conditions, metav1.Condition{
-				Type:    string(conditionType),
-				Status:  metav1.ConditionFalse,
-				Reason:  "UnavailableReplicas",
-				Message: "Deployment has unavailable replicas.",
-			})
-			return true
+func (in *HorusecPlatform) IsStatusConditionFalse(types ...condition.Type) bool {
+	for _, conditionType := range types {
+		if !meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType)) {
+			return false
 		}
 	}
-	return false
+	return true
 }
 
-func (in *HorusecPlatform) SetStatusConditionTrue(conditionType condition.Type) bool {
-	if !in.IsStatusConditionTrue(conditionType) {
-		switch conditionType {
-		case condition.DeploymentsAvailable:
-			meta.SetStatusCondition(&in.Status.Conditions, metav1.Condition{
-				Type:    string(conditionType),
-				Status:  metav1.ConditionTrue,
-				Reason:  "AvailableReplicas",
-				Message: "Deployment has minimum availability.",
-			})
-			return true
+func (in *HorusecPlatform) IsStatusConditionTrue(types ...condition.Type) bool {
+	for _, conditionType := range types {
+		if !meta.IsStatusConditionTrue(in.Status.Conditions, string(conditionType)) {
+			return false
 		}
 	}
-	return false
+	return true
+}
+
+func (in *HorusecPlatform) AnyStatusConditionFalse(types ...condition.Type) bool {
+	for _, conditionType := range types {
+		if !meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType)) { // TODO: if any condition is false, than return true
+			return false
+		}
+	}
+	return true
+}
+
+func (in *HorusecPlatform) SetStatusCondition(newCondition metav1.Condition) bool {
+	conditionType := newCondition.Type
+	status := newCondition.Status
+	if meta.IsStatusConditionPresentAndEqual(in.Status.Conditions, conditionType, status) {
+		return false
+	}
+
+	meta.SetStatusCondition(&in.Status.Conditions, newCondition)
+	_ = in.UpdateState()
+	return true
 }

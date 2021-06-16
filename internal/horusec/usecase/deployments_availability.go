@@ -21,6 +21,7 @@ import (
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/internal/operation"
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 	appsv1 "k8s.io/api/apps/v1"
 )
 
@@ -33,46 +34,81 @@ func NewDeploymentsAvailability(client KubernetesClient) *DeploymentsAvailabilit
 }
 
 func (e *DeploymentsAvailability) EnsureDeploymentsAvailable(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
-	deployments, err := e.client.ListDeploymentsByOwner(ctx, resource)
+	span, ctx := tracing.StartSpanFromContext(ctx)
+	defer span.Finish()
+
+	d, err := e.client.ListDeploymentsByOwner(ctx, resource)
 	if err != nil {
 		return nil, err
 	}
 
-	if statusOf(deployments).IsAvailable() {
-		if resource.SetStatusConditionTrue(condition.DeploymentsAvailable) {
-			return operation.RequeueOnErrorOrStop(e.client.UpdateHorusStatus(ctx, resource))
-		}
-		return operation.ContinueProcessing()
-	}
-
-	if resource.SetStatusConditionFalse(condition.DeploymentsAvailable) {
+	status := statusOfDeployments(d).UpdateConditions(resource)
+	if status.HasChanges() {
 		return operation.RequeueOnErrorOrStop(e.client.UpdateHorusStatus(ctx, resource))
 	}
+
 	return operation.RequeueAfter(10*time.Second, nil)
 }
 
-type (
-	deployStatuses struct{ items []*deployStatus }
-	deployStatus   struct{ item *appsv1.DeploymentStatus }
-)
-
-func statusOf(deployments []appsv1.Deployment) *deployStatuses {
-	items := make([]*deployStatus, 0, len(deployments))
-	for _, pod := range deployments {
-		items = append(items, &deployStatus{item: &pod.Status})
-	}
-	return &deployStatuses{items: items}
-}
-
-func (ds *deployStatuses) IsAvailable() bool {
-	for _, item := range ds.items {
-		if item.HasUnavailableReplicas() {
-			return false
-		}
-	}
-	return true
-}
+type deployStatus struct{ item *appsv1.DeploymentStatus }
 
 func (ps *deployStatus) HasUnavailableReplicas() bool {
 	return ps.item.UnavailableReplicas > 0
+}
+
+type deployStatuses struct {
+	items      map[string]*deployStatus
+	conditions map[string]condition.Type
+	changed    bool
+}
+
+func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
+	items := make(map[string]*deployStatus, len(deployments))
+	for _, deploy := range deployments {
+		if component, ok := deploy.Labels["app.kubernetes.io/component"]; ok {
+			item := deploy.Status
+			items[component] = &deployStatus{item: &item}
+		}
+	}
+	return &deployStatuses{
+		items: items,
+		conditions: map[string]condition.Type{
+			"analytic": condition.AnalyticAvailable, "api": condition.APIAvailable, "auth": condition.AuthAvailable,
+			"core": condition.CoreAvailable, "manager": condition.ManagerAvailable,
+			"vulnerability": condition.VulnerabilityAvailable, "webhook": condition.WebhookAvailable,
+		},
+	}
+}
+
+func (ds *deployStatuses) UpdateConditions(resource *v2alpha1.HorusecPlatform) *deployStatuses {
+	reason := condition.Reason{
+		Type:    "UnavailableReplicas",
+		Message: "Deployment is unavailable but we could not discover the cause.",
+	}
+
+	for component, conditionType := range ds.conditions {
+		isAvailable := ds.checkAvailabilityOf(component)
+		if isAvailable {
+			if resource.SetStatusCondition(condition.True(conditionType)) {
+				ds.changed = true
+			}
+		} else if !resource.IsStatusConditionFalse(conditionType) {
+			if resource.SetStatusCondition(condition.Unknown(conditionType, reason)) {
+				ds.changed = true
+			}
+		}
+	}
+
+	return ds
+}
+
+func (ds *deployStatuses) HasChanges() bool {
+	return ds.changed
+}
+
+func (ds *deployStatuses) checkAvailabilityOf(component string) bool {
+	if status, ok := ds.items[component]; ok {
+		return !status.HasUnavailableReplicas()
+	}
+	return false
 }

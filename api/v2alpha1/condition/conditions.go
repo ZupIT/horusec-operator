@@ -14,8 +14,60 @@
 
 package condition
 
+import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 type Type string
 
 const (
-	DeploymentsAvailable Type = "DeploymentsAvailable"
+	AnalyticAvailable      Type = "AnalyticAvailable"
+	APIAvailable                = "APIAvailable"
+	AuthAvailable               = "AuthAvailable"
+	CoreAvailable               = "CoreAvailable"
+	ManagerAvailable            = "ManagerAvailable"
+	VulnerabilityAvailable      = "VulnerabilityAvailable"
+	WebhookAvailable            = "WebhookAvailable"
 )
+
+type Reason struct {
+	Type    string
+	Message string
+}
+
+func DatabaseReason(message string) *Reason {
+	return &Reason{Type: "DatabaseError", Message: message}
+}
+
+func BrokerReason(message string) *Reason {
+	return &Reason{Type: "BrokerError", Message: message}
+}
+
+func SecretReason(message string) *Reason {
+	return &Reason{Type: "SecretNotFound", Message: message}
+}
+
+func True(conditionType Type) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionTrue,
+		Reason:  "AvailableReplicas",
+		Message: "Deployment has minimum availability.",
+	}
+}
+
+func False(conditionType Type, reason Reason) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionFalse,
+		Reason:  reason.Type,
+		Message: reason.Message,
+	}
+}
+
+func Unknown(conditionType Type, reason Reason) metav1.Condition {
+	return metav1.Condition{
+		Type:    string(conditionType),
+		Status:  metav1.ConditionUnknown,
+		Reason:  reason.Type,
+		Message: reason.Message,
+	}
+}
