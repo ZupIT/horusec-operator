@@ -18,7 +18,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/test"
@@ -31,11 +30,12 @@ func TestDeploymentsAvailability_EnsureDeploymentsAvailable(t *testing.T) {
 	usecase, ctrl := setupToEnsureDeploymentsAvailable(t)
 
 	// act
-	resource := v2alpha1.HorusecPlatform{}
-	result, err := usecase.EnsureDeploymentsAvailable(context.TODO(), &resource)
+	resource, err := test.HorusecPlatformWithAllConditionsTrue()
+	assert.NoError(t, err)
+	result, err := usecase.EnsureDeploymentsAvailable(context.TODO(), resource)
+	assert.NoError(t, err)
 
 	// assert
-	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, operation.StopResult(), result)
 	assert.True(t, resource.IsStatusConditionTrue(condition.AnalyticAvailable), `"AnalyticAvailable" condition should be true`)
