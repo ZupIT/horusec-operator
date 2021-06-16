@@ -8,15 +8,13 @@ HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-VERSION ?= 2.0.0-alpha.14
-IMAGE_TAG_BASE ?= horuszup/horusec-operator
-BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
-IMG ?= $(IMAGE_TAG_BASE):v$(VERSION)
+OPERATOR_VERSION ?= $(shell semver get alpha)
+REGISTRY_IMAGE ?= horuszup/horusec-operator:${OPERATOR_VERSION}
 
-fmt:
+fmt: # Check fmt in application
 	$(GOFMT) -w $(GO_FILES)
 
-lint:
+lint: # Check lint in application
     ifeq ($(wildcard $(GOLANG_CI_LINT)), $(GOLANG_CI_LINT))
 		$(GOLANG_CI_LINT) run -v --timeout=5m -c .golangci.yml ./...
     else
@@ -24,13 +22,13 @@ lint:
 		$(GOLANG_CI_LINT) run -v --timeout=5m -c .golangci.yml ./...
     endif
 
-coverage:
+coverage: # Check coverage in application
 	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 100 .
 
-test:
+test: # Run all tests in application
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
 
-fix-imports:
+fix-imports: # Setup all imports to default mode
     ifeq (, $(shell which $(GO_IMPORTS)))
 		$(GO) get -u golang.org/x/tools/cmd/goimports
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
@@ -38,7 +36,7 @@ fix-imports:
 		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
     endif
 
-security:
+security: # Run security pipeline
     ifeq (, $(shell which $(HORUSEC)))
 		curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
 		$(HORUSEC) start -p="./" -e="true"
@@ -46,28 +44,34 @@ security:
 		$(HORUSEC) start -p="./" -e="true"
     endif
 
-build:
-	$(GO) build -o "./tmp/bin/api" ./cmd/app/main.go
+build: # Build operator image
+	$(GO) build -o "./tmp/bin/operator" ./cmd/app
 
-update-swagger:
-	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/update-swagger.sh | bash
+pipeline: fmt fix-imports lint test coverage build security  # Run all processes of the pipeline
 
-pipeline: fmt fix-imports lint test coverage build security
-
-up-sample:
+up-sample: # Up all dev dependencies kubernetes
 	sh ./config/samples/sample_install_dependencies.sh
 
-apply-sample:
+apply-sample: # Apply yaml in kubernetes
 	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
 
-replace-sample:
-	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+replace-sample: # Replace to re-apply yaml in kubernetes
+	kubectl replace -f ./config/samples/install_v2alpha1_horusecplatform.yaml
 
-docker-build:
-	docker build -t $(IMG) -f ./Dockerfile .
+install-semver: # Install semver binary
+	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/install-semver.sh | bash
 
-docker-push:
-	docker push $(IMG)
+docker-up-alpha: # Update alpha in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh alpha false
+
+docker-up-release: # Update release in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh release false
+
+docker-up-release-latest: # Update release and latest in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh release true
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.
@@ -84,29 +88,29 @@ rm -rf $$TMP_DIR ;\
 }
 endef
 
-kustomize:
+kustomize: # Install kustomize binary
 	$(call go-get-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v3@v3.8.7)
 
-controller-gen:
+controller-gen: # Install controller-gen binary
 	$(call go-get-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.4.1)
 
-manifests: controller-gen
+manifests: controller-gen  # Update all manifests in config
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config="./config/crd/bases"
 
-generate: controller-gen
+generate: controller-gen # Generate new controller
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
-install: manifests kustomize
+install: manifests kustomize # install horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
-uninstall: manifests kustomize
+uninstall: manifests kustomize # uninstall horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-deploy: manifests kustomize
-	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+deploy: manifests kustomize # deploy horusec-operator in environment
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
-undeploy:
+undeploy: # undeploy horusec-operator in environment
 	$(KUSTOMIZE) build config/default | kubectl delete -f -
 
 mock: # generate source code for a mock
