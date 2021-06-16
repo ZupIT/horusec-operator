@@ -66,7 +66,8 @@ func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
 	items := make(map[string]*deployStatus, len(deployments))
 	for _, deploy := range deployments {
 		if component, ok := deploy.Labels["app.kubernetes.io/component"]; ok {
-			items[component] = &deployStatus{item: &deploy.Status}
+			item := deploy.Status
+			items[component] = &deployStatus{item: &item}
 		}
 	}
 	return &deployStatuses{
