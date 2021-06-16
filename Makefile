@@ -9,6 +9,7 @@ CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 OPERATOR_VERSION ?= $(shell semver get alpha)
+REGISTRY_IMAGE ?= horuszup/horusec-operator:${OPERATOR_VERSION}
 
 fmt: # Check fmt in application
 	$(GOFMT) -w $(GO_FILES)
@@ -106,7 +107,7 @@ uninstall: manifests kustomize # uninstall horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
 deploy: manifests kustomize # deploy horusec-operator in environment
-	cd config/manager && $(KUSTOMIZE) edit set image controller=horuszup/horusec-operator:${OPERATOR_VERSION}
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
 undeploy: # undeploy horusec-operator in environment
