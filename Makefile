@@ -8,7 +8,7 @@ HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-VERSION ?= 2.0.0-alpha.13
+VERSION ?= 2.0.0-alpha.14
 IMAGE_TAG_BASE ?= horuszup/horusec-operator
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 IMG ?= $(IMAGE_TAG_BASE):v$(VERSION)
