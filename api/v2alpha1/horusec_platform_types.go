@@ -56,8 +56,7 @@ type Ldap struct {
 	SkipTLS            bool             `json:"skipTls,omitempty"`
 	InsecureSkipVerify bool             `json:"insecureSkipVerify,omitempty"`
 	BindDN             string           `json:"bindDn,omitempty"`
-	BindPassword       LdapBindPassword
-	 `json:"bindPassword,omitempty"`
+	BindPassword       LdapBindPassword `json:"bindPassword,omitempty"`
 	UserFilter         string           `json:"userFilter,omitempty"`
 	AdminGroup         string           `json:"adminGroup,omitempty"`
 }
