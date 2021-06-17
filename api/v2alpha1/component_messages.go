@@ -45,7 +45,7 @@ func (h *HorusecPlatform) GetMessagesPath() string {
 func (h *HorusecPlatform) GetMessagesPortHTTP() int {
 	port := h.GetMessagesComponent().Port.HTTP
 	if port == 0 {
-		return 8004
+		return 8002
 	}
 	return port
 }

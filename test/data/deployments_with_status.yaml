@@ -1034,17 +1034,19 @@ items:
                 - name: HORUSEC_LDAP_SKIP_TLS
                   value: "true"
                 - name: HORUSEC_LDAP_INSECURE_SKIP_VERIFY
-                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                  value: "true"
                 - name: HORUSEC_LDAP_BINDDN
-                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                  value: ""
                 - name: HORUSEC_LDAP_BINDPASSWORD
-                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                  value: ""
                 - name: HORUSEC_LDAP_USERFILTER
-                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                  value: ""
                 - name: HORUSEC_LDAP_ADMIN_GROUP
-                  value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
+                  value: ""
                 - name: HORUSEC_APPLICATION_ADMIN_DATA
+                  value: ""
                 - name: HORUSEC_DEFAULT_USER_DATA
+                  value: ""
               image: docker.io/horuszup/horusec-auth:v2.12.1
               imagePullPolicy: IfNotPresent
               livenessProbe:
