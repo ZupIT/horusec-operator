@@ -49,16 +49,20 @@ type Keycloak struct {
 }
 
 type Ldap struct {
-	Base               string `json:"base,omitempty"`
-	Host               string `json:"host,omitempty"`
-	Port               int    `json:"port,omitempty"`
-	UseSSL             bool   `json:"useSsl,omitempty"`
-	SkipTLS            bool   `json:"skipTls,omitempty"`
-	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty"`
-	BindDN             string `json:"bindDn,omitempty"`
-	BindPassword       string `json:"bindPassword,omitempty"`
-	UserFilter         string `json:"userFilter,omitempty"`
-	AdminGroup         string `json:"adminGroup,omitempty"`
+	Base               string           `json:"base,omitempty"`
+	Host               string           `json:"host,omitempty"`
+	Port               int              `json:"port,omitempty"`
+	UseSSL             bool             `json:"useSsl,omitempty"`
+	SkipTLS            bool             `json:"skipTls,omitempty"`
+	InsecureSkipVerify bool             `json:"insecureSkipVerify,omitempty"`
+	BindDN             string           `json:"bindDn,omitempty"`
+	BindPassword       LdapBindPassword `json:"bindPassword,omitempty"`
+	UserFilter         string           `json:"userFilter,omitempty"`
+	AdminGroup         string           `json:"adminGroup,omitempty"`
+}
+
+type LdapBindPassword struct {
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Clients struct {

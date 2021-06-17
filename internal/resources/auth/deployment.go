@@ -94,7 +94,7 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 		{Name: "HORUSEC_LDAP_SKIP_TLS", Value: strconv.FormatBool(global.Ldap.SkipTLS)},
 		{Name: "HORUSEC_LDAP_INSECURE_SKIP_VERIFY", Value: resource.GetGlobalDatabaseURI()},
 		{Name: "HORUSEC_LDAP_BINDDN", Value: resource.GetGlobalDatabaseURI()},
-		{Name: "HORUSEC_LDAP_BINDPASSWORD", Value: resource.GetGlobalDatabaseURI()},
+		resource.NewEnvFromSecret("HORUSEC_LDAP_BINDPASSWORD", global.Ldap.BindPassword.SecretKeyRef),
 		{Name: "HORUSEC_LDAP_USERFILTER", Value: resource.GetGlobalDatabaseURI()},
 		{Name: "HORUSEC_LDAP_ADMIN_GROUP", Value: resource.GetGlobalDatabaseURI()},
 		{Name: "HORUSEC_APPLICATION_ADMIN_DATA", Value: resource.GetAuthAdminData()},
