@@ -129,6 +129,7 @@ type AuthType string
 type Messages struct {
 	Enabled            bool       `json:"enabled,omitempty"`
 	MailServer         MailServer `json:"mailServer,omitempty"`
+	EmailFrom          string     `json:"emailFrom,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
 }
 

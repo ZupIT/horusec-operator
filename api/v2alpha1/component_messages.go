@@ -124,3 +124,7 @@ func (h *HorusecPlatform) IsMessagesIngressEnabled() bool {
 
 	return *enabled
 }
+
+func (h *HorusecPlatform) GetMessagesEmailFrom() string {
+	return h.Spec.Components.Messages.EmailFrom
+}
