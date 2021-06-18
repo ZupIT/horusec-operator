@@ -87,6 +87,7 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 		{Name: "HORUSEC_KEYCLOAK_BASE_PATH", Value: global.Keycloak.PublicURL},
 		{Name: "HORUSEC_KEYCLOAK_CLIENT_ID", Value: global.Keycloak.Clients.Public.ID},
 		{Name: "HORUSEC_KEYCLOAK_REALM", Value: global.Keycloak.Realm},
+		resource.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", global.Keycloak.Clients.Confidential.SecretKeyRef),
 		{Name: "HORUSEC_LDAP_BASE", Value: global.Ldap.Base},
 		{Name: "HORUSEC_LDAP_HOST", Value: global.Ldap.Host},
 		{Name: "HORUSEC_LDAP_PORT", Value: strconv.Itoa(global.Ldap.Port)},
