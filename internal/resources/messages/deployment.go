@@ -58,7 +58,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "HORUSEC_BROKER_PORT", Value: resource.GetGlobalBrokerPort()},
 						{Name: "HORUSEC_SMTP_HOST", Value: resource.GetMessagesMailServer().Host},
 						{Name: "HORUSEC_SMTP_PORT", Value: strconv.Itoa(resource.GetMessagesMailServer().Port)},
-						{Name: "HORUSEC_EMAIL_FROM", Value: resource.GetMessagesEmailFrom()},
+						{Name: "HORUSEC_EMAIL_FROM", Value: resource.Spec.Components.Messages.EmailFrom},
 						resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", component.MailServer.User.KeyRef),
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", component.MailServer.Password.KeyRef),
 					},
