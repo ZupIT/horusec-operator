@@ -327,6 +327,7 @@
           }
         }
       },
+      "emailFrom": "horusec@mycompany.com",
       "name": "messages",
       "pod": {
         "autoscaling": {
