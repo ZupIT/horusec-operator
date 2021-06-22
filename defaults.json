@@ -327,6 +327,7 @@
           }
         }
       },
+      "emailFrom": "change.me@mycompany.com",
       "name": "messages",
       "pod": {
         "autoscaling": {

@@ -49,20 +49,24 @@ type Keycloak struct {
 }
 
 type Ldap struct {
-	Base               string `json:"base,omitempty"`
-	Host               string `json:"host,omitempty"`
-	Port               int    `json:"port,omitempty"`
-	UseSSL             bool   `json:"useSsl,omitempty"`
-	SkipTLS            bool   `json:"skipTls,omitempty"`
-	InsecureSkipVerify bool   `json:"insecureSkipVerify,omitempty"`
-	BindDN             string `json:"bindDn,omitempty"`
-	BindPassword       string `json:"bindPassword,omitempty"`
-	UserFilter         string `json:"userFilter,omitempty"`
-	AdminGroup         string `json:"adminGroup,omitempty"`
+	Base               string           `json:"base,omitempty"`
+	Host               string           `json:"host,omitempty"`
+	Port               int              `json:"port,omitempty"`
+	UseSSL             bool             `json:"useSsl,omitempty"`
+	SkipTLS            bool             `json:"skipTls,omitempty"`
+	InsecureSkipVerify bool             `json:"insecureSkipVerify,omitempty"`
+	BindDN             string           `json:"bindDn,omitempty"`
+	BindPassword       LdapBindPassword `json:"bindPassword,omitempty"`
+	UserFilter         string           `json:"userFilter,omitempty"`
+	AdminGroup         string           `json:"adminGroup,omitempty"`
+}
+
+type LdapBindPassword struct {
+	SecretKeyRef *corev1.SecretKeySelector `json:"secretKeyRef,omitempty" protobuf:"bytes,4,opt,name=secretKeyRef"`
 }
 
 type Clients struct {
-	Confidential Confidential `json:"clients,omitempty"`
+	Confidential Confidential `json:"confidential,omitempty"`
 	Public       Public       `json:"public,omitempty"`
 }
 
@@ -129,6 +133,7 @@ type AuthType string
 type Messages struct {
 	Enabled            bool       `json:"enabled,omitempty"`
 	MailServer         MailServer `json:"mailServer,omitempty"`
+	EmailFrom          string     `json:"emailFrom,omitempty"`
 	ExposableComponent `json:",inline,omitempty"`
 }
 
