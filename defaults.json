@@ -34,7 +34,7 @@
         "password": {
           "secretKeyRef": {
             "key": "password",
-            "name": "horusec-database"
+            "name": "horusec-analytic-database"
           }
         },
         "port": 5432,
@@ -42,7 +42,7 @@
         "user": {
           "secretKeyRef": {
             "key": "username",
-            "name": "horusec-database"
+            "name": "horusec-analytic-database"
           }
         }
       },
@@ -463,7 +463,7 @@
       "password": {
         "secretKeyRef": {
           "key": "password",
-          "name": "horusec-database"
+          "name": "horusec-platform-database"
         }
       },
       "port": 5432,
@@ -471,7 +471,7 @@
       "user": {
         "secretKeyRef": {
           "key": "username",
-          "name": "horusec-database"
+          "name": "horusec-platform-database"
         }
       }
     },
