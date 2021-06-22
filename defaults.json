@@ -507,6 +507,12 @@
       "skipTls": true,
       "insecureSkipVerify": true,
       "bindDn": "uid=admin,ou=system",
+      "bindPassword": {
+        "secretKeyRef": {
+          "key": "bind-password",
+          "name": "auth-ldap"
+        }
+      },
       "userFilter": "(sAMAccountName=%s)",
       "adminGroup": "admin"
     }

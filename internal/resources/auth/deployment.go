@@ -67,6 +67,20 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 
 	global := resource.Spec.Global
 	defaultEnvs := []corev1.EnvVar{
+		resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", global.Broker.User.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_USERNAME", global.Database.User.KeyRef),
+		resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_PASSWORD", global.Database.Password.KeyRef),
+	}
+	switch resource.Spec.Components.Auth.Type {
+	case "keycloak":
+		defaultEnvs = append(defaultEnvs, resource.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", global.Keycloak.Clients.Confidential.SecretKeyRef))
+	case "ldap":
+		defaultEnvs = append(defaultEnvs, resource.NewEnvFromSecret("HORUSEC_LDAP_BINDPASSWORD", global.Ldap.BindPassword.SecretKeyRef))
+	case "horusec":
+		defaultEnvs = append(defaultEnvs, resource.NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", global.JWT.SecretKeyRef))
+	}
+	defaultEnvs = append(defaultEnvs, []corev1.EnvVar{
 		{Name: "HORUSEC_PORT", Value: strconv.Itoa(resource.GetAuthPortHTTP())},
 		{Name: "HORUSEC_GRPC_PORT", Value: strconv.Itoa(resource.GetAuthPortGRPC())},
 		{Name: "HORUSEC_DATABASE_SQL_LOG_MODE", Value: resource.GetGlobalDatabaseLogMode()},
@@ -79,15 +93,10 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 		{Name: "HORUSEC_ENABLE_DEFAULT_USER", Value: strconv.FormatBool(resource.Spec.Components.Auth.User.Default.Enabled)},
 		{Name: "HORUSEC_MANAGER_URL", Value: resource.GetManagerDefaultURL()},
 		{Name: "HORUSEC_AUTH_URL", Value: resource.GetAuthEndpoint()},
-		resource.NewEnvFromSecret("HORUSEC_BROKER_USERNAME", global.Broker.User.KeyRef),
-		resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
-		resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_USERNAME", global.Database.User.KeyRef),
-		resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_PASSWORD", global.Database.Password.KeyRef),
 		{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
 		{Name: "HORUSEC_KEYCLOAK_BASE_PATH", Value: global.Keycloak.PublicURL},
 		{Name: "HORUSEC_KEYCLOAK_CLIENT_ID", Value: global.Keycloak.Clients.Public.ID},
 		{Name: "HORUSEC_KEYCLOAK_REALM", Value: global.Keycloak.Realm},
-		resource.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", global.Keycloak.Clients.Confidential.SecretKeyRef),
 		{Name: "HORUSEC_LDAP_BASE", Value: global.Ldap.Base},
 		{Name: "HORUSEC_LDAP_HOST", Value: global.Ldap.Host},
 		{Name: "HORUSEC_LDAP_PORT", Value: strconv.Itoa(global.Ldap.Port)},
@@ -95,12 +104,11 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 		{Name: "HORUSEC_LDAP_SKIP_TLS", Value: strconv.FormatBool(global.Ldap.SkipTLS)},
 		{Name: "HORUSEC_LDAP_INSECURE_SKIP_VERIFY", Value: strconv.FormatBool(global.Ldap.InsecureSkipVerify)},
 		{Name: "HORUSEC_LDAP_BINDDN", Value: global.Ldap.BindDN},
-		resource.NewEnvFromSecret("HORUSEC_LDAP_BINDPASSWORD", global.Ldap.BindPassword.SecretKeyRef),
 		{Name: "HORUSEC_LDAP_USERFILTER", Value: global.Ldap.UserFilter},
 		{Name: "HORUSEC_LDAP_ADMIN_GROUP", Value: global.Ldap.AdminGroup},
 		{Name: "HORUSEC_APPLICATION_ADMIN_DATA", Value: resource.GetAuthAdminData()},
 		{Name: "HORUSEC_DEFAULT_USER_DATA", Value: resource.GetAuthDefaultUserData()},
-	}
+	}...)
 
 	for _, envVar := range resource.GetAuthOptionalEnvs() {
 		if envVar.Value == "" {

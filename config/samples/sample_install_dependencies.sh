@@ -39,7 +39,7 @@ kubectl create secret generic horusec-analytic-database --from-literal="username
 
 kubectl create secret generic horusec-broker --from-literal="username=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
 
-kubectl create secret generic jwt-token --from-literal=jwt-token=$JWT_SECRET
+kubectl create secret generic horusec-jwt --from-literal=jwt-token=$JWT_SECRET
 
 echo "Installing horusec-operator..."
 if ! make install; then
