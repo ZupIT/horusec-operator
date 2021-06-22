@@ -65,6 +65,10 @@ docker-up-alpha: # Update alpha in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh alpha false
 
+docker-up-rc: # Update alpha in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh rc false
+
 docker-up-release: # Update release in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh release false
