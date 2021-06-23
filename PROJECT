@@ -1,16 +1,19 @@
 domain: horusec.io
 layout:
-- helm.sdk.operatorframework.io/v1
+- go.kubebuilder.io/v3
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: horusec-operator
+repo: github.com/ZupIT/horusec-operator
 resources:
 - api:
     crdVersion: v1
     namespaced: true
+  controller: true
   domain: horusec.io
   group: install
-  kind: HorusecManager
-  version: v1alpha1
+  kind: Horusec
+  path: github.com/ZupIT/horusec-operator/api/v2
+  version: v2alpha1
 version: "3"

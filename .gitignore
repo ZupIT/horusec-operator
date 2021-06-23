@@ -1,13 +1,17 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-bin
-
-# editor and IDE paraphernalia
 .idea
-*.swp
-*.swo
-*~
+.vscode
+coverage.out
+charts/
+*bin*
+*tmp*
+tmp/
+tmp-analysis/
+.env
+.aws/
+*.pem
+deployments/certs
+./images
+*.srl
+.horusec/
+e2e/**analysis
+vendor

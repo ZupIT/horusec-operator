@@ -1,71 +1,112 @@
+
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
- name: manager-role
+  creationTimestamp: null
+  name: manager-role
 rules:
- ##
- ## Base operator rules
- ##
- # We need to get namespaces so the operator can read namespaces to ensure they exist
- - apiGroups:
-    - ""
-   resources:
-    - namespaces
-   verbs:
-    - get
- # We need to manage Helm release secrets
- - apiGroups:
-    - ""
-   resources:
-    - secrets
-   verbs:
-    - "*"
- # We need to create events on CRs about things happening during reconciliation
- - apiGroups:
-    - ""
-   resources:
-    - events
-   verbs:
-    - create
-
- ##
- ## Rules for install.horusec.io/v1alpha1, Kind: HorusecManager
- ##
- - apiGroups:
-    - install.horusec.io
-   resources:
-    - horusecmanagers
-    - horusecmanagers/status
-    - horusecmanagers/finalizers
-   verbs:
-    - create
-    - delete
-    - get
-    - list
-    - patch
-    - update
-    - watch
- - apiGroups:
-    - ""
-    - apps
-    - autoscaling
-    - batch
-    - networking.k8s.io
-    - rbac.authorization.k8s.io
-    - statefulsets.apps
-   resources:
-    - configmaps
-    - deployments
-    - endpoints
-    - horizontalpodautoscalers
-    - ingresses
-    - jobs
-    - rolebindings
-    - roles
-    - serviceaccounts
-    - services
-    - statefulsets
-   verbs:
-    - "*"
-
-# +kubebuilder:scaffold:rules
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - autoscaling
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - install.horusec.io
+  resources:
+  - horusecplatforms
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - install.horusec.io
+  resources:
+  - horusecplatforms/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch

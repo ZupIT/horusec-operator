@@ -1,0 +1,24 @@
+# permissions for end users to edit horusecplatforms.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: horusecplatform-editor-role
+rules:
+- apiGroups:
+  - install.horusec.io
+  resources:
+  - horusecplatforms
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - install.horusec.io
+  resources:
+  - horusecplatforms/status
+  verbs:
+  - get

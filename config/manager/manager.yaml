@@ -25,10 +25,11 @@ spec:
       securityContext:
         runAsNonRoot: true
       containers:
-      - args:
+      - command:
+        - /manager
+        args:
         - --leader-elect
-        - --leader-election-id=horusec-operator
-        image: horuszup/horusec-operator:v1.1.0
+        image: controller:latest
         name: manager
         securityContext:
           allowPrivilegeEscalation: false
@@ -47,9 +48,9 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 90Mi
+            memory: 30Mi
           requests:
             cpu: 100m
-            memory: 60Mi
+            memory: 20Mi
       serviceAccountName: controller-manager
       terminationGracePeriodSeconds: 10

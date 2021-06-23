@@ -1,0 +1,95 @@
+---
+apiVersion: install.horusec.io/v2alpha1
+kind: HorusecPlatform
+metadata:
+  name: horusecplatform-sample
+spec:
+  components:
+    analytic:
+      database:
+        host: ""
+        name: horusec_analytic_db
+        password:
+          secretKeyRef:
+            key: password
+            name: horusec-analytic-database
+        user:
+          secretKeyRef:
+            key: username
+            name: horusec-analytic-database
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    api:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    auth:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    core:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    manager:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    messages:
+      container:
+        livenessProbe:
+          timeoutSeconds: 3
+        readinessProbe:
+          timeoutSeconds: 3
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+      mailServer:
+        host: smtp.mailtrap.io
+        password:
+          secretKeyRef:
+            key: password
+            name: horusec-smtp
+        user:
+          secretKeyRef:
+            key: username
+            name: horusec-smtp
+    vulnerability:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+    webhook:
+      ingress:
+        host: manager.horus.dev.zup.corp
+        tls:
+          secretName: horusec-tls
+  global:
+    broker:
+      host: rabbitmq
+      password:
+        secretKeyRef:
+          key: password
+          name: horusec-broker
+      user:
+        secretKeyRef:
+          key: username
+          name: horusec-broker
+    database:
+      host: ""
+      name: horusec_db
+      password:
+        secretKeyRef:
+          key: password
+          name: horusec-platform-database
+      user:
+        secretKeyRef:
+          key: username
+          name: horusec-platform-database
