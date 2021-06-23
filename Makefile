@@ -65,7 +65,7 @@ docker-up-alpha: # Update alpha in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh alpha false
 
-docker-up-rc: # Update alpha in docker image
+docker-up-rc: # Update rc in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh rc false
 
@@ -76,6 +76,10 @@ docker-up-release: # Update release in docker image
 docker-up-release-latest: # Update release and latest in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh release true
+
+docker-up-minor-latest: # Update minor and latest in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh minor true
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.
@@ -104,13 +108,18 @@ manifests: controller-gen  # Update all manifests in config
 generate: controller-gen # Generate new controller
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
+generate-service-yaml: kustomize install-semver
+	mkdir -p $(shell pwd)/tmp
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
+	$(KUSTOMIZE) build config/default > $(shell pwd)/tmp/horusec-operator.yaml
+
 install: manifests kustomize # install horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
 uninstall: manifests kustomize # uninstall horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-deploy: manifests kustomize # deploy horusec-operator in environment
+deploy: manifests kustomize install-semver # deploy horusec-operator in environment
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
