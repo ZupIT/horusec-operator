@@ -50,7 +50,8 @@ build: # Build operator image
 pipeline: fmt fix-imports lint test coverage build security  # Run all processes of the pipeline
 
 up-sample: # Up all dev dependencies kubernetes
-	sh ./config/samples/sample_install_dependencies.sh
+	chmod +x ./config/samples/sample_install_dependencies.sh
+	./config/samples/sample_install_dependencies.sh
 
 apply-sample: # Apply yaml in kubernetes
 	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
