@@ -66,7 +66,7 @@ Don't worry this is normal because the script is trying create new database, but
 
 After script finish. Install Horusec-Operator
 ```bash
-kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/latest/horusec-operator.yaml"
+kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
 ```
 
 See the resource if was installed with sucess!
