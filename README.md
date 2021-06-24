@@ -30,10 +30,10 @@ See all horusec operator details in [our documentation](https://horusec.io/docs/
 To use horusec-operator you need to configure some secrets and dependencies of horusec, they are:
 * [Kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) and connection with your cluster
 * Connection with a database
-    * You can upload a pod from a PostgreSQL database [as shown in our example](#Development Environment), or you can only create secrets of connection with your database.
+    * You can upload a pod from a PostgreSQL database [as shown in our example](#development-environment), or you can only create secrets of connection with your database.
     * Create two databases for the horusec-platform and horusec-analytic 
 * Connection with a message broker
-    * You can upload a pod from a RabbitMQ message broker [as shown in our example](#Development Environment), or you can only create secrets of connection with your message broker.
+    * You can upload a pod from a RabbitMQ message broker [as shown in our example](#development-environment), or you can only create secrets of connection with your message broker.
 * Others secrets necessary
     * The secrets you need to configure may vary depending on how you use horusec. [See possible configuration options](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
 
