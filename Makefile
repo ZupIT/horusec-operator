@@ -8,7 +8,7 @@ HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-OPERATOR_VERSION ?= $(shell semver get alpha)
+OPERATOR_VERSION ?= $(shell semver get release)
 REGISTRY_IMAGE ?= horuszup/horusec-operator:${OPERATOR_VERSION}
 
 fmt: # Check fmt in application
