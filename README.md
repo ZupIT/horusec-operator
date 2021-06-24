@@ -118,7 +118,7 @@ Read our [contributing guide](CONTRIBUTING.md) to learn about our development pr
 
 We have a few channels for contact, feel free to reach out to us at:
 
-- [GitHub Issues](https://github.com/ZupIT/horusec/issues)
+- [GitHub Issues](https://github.com/ZupIT/horusec-operator/issues)
 - [Zup Open Source Forum](https://forum.zup.com.br)
 
 ## Contributing with others projects
