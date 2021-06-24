@@ -110,7 +110,7 @@ vulnerability-7d789fd655-tpjp8                          1/1     Running     0   
 webhook-7b5c45c859-cq4nf                                1/1     Running     0          73s
 ```
 
-## Contributing
+## Contributing Guide
 
 Read our [contributing guide](CONTRIBUTING.md) to learn about our development process, how to propose bugfixes and improvements, and how to build and test your changes to horusec.
 
@@ -121,7 +121,7 @@ We have a few channels for contact, feel free to reach out to us at:
 - [GitHub Issues](https://github.com/ZupIT/horusec/issues)
 - [Zup Open Source Forum](https://forum.zup.com.br)
 
-## Contributing
+## Contributing with others projects
 
 Feel free to use, recommend improvements, or contribute to new implementations.
 
