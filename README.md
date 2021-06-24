@@ -47,7 +47,7 @@ Clone this project
 git clone https://github.com/ZupIT/horusec-operator.git && cd horusec-operator
 ```
 
-Up kubernetes cluster with all dependencies. Wait this 
+Up kubernetes cluster with all dependencies and wait finish! 
 ```bash
 make up-sample
 ```
