@@ -18,11 +18,12 @@ import (
 	"context"
 	"time"
 
+	appsv1 "k8s.io/api/apps/v1"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
-	appsv1 "k8s.io/api/apps/v1"
 )
 
 type DeploymentsAvailability struct {

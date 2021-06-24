@@ -6,14 +6,12 @@
 package main
 
 import (
+	"sigs.k8s.io/controller-runtime/pkg/manager"
+
 	"github.com/ZupIT/horusec-operator/controllers"
 	"github.com/ZupIT/horusec-operator/internal/horusec"
 	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/ZupIT/horusec-operator/internal/resources"
-	"sigs.k8s.io/controller-runtime/pkg/manager"
-)
-
-import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 

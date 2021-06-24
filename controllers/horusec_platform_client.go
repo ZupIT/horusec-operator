@@ -17,8 +17,9 @@ package controllers
 import (
 	"context"
 
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"k8s.io/apimachinery/pkg/types"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 type HorusecPlatformClient interface {

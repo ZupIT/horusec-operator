@@ -15,9 +15,10 @@
 package v2alpha1
 
 import (
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (in *HorusecPlatform) UpdateState() bool {

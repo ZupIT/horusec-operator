@@ -15,10 +15,11 @@
 package ingress
 
 import (
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	networkingv1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 //nolint:funlen // improve in the future

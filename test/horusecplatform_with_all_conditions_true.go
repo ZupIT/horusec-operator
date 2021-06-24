@@ -15,11 +15,13 @@
 package test
 
 import (
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"k8s.io/apimachinery/pkg/util/yaml"
 	"os"
 	"path"
 	"runtime"
+
+	"k8s.io/apimachinery/pkg/util/yaml"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 func HorusecPlatformWithAllConditionsTrue() (*v2alpha1.HorusecPlatform, error) {

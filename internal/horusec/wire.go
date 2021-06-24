@@ -17,8 +17,9 @@
 package horusec
 
 import (
-	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 	"github.com/google/wire"
+
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 )
 
 func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder) *Adapter {

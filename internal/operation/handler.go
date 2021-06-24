@@ -17,9 +17,10 @@ package operation
 import (
 	"context"
 
+	"sigs.k8s.io/controller-runtime/pkg/reconcile"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/requeue"
-	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 )
 
 type Handler struct {

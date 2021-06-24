@@ -73,17 +73,17 @@ updateVersion () {
 
     if [ "$IS_TO_UPDATE_LATEST" == "true" ]
     then
-        if ! docker build -t "horuszup/horusec-operator:latest" -f "$DIRECTORY/deployments/dockerfiles/Dockerfile" .; then
+        if ! docker build -t "$IMAGE_NAME:latest" -f "$DIRECTORY/deployments/dockerfiles/Dockerfile" .; then
             exit 1
         fi
-        if ! docker push "horuszup/horusec-operator:latest"; then
+        if ! docker push "$IMAGE_NAME:latest"; then
             exit 1
         fi
     fi
-    if ! docker build -t "horuszup/horusec-operator:$LATEST_VERSION" -f "$DIRECTORY/deployments/dockerfiles/Dockerfile" .; then
+    if ! docker build -t "$IMAGE_NAME:$LATEST_VERSION" -f "$DIRECTORY/deployments/dockerfiles/Dockerfile" .; then
         exit 1
     fi
-    if ! docker push "horuszup/horusec-operator:$LATEST_VERSION"; then
+    if ! docker push "$IMAGE_NAME:$LATEST_VERSION"; then
         exit 1
     fi
 }
