@@ -8,14 +8,15 @@ import (
 	context "context"
 	reflect "reflect"
 
-	v2alpha1 "github.com/ZupIT/horusec-operator/api/v2alpha1"
-	k8s "github.com/ZupIT/horusec-operator/internal/k8s"
 	gomock "github.com/golang/mock/gomock"
 	v1 "k8s.io/api/apps/v1"
 	v2beta2 "k8s.io/api/autoscaling/v2beta2"
 	v10 "k8s.io/api/batch/v1"
 	v11 "k8s.io/api/core/v1"
 	v1beta1 "k8s.io/api/networking/v1beta1"
+
+	v2alpha1 "github.com/ZupIT/horusec-operator/api/v2alpha1"
+	k8s "github.com/ZupIT/horusec-operator/internal/k8s"
 )
 
 // MockKubernetesClient is a mock of KubernetesClient interface.

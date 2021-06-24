@@ -8,11 +8,12 @@ package main
 import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
+
 	"github.com/ZupIT/horusec-operator/controllers"
 	"github.com/ZupIT/horusec-operator/internal/horusec"
 	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/ZupIT/horusec-operator/internal/resources"
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 // Injectors from wire.go:
