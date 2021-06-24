@@ -15,8 +15,9 @@
 package horusec
 
 import (
-	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 	"github.com/google/wire"
+
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 )
 
 var providers = wire.NewSet(

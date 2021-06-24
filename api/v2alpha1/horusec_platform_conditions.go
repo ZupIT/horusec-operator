@@ -15,9 +15,10 @@
 package v2alpha1
 
 import (
-	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1/condition"
 )
 
 func (in *HorusecPlatform) IsStatusConditionFalse(types ...condition.Type) bool {

@@ -23,9 +23,9 @@ lint: # Check lint in application
     endif
 
 coverage: # Check coverage in application
-	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 100 .
+	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 0 .
 
-test: # Run all tests in application
+tests: # Run all tests in application
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
 
 fix-imports: # Setup all imports to default mode

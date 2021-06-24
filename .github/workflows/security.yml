@@ -1,0 +1,11 @@
+name: Security
+on:
+  pull_request:
+    branches: ["**"]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: security
+        run: make security

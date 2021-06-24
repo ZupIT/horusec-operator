@@ -17,12 +17,13 @@ package controllers
 import (
 	"context"
 
+	"k8s.io/apimachinery/pkg/api/errors"
+	ctrl "sigs.k8s.io/controller-runtime"
+
 	installv2 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/operation"
 	"github.com/ZupIT/horusec-operator/internal/requeue"
 	"github.com/ZupIT/horusec-operator/internal/tracing"
-	"k8s.io/apimachinery/pkg/api/errors"
-	ctrl "sigs.k8s.io/controller-runtime"
 )
 
 // HorusecPlatformReconciler reconciles a HorusecPlatform object

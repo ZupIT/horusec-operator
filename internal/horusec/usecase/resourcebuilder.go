@@ -15,12 +15,13 @@
 package usecase
 
 import (
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1beta1"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 )
 
 type ResourceBuilder interface {
