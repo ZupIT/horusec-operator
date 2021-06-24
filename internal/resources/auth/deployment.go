@@ -27,14 +27,6 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	probe := corev1.Probe{
-		Handler: corev1.Handler{
-			HTTPGet: &corev1.HTTPGetAction{
-				Path: "/auth/health",
-				Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
-			},
-		},
-	}
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetAuthName(),
@@ -54,8 +46,8 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
 						{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
 					},
-					LivenessProbe:  &probe,
-					ReadinessProbe: &probe,
+					LivenessProbe:  newLivenessProbe(resource),
+					ReadinessProbe: newReadinessProbe(resource),
 				}}},
 			},
 		},
@@ -119,4 +111,22 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 	}
 
 	return append(envs, defaultEnvs...)
+}
+
+func newLivenessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Auth.Container.LivenessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/auth/health",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
+}
+
+func newReadinessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Auth.Container.ReadinessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/auth/health",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
 }
