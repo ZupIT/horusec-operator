@@ -15,11 +15,11 @@
 package manager
 
 import (
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 //nolint:funlen // to improve in the future
@@ -52,18 +52,28 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},
 					},
+					LivenessProbe:  newLivenessProbe(resource),
+					ReadinessProbe: newReadinessProbe(resource),
 				}}},
 			},
 		},
 	}
 }
 
-func NewEnvFromSecret(variableName, secretName, secretKey string) corev1.EnvVar {
-	return corev1.EnvVar{
-		Name: variableName,
-		ValueFrom: &corev1.EnvVarSource{SecretKeyRef: &corev1.SecretKeySelector{
-			LocalObjectReference: corev1.LocalObjectReference{Name: secretName},
-			Key:                  secretKey,
-		}},
-	}
+func newLivenessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Manager.Container.LivenessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
+}
+
+func newReadinessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Manager.Container.ReadinessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
 }

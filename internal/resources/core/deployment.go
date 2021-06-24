@@ -27,14 +27,6 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
-	probe := corev1.Probe{
-		Handler: corev1.Handler{
-			HTTPGet: &corev1.HTTPGetAction{
-				Path: "/core/health",
-				Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
-			},
-		},
-	}
 	global := resource.Spec.Global
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
@@ -66,10 +58,28 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetCorePortHTTP())},
 					},
-					LivenessProbe:  &probe,
-					ReadinessProbe: &probe,
+					LivenessProbe:  newLivenessProbe(resource),
+					ReadinessProbe: newReadinessProbe(resource),
 				}}},
 			},
 		},
 	}
+}
+
+func newLivenessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Core.Container.LivenessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/core/health",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
+}
+
+func newReadinessProbe(resource *v2alpha1.HorusecPlatform) *corev1.Probe {
+	p := resource.Spec.Components.Core.Container.ReadinessProbe
+	p.Handler = corev1.Handler{HTTPGet: &corev1.HTTPGetAction{
+		Path: "/core/health",
+		Port: intstr.IntOrString{Type: intstr.String, StrVal: "http"},
+	}}
+	return &p
 }
