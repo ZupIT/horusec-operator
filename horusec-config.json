@@ -23,14 +23,14 @@
   "horusecCliEnableInformationSeverity": false,
   "horusecCliEnableOwaspDependencyCheck": false,
   "horusecCliFalsePositiveHashes": [
-    "0482b7c71d08f28bab2d2597f5c1ca7b8827378df8d60bed2274e255bec115de",
     "a1a777e9a228ca16f50667a96fd7a95ae1f2e7b1a092d74a349b9b7ba68c1ebe",
     "014cc527a50fa6cd576b7458a2bf71878846158b1083b1a399a02252fed673b4",
     "60a65a7680e28b36f974ab5d34228022678f465ed032b81e5b389719c58ee1d3",
     "48a30a99f531c447583f8d8463c96a9e1866e95fd166b5c719e11b59c9319c2a",
     "c17d30c77591c14962a93d82a2add974c4494298dd6c4d38e70c5597d2978097",
     "cd8641e9ba4fa25a64b1c70574b8c8cea11b76b53bc3dbccccbab3312e2ed6c6",
-    "82efb241ad7dbf27df3bd8ecf69278a5737bf53935bb0acee0c7074421238ef1"
+    "0eb880d09e16723b24da08e7b4c29cdde65a3d7e5242aac05ef1fcd208a83f1c",
+    "efb05d4f9d1030f91cdbbd02c1bc4b938b267864c6ac823a836bce570e998d5c"
   ],
   "horusecCliFilesOrPathsToIgnore": [
     "*tmp*",
