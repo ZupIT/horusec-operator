@@ -23,9 +23,9 @@ lint: # Check lint in application
     endif
 
 coverage: # Check coverage in application
-	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 100 .
+	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 0 .
 
-test: # Run all tests in application
+tests: # Run all tests in application
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
 
 fix-imports: # Setup all imports to default mode
@@ -50,7 +50,8 @@ build: # Build operator image
 pipeline: fmt fix-imports lint test coverage build security  # Run all processes of the pipeline
 
 up-sample: # Up all dev dependencies kubernetes
-	sh ./config/samples/sample_install_dependencies.sh
+	chmod +x ./config/samples/sample_install_dependencies.sh
+	./config/samples/sample_install_dependencies.sh
 
 apply-sample: # Apply yaml in kubernetes
 	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
@@ -65,7 +66,7 @@ docker-up-alpha: # Update alpha in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh alpha false
 
-docker-up-rc: # Update alpha in docker image
+docker-up-rc: # Update rc in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh rc false
 
@@ -76,6 +77,10 @@ docker-up-release: # Update release in docker image
 docker-up-release-latest: # Update release and latest in docker image
 	chmod +x ./deployments/scripts/update-image.sh
 	./deployments/scripts/update-image.sh release true
+
+docker-up-minor-latest: # Update minor and latest in docker image
+	chmod +x ./deployments/scripts/update-image.sh
+	./deployments/scripts/update-image.sh minor true
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.
@@ -104,13 +109,18 @@ manifests: controller-gen  # Update all manifests in config
 generate: controller-gen # Generate new controller
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
+generate-service-yaml: kustomize install-semver
+	mkdir -p $(shell pwd)/tmp
+	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
+	$(KUSTOMIZE) build config/default > $(shell pwd)/tmp/horusec-operator.yaml
+
 install: manifests kustomize # install horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl apply -f -
 
 uninstall: manifests kustomize # uninstall horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-deploy: manifests kustomize # deploy horusec-operator in environment
+deploy: manifests kustomize install-semver # deploy horusec-operator in environment
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 

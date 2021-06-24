@@ -16,6 +16,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/ZupIT/horusec-operator/internal/tracing"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"

@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"reflect"
 
+	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
 	"github.com/ZupIT/horusec-operator/internal/resources/api"
@@ -27,7 +29,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/resources/messages"
 	"github.com/ZupIT/horusec-operator/internal/resources/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/resources/webhook"
-	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )

@@ -17,6 +17,9 @@ package resources
 import (
 	"fmt"
 
+	coreV1 "k8s.io/api/core/v1"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
 	"github.com/ZupIT/horusec-operator/internal/resources/api"
@@ -26,8 +29,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/resources/messages"
 	"github.com/ZupIT/horusec-operator/internal/resources/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/resources/webhook"
-	coreV1 "k8s.io/api/core/v1"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 func (b *Builder) ServicesFor(resource *v2alpha1.HorusecPlatform) ([]coreV1.Service, error) {

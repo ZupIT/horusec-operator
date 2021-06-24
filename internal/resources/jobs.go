@@ -17,12 +17,13 @@ package resources
 import (
 	"fmt"
 
+	batchv1 "k8s.io/api/batch/v1"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
 	"github.com/ZupIT/horusec-operator/internal/resources/api"
 	"github.com/ZupIT/horusec-operator/internal/resources/migration"
-	batchv1 "k8s.io/api/batch/v1"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 func (b *Builder) JobsFor(resource *v2alpha1.HorusecPlatform) ([]batchv1.Job, error) {

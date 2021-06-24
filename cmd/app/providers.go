@@ -15,16 +15,17 @@
 package main
 
 import (
-	"github.com/ZupIT/horusec-operator/controllers"
-	"github.com/ZupIT/horusec-operator/internal/horusec"
-	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
-	"github.com/ZupIT/horusec-operator/internal/k8s"
-	"github.com/ZupIT/horusec-operator/internal/resources"
 	"github.com/google/wire"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
+
+	"github.com/ZupIT/horusec-operator/controllers"
+	"github.com/ZupIT/horusec-operator/internal/horusec"
+	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+	"github.com/ZupIT/horusec-operator/internal/k8s"
+	"github.com/ZupIT/horusec-operator/internal/resources"
 )
 
 // nolint:deadcode,unused,varcheck // used for dependency injection container generation

@@ -17,6 +17,9 @@ package resources
 import (
 	"fmt"
 
+	appsv1 "k8s.io/api/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
 	"github.com/ZupIT/horusec-operator/internal/resources/api"
@@ -26,8 +29,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/resources/messages"
 	"github.com/ZupIT/horusec-operator/internal/resources/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/resources/webhook"
-	appsv1 "k8s.io/api/apps/v1"
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 func (b *Builder) DeploymentsFor(resource *v2alpha1.HorusecPlatform) ([]appsv1.Deployment, error) {

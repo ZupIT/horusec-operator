@@ -15,9 +15,10 @@
 package v2alpha1
 
 import (
-	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1/state"
 )
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
