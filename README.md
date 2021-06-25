@@ -37,6 +37,56 @@ To use horusec-operator you need to configure some secrets and dependencies of h
 * Others secrets necessary
     * The secrets you need to configure may vary depending on how you use horusec. [See possible configuration options](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
 
+## Installing
+After configuring your database connection, connecting to your broker and creating the secrets you need to install horusec-operator on your cluster, see an example below:
+```bash
+kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
+```
+See the resource if was installed with sucess!
+```bash
+kubectl api-resources | grep horus
+```
+you can see an output like this:
+```text
+$ kubectl api-resources | grep horus                                                           
+horusecplatforms                  horus        install.horusec.io             true         HorusecPlatform
+```
+
+## Usage
+And now just send the changes you want to kubenernetes. In this example we are using an [example yaml file](./config/samples/install_v2alpha1_horusecplatform.yaml), if you happen to send an empty yaml file like for example: 
+```yaml
+apiVersion: install.horusec.io/v2alpha1
+kind: HorusecPlatform
+metadata:
+  name: horusecplatform-sample
+spec: {}
+```
+It will take the default horusec settings from the file [defaults.json](./defaults.json)
+
+And now you apply your changes
+```bash
+kubectl apply -f "https://raw.githubusercontent.com/ZupIT/horusec-operator/main/config/samples/install_v2alpha1_horusecplatform.yaml"
+```
+
+and you can see all horusec web services upload in your cluster, like this example:
+```text
+$ kubectl get pods
+NAME                                                    READY   STATUS      RESTARTS   AGE
+analytic-6f6bffb5d6-f8pl9                               1/1     Running     0          74s
+api-5cc5b7545-km925                                     1/1     Running     0          73s
+auth-8fbc876d9-62r6d                                    1/1     Running     0          73s
+core-6bf7f9c9fc-fdv5c                                   1/1     Running     0          73s
+horusecplatform-sample-analytic-migration-wwdzc-r9th2   0/1     Completed   0          74s
+horusecplatform-sample-analytic-v1-2-v2-8zchl-445mz     0/1     Completed   2          74s
+horusecplatform-sample-api-v1-2-v2-5lndp-w2rbd          0/1     Completed   3          74s
+horusecplatform-sample-platform-migration-8g5ml-zmntl   0/1     Completed   0          74s
+manager-c959f4f67-fz7r4                                 1/1     Running     0          74s
+postgresql-postgresql-0                                 1/1     Running     0          7m54s
+rabbitmq-0                                              1/1     Running     0          7m54s
+vulnerability-7d789fd655-tpjp8                          1/1     Running     0          74s
+webhook-7b5c45c859-cq4nf                                1/1     Running     0          73s
+```
+
 ## Development Environment
 This only an dev example how usage horusec-operator.
 For usage this example is necessary installing [helm](https://helm.sh/docs/intro/install/#from-script) and [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) in your local machine
