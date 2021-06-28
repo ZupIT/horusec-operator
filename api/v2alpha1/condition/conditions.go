@@ -24,6 +24,7 @@ const (
 	AuthAvailable               = "AuthAvailable"
 	CoreAvailable               = "CoreAvailable"
 	ManagerAvailable            = "ManagerAvailable"
+	MessagesAvailable           = "MessagesAvailable"
 	VulnerabilityAvailable      = "VulnerabilityAvailable"
 	WebhookAvailable            = "WebhookAvailable"
 )

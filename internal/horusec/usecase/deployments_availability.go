@@ -77,6 +77,7 @@ func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
 			"analytic": condition.AnalyticAvailable, "api": condition.APIAvailable, "auth": condition.AuthAvailable,
 			"core": condition.CoreAvailable, "manager": condition.ManagerAvailable,
 			"vulnerability": condition.VulnerabilityAvailable, "webhook": condition.WebhookAvailable,
+			"messages": condition.MessagesAvailable,
 		},
 	}
 }
