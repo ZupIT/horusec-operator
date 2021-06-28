@@ -16,7 +16,6 @@ package usecase
 
 import (
 	"context"
-	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 
@@ -48,7 +47,7 @@ func (e *DeploymentsAvailability) EnsureDeploymentsAvailable(ctx context.Context
 		return operation.RequeueOnErrorOrStop(e.client.UpdateHorusStatus(ctx, resource))
 	}
 
-	return operation.RequeueAfter(10*time.Second, nil)
+	return operation.ContinueProcessing()
 }
 
 type deployStatus struct{ item *appsv1.DeploymentStatus }

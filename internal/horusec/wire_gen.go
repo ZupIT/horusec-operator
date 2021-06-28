@@ -20,6 +20,7 @@ func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder
 	currentState := usecase.NewCurrentState(client)
 	serviceAccounts := usecase.NewServiceAccounts(client, builder)
 	services := usecase.NewServices(client, builder)
+	unavailabilityReason := usecase.NewUnavailabilityReason(client)
 	adapter := &Adapter{
 		Autoscaling:             autoscaling,
 		DatabaseMigrations:      databaseMigrations,
@@ -29,6 +30,7 @@ func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder
 		CurrentState:            currentState,
 		ServiceAccounts:         serviceAccounts,
 		Services:                services,
+		UnavailabilityReason:    unavailabilityReason,
 	}
 	return adapter
 }
