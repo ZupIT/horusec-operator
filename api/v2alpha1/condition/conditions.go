@@ -16,6 +16,17 @@ package condition
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+var ComponentMap = map[string]Type{
+	"analytic":      AnalyticAvailable,
+	"api":           APIAvailable,
+	"auth":          AuthAvailable,
+	"core":          CoreAvailable,
+	"manager":       ManagerAvailable,
+	"messages":      MessagesAvailable,
+	"vulnerability": VulnerabilityAvailable,
+	"webhook":       WebhookAvailable,
+}
+
 type Type string
 
 const (
