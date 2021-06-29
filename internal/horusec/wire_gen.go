@@ -11,7 +11,7 @@ import (
 
 // Injectors from wire.go:
 
-func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder) *Adapter {
+func NewAdapter(builder usecase.ResourceBuilder, client usecase.KubernetesClient, logs usecase.KubernetesLogs) *Adapter {
 	autoscaling := usecase.NewAutoscaling(client, builder)
 	databaseMigrations := usecase.NewDatabaseMigrations(client, builder)
 	deployments := usecase.NewDeployments(client, builder)
@@ -20,7 +20,7 @@ func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder
 	currentState := usecase.NewCurrentState(client)
 	serviceAccounts := usecase.NewServiceAccounts(client, builder)
 	services := usecase.NewServices(client, builder)
-	unavailabilityReason := usecase.NewUnavailabilityReason(client)
+	unavailabilityReason := usecase.NewUnavailabilityReason(logs, client)
 	adapter := &Adapter{
 		Autoscaling:             autoscaling,
 		DatabaseMigrations:      databaseMigrations,

@@ -20,11 +20,14 @@ import (
 // Injectors from wire.go:
 
 func newHorusecPlatformReconciler(mgr manager.Manager) (*controllers.HorusecPlatformReconciler, error) {
-	client := extractClient(mgr)
-	k8sClient := k8s.NewClient(client)
 	runtimeScheme := extractScheme(mgr)
 	builder := resources.NewBuilder(runtimeScheme)
-	adapter := horusec.NewAdapter(k8sClient, builder)
+	client := extractClient(mgr)
+	k8sClient := k8s.NewClient(client)
+	config := extractRestConfig(mgr)
+	coreV1Interface := k8s.NewTypedCoreClient(config)
+	containerClient := k8s.NewContainerClient(coreV1Interface)
+	adapter := horusec.NewAdapter(builder, k8sClient, containerClient)
 	horusecPlatformReconciler := controllers.NewHorusecPlatformReconciler(adapter, k8sClient)
 	return horusecPlatformReconciler, nil
 }
