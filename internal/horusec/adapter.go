@@ -25,4 +25,5 @@ type Adapter struct {
 	*usecase.CurrentState
 	*usecase.ServiceAccounts
 	*usecase.Services
+	*usecase.UnavailabilityReason
 }

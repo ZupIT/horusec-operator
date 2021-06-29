@@ -22,7 +22,7 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/horusec/usecase"
 )
 
-func NewAdapter(client usecase.KubernetesClient, builder usecase.ResourceBuilder) *Adapter {
+func NewAdapter(builder usecase.ResourceBuilder, client usecase.KubernetesClient, logs usecase.KubernetesLogs) *Adapter {
 	wire.Build(providers)
 	return nil
 }

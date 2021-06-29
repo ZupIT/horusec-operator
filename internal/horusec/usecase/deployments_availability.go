@@ -16,7 +16,6 @@ package usecase
 
 import (
 	"context"
-	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 
@@ -48,7 +47,7 @@ func (e *DeploymentsAvailability) EnsureDeploymentsAvailable(ctx context.Context
 		return operation.RequeueOnErrorOrStop(e.client.UpdateHorusStatus(ctx, resource))
 	}
 
-	return operation.RequeueAfter(10*time.Second, nil)
+	return operation.ContinueProcessing()
 }
 
 type deployStatus struct{ item *appsv1.DeploymentStatus }
@@ -58,9 +57,8 @@ func (ps *deployStatus) HasUnavailableReplicas() bool {
 }
 
 type deployStatuses struct {
-	items      map[string]*deployStatus
-	conditions map[string]condition.Type
-	changed    bool
+	items   map[string]*deployStatus
+	changed bool
 }
 
 func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
@@ -71,23 +69,16 @@ func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
 			items[component] = &deployStatus{item: &item}
 		}
 	}
-	return &deployStatuses{
-		items: items,
-		conditions: map[string]condition.Type{
-			"analytic": condition.AnalyticAvailable, "api": condition.APIAvailable, "auth": condition.AuthAvailable,
-			"core": condition.CoreAvailable, "manager": condition.ManagerAvailable,
-			"vulnerability": condition.VulnerabilityAvailable, "webhook": condition.WebhookAvailable,
-		},
-	}
+	return &deployStatuses{items: items}
 }
 
 func (ds *deployStatuses) UpdateConditions(resource *v2alpha1.HorusecPlatform) *deployStatuses {
-	reason := condition.Reason{
+	reason := &condition.Reason{
 		Type:    "UnavailableReplicas",
 		Message: "Deployment is unavailable but we could not discover the cause.",
 	}
 
-	for component, conditionType := range ds.conditions {
+	for component, conditionType := range condition.ComponentMap {
 		isAvailable := ds.checkAvailabilityOf(component)
 		if isAvailable {
 			if resource.SetStatusCondition(condition.True(conditionType)) {

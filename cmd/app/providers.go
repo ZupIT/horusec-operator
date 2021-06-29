@@ -37,10 +37,13 @@ var providers = wire.NewSet(
 	controllers.NewHorusecPlatformReconciler,
 	horusec.NewAdapter,
 	k8s.NewClient,
+	k8s.NewContainerClient,
+	k8s.NewTypedCoreClient,
 	resources.NewBuilder,
 	wire.Bind(new(controllers.HorusecPlatformAdapter), new(*horusec.Adapter)),
 	wire.Bind(new(controllers.HorusecPlatformClient), new(*k8s.Client)),
 	wire.Bind(new(usecase.KubernetesClient), new(*k8s.Client)),
+	wire.Bind(new(usecase.KubernetesLogs), new(*k8s.ContainerClient)),
 	wire.Bind(new(usecase.ResourceBuilder), new(*resources.Builder)),
 )
 

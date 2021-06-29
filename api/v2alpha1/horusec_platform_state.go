@@ -22,13 +22,17 @@ import (
 )
 
 func (in *HorusecPlatform) UpdateState() bool {
-	desired := []condition.Type{
-		condition.AnalyticAvailable, condition.APIAvailable, condition.AuthAvailable, condition.CoreAvailable,
-		condition.ManagerAvailable, condition.VulnerabilityAvailable, condition.WebhookAvailable,
+	desired := make([]condition.Type, 0, len(condition.ComponentMap))
+	for _, c := range condition.ComponentMap {
+		desired = append(desired, c)
 	}
 
 	if in.IsStatusConditionTrue(desired...) {
 		return in.setState(state.Ready)
+	}
+
+	if in.AnyStatusConditionFalse(desired...) {
+		return in.setState(state.Error)
 	}
 
 	return in.setState(state.Pending)

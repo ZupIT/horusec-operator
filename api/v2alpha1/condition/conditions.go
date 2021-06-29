@@ -16,6 +16,17 @@ package condition
 
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
+var ComponentMap = map[string]Type{
+	"analytic":      AnalyticAvailable,
+	"api":           APIAvailable,
+	"auth":          AuthAvailable,
+	"core":          CoreAvailable,
+	"manager":       ManagerAvailable,
+	"messages":      MessagesAvailable,
+	"vulnerability": VulnerabilityAvailable,
+	"webhook":       WebhookAvailable,
+}
+
 type Type string
 
 const (
@@ -24,6 +35,7 @@ const (
 	AuthAvailable               = "AuthAvailable"
 	CoreAvailable               = "CoreAvailable"
 	ManagerAvailable            = "ManagerAvailable"
+	MessagesAvailable           = "MessagesAvailable"
 	VulnerabilityAvailable      = "VulnerabilityAvailable"
 	WebhookAvailable            = "WebhookAvailable"
 )
@@ -54,7 +66,7 @@ func True(conditionType Type) metav1.Condition {
 	}
 }
 
-func False(conditionType Type, reason Reason) metav1.Condition {
+func False(conditionType Type, reason *Reason) metav1.Condition {
 	return metav1.Condition{
 		Type:    string(conditionType),
 		Status:  metav1.ConditionFalse,
@@ -63,7 +75,7 @@ func False(conditionType Type, reason Reason) metav1.Condition {
 	}
 }
 
-func Unknown(conditionType Type, reason Reason) metav1.Condition {
+func Unknown(conditionType Type, reason *Reason) metav1.Condition {
 	return metav1.Condition{
 		Type:    string(conditionType),
 		Status:  metav1.ConditionUnknown,

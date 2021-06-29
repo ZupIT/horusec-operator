@@ -81,6 +81,7 @@ func (r *HorusecPlatformReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		r.adapter.EnsureAutoscaling,
 		r.adapter.EnsureIngressRules,
 		r.adapter.EnsureDeploymentsAvailable,
+		r.adapter.EnsureUnavailabilityReason,
 	).Handle(ctx, resource)
 	log.V(1).
 		WithValues("error", err != nil, "requeing", result.Requeue, "delay", result.RequeueAfter).
