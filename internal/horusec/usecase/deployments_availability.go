@@ -73,7 +73,7 @@ func statusOfDeployments(deployments []appsv1.Deployment) *deployStatuses {
 }
 
 func (ds *deployStatuses) UpdateConditions(resource *v2alpha1.HorusecPlatform) *deployStatuses {
-	reason := condition.Reason{
+	reason := &condition.Reason{
 		Type:    "UnavailableReplicas",
 		Message: "Deployment is unavailable but we could not discover the cause.",
 	}

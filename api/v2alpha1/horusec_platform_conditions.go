@@ -39,6 +39,15 @@ func (in *HorusecPlatform) IsStatusConditionTrue(types ...condition.Type) bool {
 	return true
 }
 
+func (in *HorusecPlatform) AnyStatusConditionFalse(types ...condition.Type) bool {
+	for _, conditionType := range types {
+		if meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType)) {
+			return true
+		}
+	}
+	return false
+}
+
 func (in *HorusecPlatform) AnyStatusConditionFalseOrUnknown() bool {
 	for _, conditionType := range condition.ComponentMap {
 		if meta.IsStatusConditionFalse(in.Status.Conditions, string(conditionType)) ||
@@ -52,7 +61,8 @@ func (in *HorusecPlatform) AnyStatusConditionFalseOrUnknown() bool {
 func (in *HorusecPlatform) SetStatusCondition(newCondition metav1.Condition) bool {
 	conditionType := newCondition.Type
 	status := newCondition.Status
-	if meta.IsStatusConditionPresentAndEqual(in.Status.Conditions, conditionType, status) {
+	foundCondition := meta.FindStatusCondition(in.Status.Conditions, conditionType)
+	if foundCondition != nil && foundCondition.Status == status && foundCondition.Reason == newCondition.Reason {
 		return false
 	}
 

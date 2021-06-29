@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"regexp"
 	"strings"
 	"time"
 
@@ -41,6 +42,7 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 		return nil, err
 	}
 
+	changed := false
 	for _, container := range containers {
 		logs, err := u.logs.PreviousContainerLogs(ctx, container.pod, container.name)
 		if err != nil {
@@ -48,9 +50,21 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 		}
 
 		reader := bytes.NewReader(logs)
-		if dbErr := u.searchForDatabaseErrors(reader); dbErr != "" {
-			log.Info(fmt.Sprintf("error found: %q", dbErr))
+		if msg := u.searchForDatabaseErrors(reader); msg != "" {
+			log.V(0).
+				WithValues("pod", container.pod).
+				WithValues("container", container.name).
+				Info("an error with database was found")
+
+			conditionType := condition.ComponentMap[container.component]
+			if resource.SetStatusCondition(condition.False(conditionType, condition.DatabaseReason(msg))) {
+				changed = true
+			}
 		}
+	}
+
+	if changed {
+		return operation.RequeueOnErrorOrStop(u.client.UpdateHorusStatus(ctx, resource))
 	}
 
 	return operation.RequeueAfter(10*time.Second, nil)
@@ -80,7 +94,12 @@ func (u *UnavailabilityReason) searchForDatabaseErrors(logs io.Reader) string {
 	for scanner.Scan() {
 		text := scanner.Text()
 		if strings.Contains(text, "{ERROR_DATABASE}") {
-			return text
+			var compRegEx = regexp.MustCompile(`error="(.*?)"`)
+			match := compRegEx.FindStringSubmatch(text)
+			if len(match) == 0 {
+				return ""
+			}
+			return match[len(match)-1]
 		}
 	}
 
@@ -119,8 +138,9 @@ func (p podStatus) CrashingContainers() []*podContainer {
 		waiting := status.State.Waiting
 		if waiting != nil && waiting.Reason == "CrashLoopBackOff" {
 			containers = append(containers, &podContainer{
-				pod:  types.NamespacedName{Namespace: p.item.GetNamespace(), Name: p.item.GetName()},
-				name: status.Name,
+				component: p.item.Labels["app.kubernetes.io/component"],
+				pod:       types.NamespacedName{Namespace: p.item.GetNamespace(), Name: p.item.GetName()},
+				name:      status.Name,
 			})
 		}
 	}
@@ -178,6 +198,7 @@ func (p *podStatuses) CrashingContainers() []*podContainer {
 }
 
 type podContainer struct {
-	pod  types.NamespacedName
-	name string
+	component string
+	pod       types.NamespacedName
+	name      string
 }

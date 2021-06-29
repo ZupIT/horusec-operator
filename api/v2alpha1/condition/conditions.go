@@ -66,7 +66,7 @@ func True(conditionType Type) metav1.Condition {
 	}
 }
 
-func False(conditionType Type, reason Reason) metav1.Condition {
+func False(conditionType Type, reason *Reason) metav1.Condition {
 	return metav1.Condition{
 		Type:    string(conditionType),
 		Status:  metav1.ConditionFalse,
@@ -75,7 +75,7 @@ func False(conditionType Type, reason Reason) metav1.Condition {
 	}
 }
 
-func Unknown(conditionType Type, reason Reason) metav1.Condition {
+func Unknown(conditionType Type, reason *Reason) metav1.Condition {
 	return metav1.Condition{
 		Type:    string(conditionType),
 		Status:  metav1.ConditionUnknown,
