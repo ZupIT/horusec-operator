@@ -30,7 +30,6 @@ func NewUnavailabilityReason(logs KubernetesLogs, client KubernetesClient) *Unav
 
 func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*operation.Result, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
-	log := span.Logger()
 	defer span.Finish()
 
 	if !resource.AnyStatusConditionFalseOrUnknown() {
@@ -50,16 +49,11 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 		}
 
 		reader := bytes.NewReader(logs)
-		if msg := u.searchForDatabaseErrors(reader); msg != "" {
-			log.V(0).
-				WithValues("pod", container.pod).
-				WithValues("container", container.name).
-				Info("an error with database was found")
+		contype := condition.ComponentMap[container.component]
 
-			conditionType := condition.ComponentMap[container.component]
-			if resource.SetStatusCondition(condition.False(conditionType, condition.DatabaseReason(msg))) {
-				changed = true
-			}
+		if msg := u.searchForDatabaseErrors(reader); msg != "" &&
+			resource.SetStatusCondition(condition.False(contype, condition.DatabaseReason(msg))) {
+			changed = true
 		}
 	}
 
@@ -94,7 +88,7 @@ func (u *UnavailabilityReason) searchForDatabaseErrors(logs io.Reader) string {
 	for scanner.Scan() {
 		text := scanner.Text()
 		if strings.Contains(text, "{ERROR_DATABASE}") {
-			var compRegEx = regexp.MustCompile(`error="(.*?)"`)
+			compRegEx := regexp.MustCompile(`error="(.*?)"`)
 			match := compRegEx.FindStringSubmatch(text)
 			if len(match) == 0 {
 				return ""
