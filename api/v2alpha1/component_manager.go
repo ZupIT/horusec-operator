@@ -99,46 +99,37 @@ func (h *HorusecPlatform) GetManagerImage() string {
 }
 
 func (h *HorusecPlatform) GetAnalyticEndpoint() string {
-	host := h.GetAnalyticComponent().Ingress.Host
-	if host == "" {
-		return h.GetAnalyticHost()
-	}
+	host := h.GetAnalyticHost()
 	schema := h.GetAnalyticSchema()
 	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetAPIEndpoint() string {
-	host := h.GetAPIComponent().Ingress.Host
-	if host == "" {
-		return h.GetAPIHost()
-	}
+	host := h.GetAPIHost()
 	schema := h.GetAPISchema()
 	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetAuthEndpoint() string {
-	host := h.GetAuthComponent().Ingress.Host
-	if host == "" {
-		return h.GetAuthHost()
-	}
+	host := h.GetAuthHost()
 	schema := h.GetAuthSchema()
 	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
+func (h *HorusecPlatform) GetVulnerabilityEndpoint() string {
+	host := h.GetVulnerabilityHost()
+	schema := h.GetVulnerabilitySchema()
+	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
+}
+
 func (h *HorusecPlatform) GetCoreEndpoint() string {
-	host := h.GetCoreComponent().Ingress.Host
-	if host == "" {
-		return h.GetCoreHost()
-	}
+	host := h.GetCoreHost()
 	schema := h.GetCoreSchema()
 	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
 
 func (h *HorusecPlatform) GetWebhookEndpoint() string {
-	host := h.GetWebhookComponent().Ingress.Host
-	if host == "" {
-		return h.GetWebhookHost()
-	}
+	host := h.GetWebhookHost()
 	schema := h.GetWebhookSchema()
 	return fmt.Sprintf("%s:\\/\\/%s", schema, host)
 }
@@ -179,6 +170,14 @@ func (h *HorusecPlatform) GetAPISchema() string {
 
 func (h *HorusecPlatform) GetAuthSchema() string {
 	component := h.Spec.Components.Auth
+	if component.Ingress.TLS.SecretName != "" {
+		return "https"
+	}
+	return "http"
+}
+
+func (h *HorusecPlatform) GetVulnerabilitySchema() string {
+	component := h.Spec.Components.Vulnerability
 	if component.Ingress.TLS.SecretName != "" {
 		return "https"
 	}
