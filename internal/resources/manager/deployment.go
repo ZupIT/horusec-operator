@@ -45,6 +45,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						{Name: "REACT_APP_HORUSEC_ENDPOINT_CORE", Value: resource.GetCoreEndpoint()},
 						{Name: "REACT_APP_HORUSEC_ENDPOINT_WEBHOOK", Value: resource.GetWebhookEndpoint()},
 						{Name: "REACT_APP_HORUSEC_ENDPOINT_AUTH", Value: resource.GetAuthEndpoint()},
+						{Name: "REACT_APP_HORUSEC_ENDPOINT_VULNERABILITY", Value: resource.GetVulnerabilityEndpoint()},
 						{Name: "REACT_APP_HORUSEC_MANAGER_PATH", Value: "\\/manager"},
 						{Name: "REACT_APP_KEYCLOAK_BASE_PATH", Value: resource.Spec.Global.Keycloak.PublicURL},
 						{Name: "REACT_APP_KEYCLOAK_CLIENT_ID", Value: resource.Spec.Global.Keycloak.Clients.Public.ID},
