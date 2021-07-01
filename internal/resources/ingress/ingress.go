@@ -15,6 +15,8 @@
 package ingress
 
 import (
+	"net"
+
 	networkingv1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -81,6 +83,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetAnalyticComponent()
 		path := r.GetAnalyticPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -89,6 +94,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetAPIComponent()
 		path := r.GetAPIPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -97,6 +105,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetAuthComponent()
 		path := r.GetAuthPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -105,6 +116,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetCoreComponent()
 		path := r.GetCorePath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -113,6 +127,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetMessagesComponent()
 		path := r.GetMessagesPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -121,6 +138,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetVulnerabilityComponent()
 		path := r.GetVulnerabilityPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -129,6 +149,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetWebhookComponent()
 		path := r.GetWebhookPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -137,6 +160,9 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngress
 		component := r.GetManagerComponent()
 		path := r.GetManagerPath()
 		host := component.Ingress.Host
+		if h, _, err := net.SplitHostPort(host); err == nil {
+			host = h
+		}
 		if host != "" {
 			hosts[host] = append(hosts[host], newHTTPIngressPath(path, component.Name))
 		}
@@ -150,56 +176,88 @@ func mapTLSSecrets(r *v2alpha1.HorusecPlatform) map[string][]string {
 		component := r.GetAnalyticComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetAnalyticHost())
+			host := r.GetAnalyticHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsAPIIngressEnabled() {
 		component := r.GetAPIComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetAPIHost())
+			host := r.GetAPIHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsAuthIngressEnabled() {
 		component := r.GetAuthComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetAuthHost())
+			host := r.GetAuthHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsCoreIngressEnabled() {
 		component := r.GetCoreComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetCoreHost())
+			host := r.GetCoreHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsManagerIngressEnabled() {
 		component := r.GetManagerComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetManagerHost())
+			host := r.GetManagerHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsMessagesIngressEnabled() {
 		component := r.GetMessagesComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetMessagesHost())
+			host := r.GetMessagesHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsVulnerabilityIngressEnabled() {
 		component := r.GetVulnerabilityComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetVulnerabilityHost())
+			host := r.GetVulnerabilityHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	if r.IsWebhookIngressEnabled() {
 		component := r.GetWebhookComponent()
 		secretName := component.Ingress.TLS.SecretName
 		if secretName != "" {
-			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], r.GetWebhookHost())
+			host := r.GetWebhookHost()
+			if h, _, err := net.SplitHostPort(host); err == nil {
+				host = h
+			}
+			tlsSecrets[secretName] = dedupe(tlsSecrets[secretName], host)
 		}
 	}
 	return tlsSecrets
