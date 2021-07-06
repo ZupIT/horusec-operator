@@ -39,6 +39,7 @@ func NewHorusecPlatformReconciler(adapter HorusecPlatformAdapter, client Horusec
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=install.horusec.io,resources=horusecplatforms/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups="",resources=pods,verbs=get;list;watch
+//+kubebuilder:rbac:groups="",resources=pods/log,verbs=get
 //+kubebuilder:rbac:groups="",resources=serviceaccounts,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=extensions,resources=ingresses,verbs=get;list;watch;create;update;patch;delete
