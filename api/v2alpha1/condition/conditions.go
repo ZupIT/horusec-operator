@@ -54,7 +54,11 @@ func BrokerReason(message string) *Reason {
 }
 
 func SecretReason(message string) *Reason {
-	return &Reason{Type: "SecretNotFound", Message: message}
+	return &Reason{Type: "SecretError", Message: message}
+}
+
+func ConfigReason(message string) *Reason {
+	return &Reason{Type: "ConfigError", Message: message}
 }
 
 func True(conditionType Type) metav1.Condition {
