@@ -62,7 +62,10 @@ func (in *HorusecPlatform) SetStatusCondition(newCondition metav1.Condition) boo
 	conditionType := newCondition.Type
 	status := newCondition.Status
 	foundCondition := meta.FindStatusCondition(in.Status.Conditions, conditionType)
-	if foundCondition != nil && foundCondition.Status == status && foundCondition.Reason == newCondition.Reason {
+	if foundCondition != nil &&
+		foundCondition.Status == status &&
+		foundCondition.Reason == newCondition.Reason &&
+		foundCondition.Message == newCondition.Message {
 		return false
 	}
 

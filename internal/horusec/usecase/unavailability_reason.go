@@ -43,16 +43,19 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 
 	changed := false
 	for _, container := range containers {
+		contype := condition.ComponentMap[container.component]
 		logs, err := u.logs.PreviousContainerLogs(ctx, container.pod, container.name)
 		if err != nil {
 			return nil, err
 		}
 
-		reader := bytes.NewReader(logs)
-		contype := condition.ComponentMap[container.component]
-
-		if msg := u.searchForDatabaseErrors(reader); msg != "" &&
+		if msg := u.searchForDatabaseErrors(bytes.NewReader(logs)); msg != "" &&
 			resource.SetStatusCondition(condition.False(contype, condition.DatabaseReason(msg))) {
+			changed = true
+		}
+
+		if msg := u.searchForBrokerErrors(bytes.NewReader(logs)); msg != "" &&
+			resource.SetStatusCondition(condition.False(contype, condition.BrokerReason(msg))) {
 			changed = true
 		}
 	}
@@ -90,6 +93,24 @@ func (u *UnavailabilityReason) searchForDatabaseErrors(logs io.Reader) string {
 		if strings.Contains(text, "{ERROR_DATABASE}") {
 			compRegEx := regexp.MustCompile(`error="(.*?)"`)
 			match := compRegEx.FindStringSubmatch(text)
+			if len(match) == 0 {
+				return ""
+			}
+			return match[len(match)-1]
+		}
+	}
+
+	return ""
+}
+
+func (u *UnavailabilityReason) searchForBrokerErrors(logs io.Reader) string {
+	scanner := bufio.NewScanner(logs)
+	scanner.Split(bufio.ScanLines)
+
+	for scanner.Scan() {
+		text := scanner.Text()
+		if strings.Contains(text, "{ERROR_BROKER}") {
+			match := strings.Split(text, "panic: {ERROR_BROKER} ")
 			if len(match) == 0 {
 				return ""
 			}
