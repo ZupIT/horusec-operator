@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"regexp"
 	"strings"
@@ -42,7 +41,7 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 	}
 
 	changed := false
-	for _, container := range containers {
+	for _, container := range containers.FilterCrashLoopBackOff() {
 		contype := condition.ComponentMap[container.component]
 		logs, err := u.logs.PreviousContainerLogs(ctx, container.pod, container.name)
 		if err != nil {
@@ -60,6 +59,22 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 		}
 	}
 
+	for _, container := range containers.FilterConfigError() {
+		var reason *condition.Reason
+		contype := condition.ComponentMap[container.component]
+		msg := container.StateWaitingMessage()
+
+		if container.HasSecretError() {
+			reason = condition.SecretReason(msg)
+		} else {
+			reason = condition.ConfigReason(msg)
+		}
+
+		if resource.SetStatusCondition(condition.False(contype, reason)) {
+			changed = true
+		}
+	}
+
 	if changed {
 		return operation.RequeueOnErrorOrStop(u.client.UpdateHorusStatus(ctx, resource))
 	}
@@ -67,16 +82,16 @@ func (u *UnavailabilityReason) EnsureUnavailabilityReason(ctx context.Context, r
 	return operation.RequeueAfter(10*time.Second, nil)
 }
 
-func (u *UnavailabilityReason) listCrashingContainers(ctx context.Context, resource *v2alpha1.HorusecPlatform) ([]*podContainer, error) {
+func (u *UnavailabilityReason) listCrashingContainers(ctx context.Context, resource *v2alpha1.HorusecPlatform) (containerStatuses, error) {
 	status, err := u.podStatusOf(ctx, resource)
 	if err != nil {
 		return nil, err
 	}
 
-	crashingContainers := make([]*podContainer, 0, 0)
+	crashingContainers := make([]*containerStatus, 0, 0)
 	for component, conditionType := range condition.ComponentMap {
 		if !resource.IsStatusConditionTrue(conditionType) {
-			containers := status.ofComponent(component).CrashingContainers()
+			containers := status.OfComponent(component).CrashingContainers()
 			crashingContainers = append(crashingContainers, containers...)
 		}
 	}
@@ -121,7 +136,7 @@ func (u *UnavailabilityReason) searchForBrokerErrors(logs io.Reader) string {
 	return ""
 }
 
-func (u *UnavailabilityReason) podStatusOf(ctx context.Context, resource *v2alpha1.HorusecPlatform) (*podStatuses, error) {
+func (u *UnavailabilityReason) podStatusOf(ctx context.Context, resource *v2alpha1.HorusecPlatform) (podStatuses, error) {
 	pods, err := u.client.ListPodsByOwner(ctx, resource)
 	if err != nil {
 		return nil, err
@@ -132,42 +147,53 @@ func (u *UnavailabilityReason) podStatusOf(ctx context.Context, resource *v2alph
 		item := pod
 		items = append(items, &podStatus{item: &item})
 	}
-	return &podStatuses{items: items}, nil
+	return items, nil
 }
 
-type podStatus struct{ item *core.Pod }
+type (
+	podStatus       struct{ item *core.Pod }
+	podStatuses     []*podStatus
+	containerStatus struct {
+		component string
+		pod       types.NamespacedName
+		name      string
+		state     core.ContainerState
+	}
+	containerStatuses []*containerStatus
+)
 
-func (p podStatus) IsCrashing() bool {
+func newPodContainer(pod *core.Pod, container core.ContainerStatus) *containerStatus {
+	return &containerStatus{
+		component: pod.Labels["app.kubernetes.io/component"],
+		pod:       types.NamespacedName{Namespace: pod.GetNamespace(), Name: pod.GetName()},
+		name:      container.Name,
+		state:     container.State,
+	}
+}
+
+func (p *podStatus) IsCrashing() bool {
 	for _, status := range p.item.Status.ContainerStatuses {
-		waiting := status.State.Waiting
-		if waiting != nil && waiting.Reason == "CrashLoopBackOff" {
+		container := newPodContainer(p.item, status)
+		if container.StateWaitingReason() != "" {
 			return true
 		}
 	}
 	return false
 }
 
-func (p podStatus) CrashingContainers() []*podContainer {
-	containers := make([]*podContainer, 0, 0)
+func (p *podStatus) CrashingContainers() containerStatuses {
+	containers := make([]*containerStatus, 0, 0)
 	for _, status := range p.item.Status.ContainerStatuses {
-		waiting := status.State.Waiting
-		if waiting != nil && waiting.Reason == "CrashLoopBackOff" {
-			containers = append(containers, &podContainer{
-				component: p.item.Labels["app.kubernetes.io/component"],
-				pod:       types.NamespacedName{Namespace: p.item.GetNamespace(), Name: p.item.GetName()},
-				name:      status.Name,
-			})
+		container := newPodContainer(p.item, status)
+		if container.StateWaitingReason() != "" {
+			containers = append(containers, container)
 		}
 	}
 	return containers
 }
 
-type podStatuses struct {
-	items []*podStatus
-}
-
-func (p *podStatuses) IsCrashing() bool {
-	for _, status := range p.items {
+func (p podStatuses) IsCrashing() bool {
+	for _, status := range p {
 		if status.IsCrashing() {
 			return true
 		}
@@ -175,36 +201,20 @@ func (p *podStatuses) IsCrashing() bool {
 	return false
 }
 
-func (p *podStatuses) String() string {
-	pods := make([]string, 0, len(p.items))
-	for _, pod := range p.items {
-		phase := func() string {
-			if pod.IsCrashing() {
-				return "CrashLoopBackOff"
-			}
-			return string(pod.item.Status.Phase)
-		}()
-		name := pod.item.GetName()
-		namespace := pod.item.GetNamespace()
-		pods = append(pods, fmt.Sprintf("%s/%s[%s]", namespace, name, phase))
-	}
-	return strings.Join(pods, ", ")
-}
-
-func (p *podStatuses) ofComponent(component string) *podStatuses {
+func (p podStatuses) OfComponent(component string) podStatuses {
 	items := make([]*podStatus, 0)
-	for _, status := range p.items {
+	for _, status := range p {
 		pod := status.item
 		if c, ok := pod.Labels["app.kubernetes.io/component"]; ok && c == component {
 			items = append(items, &podStatus{item: pod})
 		}
 	}
-	return &podStatuses{items: items}
+	return items
 }
 
-func (p *podStatuses) CrashingContainers() []*podContainer {
-	containers := make([]*podContainer, 0, 0)
-	for _, pod := range p.items {
+func (p podStatuses) CrashingContainers() containerStatuses {
+	containers := make([]*containerStatus, 0, 0)
+	for _, pod := range p {
 		if pod.IsCrashing() {
 			containers = append(containers, pod.CrashingContainers()...)
 		}
@@ -212,8 +222,44 @@ func (p *podStatuses) CrashingContainers() []*podContainer {
 	return containers
 }
 
-type podContainer struct {
-	component string
-	pod       types.NamespacedName
-	name      string
+func (p *containerStatus) StateWaitingReason() string {
+	waiting := p.state.Waiting
+	if waiting != nil && (waiting.Reason == "CrashLoopBackOff" || waiting.Reason == "CreateContainerConfigError") {
+		return waiting.Reason
+	}
+	return ""
+}
+
+func (p *containerStatus) StateWaitingMessage() string {
+	waiting := p.state.Waiting
+	if waiting != nil {
+		return waiting.Message
+	}
+	return ""
+}
+
+func (p *containerStatus) HasSecretError() bool {
+	return regexp.
+		MustCompile(`(?i)\b(secret)\b`).
+		MatchString(p.StateWaitingMessage())
+}
+
+func (p containerStatuses) FilterCrashLoopBackOff() containerStatuses {
+	containers := make([]*containerStatus, 0, 0)
+	for _, container := range p {
+		if container.StateWaitingReason() == "CrashLoopBackOff" {
+			containers = append(containers, container)
+		}
+	}
+	return containers
+}
+
+func (p containerStatuses) FilterConfigError() containerStatuses {
+	containers := make([]*containerStatus, 0, 0)
+	for _, container := range p {
+		if container.StateWaitingReason() == "CreateContainerConfigError" {
+			containers = append(containers, container)
+		}
+	}
+	return containers
 }
