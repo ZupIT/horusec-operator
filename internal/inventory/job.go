@@ -24,24 +24,14 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var (
-	ignoredJobFields = [...]string{
-		"ObjectMeta.Labels",
-		"Spec.Containers.TerminationMessagePath",
-		"Spec.Containers.TerminationMessagePolicy",
-		"Spec.DNSPolicy",
-		"Spec.SchedulerName",
-		"Spec.SecurityContext",
-	}
-	jobDiffOptions = cmp.FilterPath(func(path cmp.Path) bool {
-		for _, p := range ignoredJobFields {
-			if p == path.String() {
-				return true
-			}
-		}
-		return false
-	}, cmp.Ignore())
-)
+var ignoredJobFields = []string{
+	"ObjectMeta.Labels",
+	"Spec.Containers.TerminationMessagePath",
+	"Spec.Containers.TerminationMessagePolicy",
+	"Spec.DNSPolicy",
+	"Spec.SchedulerName",
+	"Spec.SecurityContext",
+}
 
 //nolint:gocritic, funlen // improve in the future
 func ForJobs(existing, desired []batchv1.Job) k8s.Objects {
@@ -51,7 +41,7 @@ func ForJobs(existing, desired []batchv1.Job) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v.Spec.Template, t.Spec.Template, jobDiffOptions)
+			diff := cmp.Diff(v.Spec.Template, t.Spec.Template, ignore(ignoredJobFields...))
 			if diff == "" {
 				delete(mcreate, k)
 				delete(mdelete, k)

@@ -18,42 +18,44 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-operator/internal/k8s"
-
-	"sigs.k8s.io/controller-runtime/pkg/client"
-
+	"github.com/google/go-cmp/cmp"
 	appsv1 "k8s.io/api/apps/v1"
+	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:funlen, gocritic // to improve in the future
 func ForDeployments(existing, desired []appsv1.Deployment) k8s.Objects {
-	update := []client.Object{}
+	var update []client.Object
 	mcreate := deploymentMap(desired)
 	mdelete := deploymentMap(existing)
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			tp := t.DeepCopy()
+			diff := cmp.Diff(v, t, ignore())
+			if diff != "" {
+				tp := t.DeepCopy()
 
-			// if we have a nil value for the replicas in the desired deployment
-			// but we have a specific value in the current deployment, we override the desired with the current
-			// as this might have been written by an HPA
-			if tp.Spec.Replicas != nil && v.Spec.Replicas == nil {
-				v.Spec.Replicas = tp.Spec.Replicas
+				// if we have a nil value for the replicas in the desired deployment
+				// but we have a specific value in the current deployment, we override the desired with the current
+				// as this might have been written by an HPA
+				if tp.Spec.Replicas != nil && v.Spec.Replicas == nil {
+					v.Spec.Replicas = tp.Spec.Replicas
+				}
+
+				// we can't blindly DeepCopyInto, so, we select what we bring from the new to the old object
+				tp.Spec = v.Spec
+				tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
+
+				for k, v := range v.ObjectMeta.Annotations {
+					tp.ObjectMeta.Annotations[k] = v
+				}
+
+				for k, v := range v.ObjectMeta.Labels {
+					tp.ObjectMeta.Labels[k] = v
+				}
+
+				update = append(update, tp)
 			}
-
-			// we can't blindly DeepCopyInto, so, we select what we bring from the new to the old object
-			tp.Spec = v.Spec
-			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
-
-			for k, v := range v.ObjectMeta.Annotations {
-				tp.ObjectMeta.Annotations[k] = v
-			}
-
-			for k, v := range v.ObjectMeta.Labels {
-				tp.ObjectMeta.Labels[k] = v
-			}
-
-			update = append(update, tp)
 			delete(mcreate, k)
 			delete(mdelete, k)
 		}
@@ -77,7 +79,7 @@ func deploymentMap(deps []appsv1.Deployment) map[string]appsv1.Deployment {
 
 //nolint // to improve in the future
 func deploymentList(m map[string]appsv1.Deployment) []client.Object {
-	l := []client.Object{}
+	var l []client.Object
 	for _, v := range m {
 		obj := v
 		l = append(l, &obj)

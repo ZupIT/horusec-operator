@@ -18,33 +18,47 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-operator/internal/k8s"
-
-	networkingv1 "k8s.io/api/networking/v1beta1"
+	"github.com/google/go-cmp/cmp"
+	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+var ignoredIngressFields = []string{
+	"TypeMeta",
+	"ObjectMeta.UID",
+	"ObjectMeta.ResourceVersion",
+	"ObjectMeta.Generation",
+	"ObjectMeta.CreationTimestamp",
+	"ObjectMeta.ManagedFields",
+	"ObjectMeta.SelfLink",
+	"Status",
+}
+
 //nolint:gocritic, funlen // to improve in the future
-func ForIngresses(existing, desired []networkingv1.Ingress) k8s.Objects {
-	update := []client.Object{}
+func ForIngresses(existing, desired []networkingv1beta1.Ingress) k8s.Objects {
+	var update []client.Object
 	mcreate := ingressMap(desired)
 	mdelete := ingressMap(existing)
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			tp := t.DeepCopy()
+			diff := cmp.Diff(v, t, ignore(ignoredIngressFields...))
+			if diff != "" {
+				tp := t.DeepCopy()
 
-			tp.Spec = v.Spec
-			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
+				tp.Spec = v.Spec
+				tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
 
-			for k, v := range v.ObjectMeta.Annotations {
-				tp.ObjectMeta.Annotations[k] = v
+				for k, v := range v.ObjectMeta.Annotations {
+					tp.ObjectMeta.Annotations[k] = v
+				}
+
+				for k, v := range v.ObjectMeta.Labels {
+					tp.ObjectMeta.Labels[k] = v
+				}
+
+				update = append(update, tp)
 			}
-
-			for k, v := range v.ObjectMeta.Labels {
-				tp.ObjectMeta.Labels[k] = v
-			}
-
-			update = append(update, tp)
 			delete(mcreate, k)
 			delete(mdelete, k)
 		}
@@ -58,8 +72,8 @@ func ForIngresses(existing, desired []networkingv1.Ingress) k8s.Objects {
 }
 
 //nolint:gocritic // to improve in the future
-func ingressMap(deps []networkingv1.Ingress) map[string]networkingv1.Ingress {
-	m := map[string]networkingv1.Ingress{}
+func ingressMap(deps []networkingv1beta1.Ingress) map[string]networkingv1beta1.Ingress {
+	m := map[string]networkingv1beta1.Ingress{}
 	for _, d := range deps {
 		m[fmt.Sprintf("%s.%s", d.Namespace, d.Name)] = d
 	}
@@ -67,8 +81,8 @@ func ingressMap(deps []networkingv1.Ingress) map[string]networkingv1.Ingress {
 }
 
 //nolint // to improve in the future
-func ingressList(m map[string]networkingv1.Ingress) []client.Object {
-	l := []client.Object{}
+func ingressList(m map[string]networkingv1beta1.Ingress) []client.Object {
+	var l []client.Object
 	for _, v := range m {
 		obj := v
 		l = append(l, &obj)

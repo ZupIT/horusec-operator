@@ -18,36 +18,39 @@ import (
 	"fmt"
 
 	"github.com/ZupIT/horusec-operator/internal/k8s"
-
-	v1 "k8s.io/api/core/v1"
+	"github.com/google/go-cmp/cmp"
+	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
 //nolint:gocritic, funlen // improve in the future
-func ForService(existing, desired []v1.Service) k8s.Objects {
+func ForService(existing, desired []corev1.Service) k8s.Objects {
 	var update []client.Object
 	mdelete := serviceMap(existing)
 	mcreate := serviceMap(desired)
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			tp := t.DeepCopy()
+			diff := cmp.Diff(v, t, ignore())
+			if diff != "" {
+				tp := t.DeepCopy()
 
-			if v.Spec.ClusterIP == "" && len(tp.Spec.ClusterIP) > 0 {
-				v.Spec.ClusterIP = tp.Spec.ClusterIP
+				if v.Spec.ClusterIP == "" && len(tp.Spec.ClusterIP) > 0 {
+					v.Spec.ClusterIP = tp.Spec.ClusterIP
+				}
+
+				tp.Spec = v.Spec
+				tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
+				for k, v := range v.ObjectMeta.Annotations {
+					tp.ObjectMeta.Annotations[k] = v
+				}
+
+				for k, v := range v.ObjectMeta.Labels {
+					tp.ObjectMeta.Labels[k] = v
+				}
+
+				update = append(update, tp)
 			}
-
-			tp.Spec = v.Spec
-			tp.ObjectMeta.OwnerReferences = v.ObjectMeta.OwnerReferences
-			for k, v := range v.ObjectMeta.Annotations {
-				tp.ObjectMeta.Annotations[k] = v
-			}
-
-			for k, v := range v.ObjectMeta.Labels {
-				tp.ObjectMeta.Labels[k] = v
-			}
-
-			update = append(update, tp)
 			delete(mcreate, k)
 			delete(mdelete, k)
 		}
@@ -61,8 +64,8 @@ func ForService(existing, desired []v1.Service) k8s.Objects {
 }
 
 //nolint:gocritic // improve in the future
-func serviceMap(deps []v1.Service) map[string]v1.Service {
-	m := map[string]v1.Service{}
+func serviceMap(deps []corev1.Service) map[string]corev1.Service {
+	m := map[string]corev1.Service{}
 	for _, d := range deps {
 		m[fmt.Sprintf("%s.%s", d.Namespace, d.Name)] = d
 	}
@@ -70,7 +73,7 @@ func serviceMap(deps []v1.Service) map[string]v1.Service {
 }
 
 //nolint // improve in the future
-func serviceList(m map[string]v1.Service) []client.Object {
+func serviceList(m map[string]corev1.Service) []client.Object {
 	var l []client.Object
 	for _, v := range m {
 		obj := v
