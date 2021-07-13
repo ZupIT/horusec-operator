@@ -31,7 +31,7 @@ func ForDeployments(existing, desired []appsv1.Deployment) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v, t, ignore())
+			diff := cmp.Diff(t, v, ignore(ignoredDeploymentFields...))
 			if diff != "" {
 				tp := t.DeepCopy()
 
@@ -85,4 +85,24 @@ func deploymentList(m map[string]appsv1.Deployment) []client.Object {
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredDeploymentFields = []string{
+	"ObjectMeta",
+	"Spec.ProgressDeadlineSeconds",
+	"Spec.RevisionHistoryLimit",
+	"Spec.Strategy",
+	"Spec.Template.Spec.Containers.ImagePullPolicy",
+	"Spec.Template.Spec.Containers.LivenessProbe.Handler.HTTPGet.Scheme",
+	"Spec.Template.Spec.Containers.Ports.Protocol",
+	"Spec.Template.Spec.Containers.ReadinessProbe.Handler.HTTPGet.Scheme",
+	"Spec.Template.Spec.Containers.TerminationMessagePath",
+	"Spec.Template.Spec.Containers.TerminationMessagePolicy",
+	"Spec.Template.Spec.DNSPolicy",
+	"Spec.Template.Spec.RestartPolicy",
+	"Spec.Template.Spec.SchedulerName",
+	"Spec.Template.Spec.SecurityContext",
+	"Spec.Template.Spec.TerminationGracePeriodSeconds",
+	"Status",
+	"TypeMeta",
 }

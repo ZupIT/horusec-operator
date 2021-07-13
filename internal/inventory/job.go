@@ -24,15 +24,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var ignoredJobFields = []string{
-	"ObjectMeta.Labels",
-	"Spec.Containers.TerminationMessagePath",
-	"Spec.Containers.TerminationMessagePolicy",
-	"Spec.DNSPolicy",
-	"Spec.SchedulerName",
-	"Spec.SecurityContext",
-}
-
 //nolint:gocritic, funlen // improve in the future
 func ForJobs(existing, desired []batchv1.Job) k8s.Objects {
 	var update []client.Object
@@ -41,7 +32,7 @@ func ForJobs(existing, desired []batchv1.Job) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v.Spec.Template, t.Spec.Template, ignore(ignoredJobFields...))
+			diff := cmp.Diff(t.Spec.Template, v.Spec.Template, ignore(ignoredJobFields...))
 			if diff == "" {
 				delete(mcreate, k)
 				delete(mdelete, k)
@@ -76,4 +67,13 @@ func jobList(m map[string]batchv1.Job) []client.Object {
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredJobFields = []string{
+	"ObjectMeta.Labels",
+	"Spec.Containers.TerminationMessagePath",
+	"Spec.Containers.TerminationMessagePolicy",
+	"Spec.DNSPolicy",
+	"Spec.SchedulerName",
+	"Spec.SecurityContext",
 }

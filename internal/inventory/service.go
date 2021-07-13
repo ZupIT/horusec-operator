@@ -31,7 +31,7 @@ func ForService(existing, desired []corev1.Service) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v, t, ignore())
+			diff := cmp.Diff(t, v, ignore(ignoredServiceFields...))
 			if diff != "" {
 				tp := t.DeepCopy()
 
@@ -80,4 +80,13 @@ func serviceList(m map[string]corev1.Service) []client.Object {
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredServiceFields = []string{
+	"TypeMeta",
+	"ObjectMeta",
+	"Spec.ClusterIP",
+	"Spec.ClusterIPs",
+	"Spec.SessionAffinity",
+	"Status",
 }

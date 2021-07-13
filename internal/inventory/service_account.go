@@ -31,7 +31,7 @@ func ForServiceAccount(existing, desired []corev1.ServiceAccount) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v, t, ignore())
+			diff := cmp.Diff(t, v, ignore(ignoredServiceAccountFields...))
 			if diff != "" {
 				tp := t.DeepCopy()
 
@@ -77,4 +77,10 @@ func serviceAccountList(m map[string]corev1.ServiceAccount) []client.Object {
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredServiceAccountFields = []string{
+	"TypeMeta",
+	"ObjectMeta",
+	"Secrets",
 }

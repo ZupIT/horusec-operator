@@ -32,7 +32,7 @@ func ForHorizontalPodAutoscaling(existing []autoscalingv2beta2.HorizontalPodAuto
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v, t, ignore())
+			diff := cmp.Diff(t, v, ignore(ignoredAutoscalingFields...))
 			if diff != "" {
 				tp := t.DeepCopy()
 				if tp.GetLabels() == nil {
@@ -85,4 +85,9 @@ func hpaList(m map[string]autoscalingv2beta2.HorizontalPodAutoscaler) []client.O
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredAutoscalingFields = []string{
+	"TypeMeta",
+	"ObjectMeta",
 }

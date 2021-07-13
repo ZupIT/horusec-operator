@@ -23,17 +23,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-var ignoredIngressFields = []string{
-	"TypeMeta",
-	"ObjectMeta.UID",
-	"ObjectMeta.ResourceVersion",
-	"ObjectMeta.Generation",
-	"ObjectMeta.CreationTimestamp",
-	"ObjectMeta.ManagedFields",
-	"ObjectMeta.SelfLink",
-	"Status",
-}
-
 //nolint:gocritic, funlen // to improve in the future
 func ForIngresses(existing, desired []networkingv1beta1.Ingress) k8s.Objects {
 	var update []client.Object
@@ -42,7 +31,7 @@ func ForIngresses(existing, desired []networkingv1beta1.Ingress) k8s.Objects {
 
 	for k, v := range mcreate {
 		if t, ok := mdelete[k]; ok {
-			diff := cmp.Diff(v, t, ignore(ignoredIngressFields...))
+			diff := cmp.Diff(t, v, ignore(ignoredIngressFields...))
 			if diff != "" {
 				tp := t.DeepCopy()
 
@@ -88,4 +77,16 @@ func ingressList(m map[string]networkingv1beta1.Ingress) []client.Object {
 		l = append(l, &obj)
 	}
 	return l
+}
+
+var ignoredIngressFields = []string{
+	"TypeMeta",
+	"ObjectMeta.UID",
+	"ObjectMeta.ResourceVersion",
+	"ObjectMeta.Generation",
+	"ObjectMeta.CreationTimestamp",
+	"ObjectMeta.ManagedFields",
+	"ObjectMeta.SelfLink",
+	"Spec.Rules.IngressRuleValue.HTTP.Paths.PathType",
+	"Status",
 }
