@@ -9,8 +9,18 @@
           "repository": "horusec-analytic",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -81,8 +91,18 @@
           "repository": "horusec-api",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -125,8 +145,18 @@
           "repository": "horusec-auth",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -205,8 +235,18 @@
           "repository": "horusec-core",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -249,8 +289,18 @@
           "repository": "horusec-manager",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -294,8 +344,18 @@
           "repository": "horusec-messages",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -356,8 +416,18 @@
           "repository": "horusec-vulnerability",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -400,8 +470,18 @@
           "repository": "horusec-webhook",
           "tag": "v2.14.0"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
