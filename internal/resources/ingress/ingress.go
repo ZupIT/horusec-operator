@@ -15,46 +15,51 @@
 package ingress
 
 import (
+	"sort"
+
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	networkingv1 "k8s.io/api/networking/v1beta1"
+	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 //nolint:funlen // improve in the future
-func NewIngress(resource *v2alpha1.HorusecPlatform) networkingv1.Ingress {
-	return networkingv1.Ingress{
+func NewIngress(resource *v2alpha1.HorusecPlatform) networkingv1beta1.Ingress {
+	return networkingv1beta1.Ingress{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetName(),
 			Namespace: resource.GetNamespace(),
 			Labels:    resource.GetDefaultLabel(),
 		},
-		Spec: networkingv1.IngressSpec{
+		Spec: networkingv1beta1.IngressSpec{
 			Rules: newIngressRules(resource),
 			TLS:   newIngressTLS(resource),
 		},
 	}
 }
 
-func newIngressRules(resource *v2alpha1.HorusecPlatform) []networkingv1.IngressRule {
+func newIngressRules(resource *v2alpha1.HorusecPlatform) []networkingv1beta1.IngressRule {
 	hosts := mapHosts(resource)
-	rules := make([]networkingv1.IngressRule, 0, len(hosts))
+	rules := make([]networkingv1beta1.IngressRule, 0, len(hosts))
 	for host, backends := range hosts {
-		rules = append(rules, networkingv1.IngressRule{
+		rules = append(rules, networkingv1beta1.IngressRule{
 			Host: host,
-			IngressRuleValue: networkingv1.IngressRuleValue{
-				HTTP: &networkingv1.HTTPIngressRuleValue{Paths: backends},
+			IngressRuleValue: networkingv1beta1.IngressRuleValue{
+				HTTP: &networkingv1beta1.HTTPIngressRuleValue{Paths: backends},
 			},
 		})
 	}
+	sort.Slice(rules, func(i, j int) bool {
+		return rules[i].Host < rules[j].Host
+	})
 	return rules
 }
 
-func newIngressTLS(resource *v2alpha1.HorusecPlatform) []networkingv1.IngressTLS {
+func newIngressTLS(resource *v2alpha1.HorusecPlatform) []networkingv1beta1.IngressTLS {
 	secrets := mapTLSSecrets(resource)
-	tls := make([]networkingv1.IngressTLS, 0, len(secrets))
+	tls := make([]networkingv1beta1.IngressTLS, 0, len(secrets))
 	for secret, hosts := range secrets {
-		tls = append(tls, networkingv1.IngressTLS{
+		tls = append(tls, networkingv1beta1.IngressTLS{
 			Hosts:      hosts,
 			SecretName: secret,
 		})
@@ -62,23 +67,24 @@ func newIngressTLS(resource *v2alpha1.HorusecPlatform) []networkingv1.IngressTLS
 	if len(tls) == 0 {
 		return nil
 	}
+	sort.Slice(tls, func(i, j int) bool {
+		return tls[i].SecretName < tls[j].SecretName
+	})
 	return tls
 }
 
-func newHTTPIngressPath(path, service string) networkingv1.HTTPIngressPath {
-	prefix := networkingv1.PathTypePrefix
-	return networkingv1.HTTPIngressPath{
-		Path:     path,
-		PathType: &prefix,
-		Backend: networkingv1.IngressBackend{
+func newHTTPIngressPath(path, service string) networkingv1beta1.HTTPIngressPath {
+	return networkingv1beta1.HTTPIngressPath{
+		Path: path,
+		Backend: networkingv1beta1.IngressBackend{
 			ServiceName: service,
 			ServicePort: intstr.FromString("http"),
 		},
 	}
 }
 
-func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1.HTTPIngressPath {
-	hosts := make(map[string][]networkingv1.HTTPIngressPath, 0)
+func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1beta1.HTTPIngressPath {
+	hosts := make(map[string][]networkingv1beta1.HTTPIngressPath, 0)
 	for _, ingress := range r.Ingresses() {
 		if ingress.IsEnabled() {
 			path := ingress.GetPath()
@@ -114,5 +120,6 @@ func dedupe(a []string, b ...string) []string {
 	for letter := range check {
 		res = append(res, letter)
 	}
+	sort.Strings(res)
 	return res
 }
