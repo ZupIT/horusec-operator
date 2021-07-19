@@ -90,7 +90,7 @@ func mapHosts(r *v2alpha1.HorusecPlatform) map[string][]networkingv1beta1.HTTPIn
 	for _, ingress := range r.Ingresses() {
 		if ingress.IsEnabled() {
 			path := ingress.GetPath()
-			if host := ingress.GetHost(); host != "" {
+			if host := ingress.GetHost(); host != "" && path != "" {
 				hosts[host] = append(hosts[host], newHTTPIngressPath(path, ingress.GetName()))
 			}
 		}
