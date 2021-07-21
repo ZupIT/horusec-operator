@@ -490,6 +490,12 @@
         }
       },
       "extraEnv": [],
+      "ingress": {
+        "enabled": true,
+        "host": "webhook.local",
+        "path": "/webhook",
+        "tls": null
+      },
       "name": "webhook",
       "pod": {
         "autoscaling": {
