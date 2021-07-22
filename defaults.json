@@ -403,7 +403,7 @@
         }
       },
       "port": {
-        "http": 8004
+        "http": 8002
       },
       "replicaCount": 1
     },
@@ -457,7 +457,7 @@
         }
       },
       "port": {
-        "http": 8003
+        "http": 8001
       },
       "replicaCount": 1
     },
@@ -511,7 +511,7 @@
         }
       },
       "port": {
-        "http": 8005
+        "http": 8004
       },
       "replicaCount": 1
     }

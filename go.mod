@@ -6,6 +6,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.0 // indirect
 	github.com/go-logr/logr v0.3.0
 	github.com/golang/mock v1.5.0
+	github.com/google/addlicense v0.0.0-20210428195630-6d92264d7170 // indirect
 	github.com/google/go-cmp v0.5.6
 	github.com/google/wire v0.5.0
 	github.com/onsi/ginkgo v1.14.1
@@ -15,6 +16,7 @@ require (
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
 	go.uber.org/zap v1.15.0
+	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	k8s.io/api v0.20.2
 	k8s.io/apimachinery v0.20.2
 	k8s.io/client-go v0.20.2
