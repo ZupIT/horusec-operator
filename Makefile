@@ -10,6 +10,7 @@ KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
 OPERATOR_VERSION ?= $(shell semver get release)
 REGISTRY_IMAGE ?= horuszup/horusec-operator:${OPERATOR_VERSION}
+ADDLICENSE ?= addlicense
 
 fmt: # Check fmt in application
 	$(GOFMT) -w $(GO_FILES)
@@ -129,3 +130,11 @@ undeploy: # undeploy horusec-operator in environment
 
 mock: # generate source code for a mock
 	mockgen -package=test -destination test/kubernetes_client.go -source=internal/horusec/usecase/kubeclient.go KubernetesClient
+
+license:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -check -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
+
+license-fix:
+	$(GO) get -u github.com/google/addlicense
+	@$(ADDLICENSE) -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')

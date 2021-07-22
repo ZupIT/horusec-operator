@@ -12,19 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resources:
-- bases/config.yaml
-patchesJson6902:
-- path: patches/basic.config.yaml
-  target:
-    group: scorecard.operatorframework.io
-    version: v1alpha3
-    kind: Configuration
-    name: config
-- path: patches/olm.config.yaml
-  target:
-    group: scorecard.operatorframework.io
-    version: v1alpha3
-    kind: Configuration
-    name: config
-#+kubebuilder:scaffold:patchesJson6902
+name: License
+on: [ "push" ]
+jobs:
+  license:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - name: license
+        run: |
+          export PATH=${PATH}:`go env GOPATH`/bin
+          make license
