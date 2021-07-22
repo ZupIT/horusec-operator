@@ -30,4 +30,5 @@ type HorusecPlatformAdapter interface {
 	EnsureIngressRules(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureServiceAccounts(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 	EnsureDeploymentsAvailable(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
+	EnsureUnavailabilityReason(context.Context, *v2alpha1.HorusecPlatform) (*operation.Result, error)
 }

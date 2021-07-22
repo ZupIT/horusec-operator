@@ -247,6 +247,7 @@ type HorusecPlatformStatus struct {
 //+kubebuilder:resource:shortName=horus
 // nolint:lll // kubebuilder tags could not be split into multiple lines.
 //+kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.state",description="The status of the platform installation"
+//+kubebuilder:printcolumn:name="Reason",type="string",priority=1,JSONPath=".status.conditions[?(@.status=='False')].reason",description="It indicates the reason for a condition error"
 //+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp"
 
 // HorusecPlatform is the Schema for the horusecs API

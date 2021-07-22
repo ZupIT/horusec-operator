@@ -17,6 +17,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	apps "k8s.io/api/apps/v1"
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
@@ -213,7 +214,7 @@ func (d *Client) delete(ctx context.Context, obj client.Object) error {
 	if err := d.Delete(ctx, obj, deleteOptions...); err != nil {
 		return span.HandleError(fmt.Errorf("failed to delete %T %q: %w", obj, obj.GetName(), err))
 	}
-	log.Info(fmt.Sprintf("%T %q deleted", obj, obj.GetName()))
+	log.Info(fmt.Sprintf("%s deleted", wrap(obj).String()))
 	return nil
 }
 
@@ -225,7 +226,7 @@ func (d *Client) update(ctx context.Context, obj client.Object) error {
 	if err := d.Update(ctx, obj); err != nil {
 		return span.HandleError(fmt.Errorf("failed to update %T %q: %w", obj, obj.GetName(), err))
 	}
-	log.Info(fmt.Sprintf("%T %q updated", obj, obj.GetName()))
+	log.Info(fmt.Sprintf("%s updated", wrap(obj).String()))
 	return nil
 }
 
@@ -237,6 +238,25 @@ func (d *Client) create(ctx context.Context, obj client.Object) error {
 	if err := d.Create(ctx, obj); err != nil {
 		return span.HandleError(fmt.Errorf("failed to create %T %q: %w", obj, obj.GetName(), err))
 	}
-	log.Info(fmt.Sprintf("%T %q created", obj, obj.GetName()))
+	log.Info(fmt.Sprintf("%s created", wrap(obj).String()))
 	return nil
+}
+
+type wrapper struct {
+	obj client.Object
+}
+
+func wrap(obj client.Object) *wrapper {
+	return &wrapper{obj: obj}
+}
+
+func (o *wrapper) kind() string {
+	ss := strings.Split(fmt.Sprintf("%T", o.obj), ".")
+	return ss[len(ss)-1]
+}
+
+func (o *wrapper) String() string {
+	kind := o.kind()
+	name := o.obj.GetName()
+	return fmt.Sprintf("%s %q", strings.ToLower(kind), name)
 }

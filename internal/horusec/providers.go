@@ -29,5 +29,6 @@ var providers = wire.NewSet(
 	usecase.NewIngressRules,
 	usecase.NewServiceAccounts,
 	usecase.NewServices,
+	usecase.NewUnavailabilityReason,
 	wire.Struct(new(Adapter), "*"),
 )

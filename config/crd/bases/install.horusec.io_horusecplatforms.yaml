@@ -37,6 +37,11 @@ spec:
       jsonPath: .status.state
       name: Status
       type: string
+    - description: It indicates the reason for a condition error
+      jsonPath: .status.conditions[?(@.status=='False')].reason
+      name: Reason
+      priority: 1
+      type: string
     - jsonPath: .metadata.creationTimestamp
       name: Age
       type: date

@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package horusec
+package inventory
 
-import "github.com/ZupIT/horusec-operator/internal/horusec/usecase"
+import "github.com/google/go-cmp/cmp"
 
-type Adapter struct {
-	*usecase.Autoscaling
-	*usecase.DatabaseMigrations
-	*usecase.Deployments
-	*usecase.DeploymentsAvailability
-	*usecase.IngressRules
-	*usecase.CurrentState
-	*usecase.ServiceAccounts
-	*usecase.Services
-	*usecase.UnavailabilityReason
+func ignore(fields ...string) cmp.Option {
+	return cmp.FilterPath(func(path cmp.Path) bool {
+		for _, p := range fields {
+			if p == path.String() {
+				return true
+			}
+		}
+		return false
+	}, cmp.Ignore())
 }

@@ -17,14 +17,14 @@ package usecase
 import (
 	"context"
 
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/k8s"
 	apps "k8s.io/api/apps/v1"
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
 	networking "k8s.io/api/networking/v1beta1"
-
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/k8s"
+	"k8s.io/apimachinery/pkg/types"
 )
 
 type KubernetesClient interface {
@@ -37,4 +37,8 @@ type KubernetesClient interface {
 	ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Pod, error)
 	ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.ServiceAccount, error)
 	ListServicesByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Service, error)
+}
+
+type KubernetesLogs interface {
+	PreviousContainerLogs(ctx context.Context, pod types.NamespacedName, container string) ([]byte, error)
 }

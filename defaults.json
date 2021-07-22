@@ -7,10 +7,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-analytic",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -27,7 +37,7 @@
             "pullSecrets": [],
             "registry": "docker.io/horuszup",
             "repository": "horusec-migrations",
-            "tag": "v2.15.0"
+            "tag": "v2.16.1"
           }
         },
         "name": "horusec_analytic_db",
@@ -79,10 +89,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-api",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -123,10 +143,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-auth",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -203,10 +233,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-core",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -247,10 +287,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-manager",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -292,10 +342,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-messages",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -354,10 +414,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-vulnerability",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -398,10 +468,20 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-webhook",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         },
-        "livenessProbe": null,
-        "readinessProbe": null,
+        "livenessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
+        "readinessProbe": {
+          "timeoutSeconds": 1,
+          "periodSeconds": 10,
+          "successThreshold": 1,
+          "failureThreshold": 3
+        },
         "resources": null,
         "securityContext": {
           "enabled": false,
@@ -410,6 +490,12 @@
         }
       },
       "extraEnv": [],
+      "ingress": {
+        "enabled": true,
+        "host": "webhook.local",
+        "path": "/webhook",
+        "tls": null
+      },
       "name": "webhook",
       "pod": {
         "autoscaling": {
@@ -456,7 +542,7 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-migrations",
-          "tag": "v2.15.0"
+          "tag": "v2.16.1"
         }
       },
       "name": "horusec_db",

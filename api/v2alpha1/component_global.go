@@ -108,14 +108,12 @@ func (h *HorusecPlatform) GetGlobalDatabaseURI() string {
 }
 
 func (h *HorusecPlatform) GetAllIngressIsDisabled() bool {
-	return !h.IsAnalyticIngressEnabled() &&
-		!h.IsAPIIngressEnabled() &&
-		!h.IsAuthIngressEnabled() &&
-		!h.IsCoreIngressEnabled() &&
-		!h.IsManagerIngressEnabled() &&
-		!h.IsMessagesIngressEnabled() &&
-		!h.IsVulnerabilityIngressEnabled() &&
-		!h.IsWebhookIngressEnabled()
+	for _, ingress := range h.Ingresses() {
+		if ingress.IsEnabled() {
+			return false
+		}
+	}
+	return true
 }
 
 func (h *HorusecPlatform) IsEmailsEnabled() string {
