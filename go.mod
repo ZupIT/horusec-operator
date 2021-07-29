@@ -6,7 +6,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.0 // indirect
 	github.com/go-logr/logr v0.3.0
 	github.com/golang/mock v1.5.0
-	github.com/google/addlicense v0.0.0-20210428195630-6d92264d7170 // indirect
+	github.com/google/addlicense v0.0.0-20210729153508-ef04bb38a16b // indirect
 	github.com/google/go-cmp v0.5.6
 	github.com/google/wire v0.5.0
 	github.com/onsi/ginkgo v1.14.1
