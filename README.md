@@ -40,9 +40,9 @@ To use horusec-operator you need to configure some secrets and dependencies of h
 ## Installing
 After configuring your database connection, connecting to your broker and creating the secrets you need to install horusec-operator on your cluster, see an example below:
 ```bash
-kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.2"
 ```
-See the resource if was installed with sucess!
+See the resource if was installed with success!
 ```bash
 kubectl api-resources | grep horus
 ```
@@ -116,7 +116,7 @@ Don't worry this is normal because the script is trying create new database, but
 
 After script finish. Install Horusec-Operator
 ```bash
-kubectl apply -f "https://github.com/ZupIT/horusec-operator/releases/download/v2.0.0/horusec-operator.yaml"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.2"
 ```
 
 See the resource if was installed with sucess!
