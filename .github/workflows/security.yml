@@ -13,13 +13,17 @@
 # limitations under the License.
 
 name: Security
-on:
-  pull_request:
-    branches: ["**"]
+on: [ "push" ]
 jobs:
   security:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: security
-        run: make security
+        env:
+          HORUSEC_CLI_REPOSITORY_AUTHORIZATION: ${{ secrets.HORUSEC_CLI_REPOSITORY_AUTHORIZATION }}
+          HORUSEC_CLI_HORUSEC_API_URI: ${{ secrets.HORUSEC_CLI_HORUSEC_API_URI }}
+          HORUSEC_CLI_REPOSITORY_NAME: ${{ secrets.HORUSEC_CLI_REPOSITORY_NAME }}
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec/master/deployments/scripts/install.sh | bash -s latest
+          horusec start -p . -e true
