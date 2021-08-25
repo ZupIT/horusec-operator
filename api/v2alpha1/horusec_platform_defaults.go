@@ -15,18 +15,16 @@
 package v2alpha1
 
 import (
+	_ "embed"
 	"encoding/json"
-	"io/ioutil"
 )
 
-func MergeWithDefaultValues(horus *HorusecPlatform) (*HorusecPlatform, error) {
-	data, err := ioutil.ReadFile("defaults.json")
-	if err != nil {
-		return nil, err
-	}
+//go:embed horusec_platform_defaults.json
+var defaults []byte
 
+func MergeWithDefaultValues(horus *HorusecPlatform) (*HorusecPlatform, error) {
 	merged := new(HorusecPlatform)
-	if err = json.Unmarshal(data, &merged.Spec); err != nil {
+	if err := json.Unmarshal(defaults, &merged.Spec); err != nil {
 		return nil, err
 	}
 
