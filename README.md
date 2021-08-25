@@ -61,7 +61,7 @@ metadata:
   name: horusecplatform-sample
 spec: {}
 ```
-It will take the default horusec settings from the file [defaults.json](./defaults.json)
+It will take the [default horusec settings](./api/v2alpha1/horusec_platform_defaults.json)
 
 And now you apply your changes
 ```bash
