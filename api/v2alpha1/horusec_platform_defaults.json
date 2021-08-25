@@ -7,26 +7,12 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-analytic",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "database": {
         "host": "",
@@ -37,49 +23,23 @@
             "pullSecrets": [],
             "registry": "docker.io/horuszup",
             "repository": "horusec-migrations",
-            "tag": "v2.16.5"
+            "tag": "v2.16.8"
           }
         },
         "name": "horusec_analytic_db",
-        "password": {
-          "secretKeyRef": {
-            "key": "password",
-            "name": "horusec-analytic-database"
-          }
-        },
+        "password": {"secretKeyRef": {"key": "password", "name": "horusec-analytic-database"}},
         "port": 5432,
         "sslMode": false,
-        "user": {
-          "secretKeyRef": {
-            "key": "username",
-            "name": "horusec-analytic-database"
-          }
-        }
+        "user": {"secretKeyRef": {"key": "username", "name": "horusec-analytic-database"}}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "analytic.local",
-        "path": "/analytic",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "analytic.local", "path": "/analytic", "tls": null},
       "name": "analytic",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8005
-      },
+      "port": {"http": 8005},
       "replicaCount": 1
     },
     "api": {
@@ -89,51 +49,21 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-api",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "api.local",
-        "path": "/api",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "api.local", "path": "/api", "tls": null},
       "name": "api",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8000
-      },
+      "port": {"http": 8000},
       "replicaCount": 1
     },
     "auth": {
@@ -143,86 +73,35 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-auth",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "auth.local",
-        "path": "/auth",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "auth.local", "path": "/auth", "tls": null},
       "name": "auth",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "grpc": 8007,
-        "http": 8006
-      },
+      "port": {"grpc": 8007, "http": 8006},
       "replicaCount": 1,
       "type": "horusec",
       "user": {
         "administrator": {
           "email": "",
           "enabled": false,
-          "password": {
-            "secretKeyRef": {
-              "key": "password",
-              "name": "horusec-administrator"
-            }
-          },
-          "user": {
-            "secretKeyRef": {
-              "key": "username",
-              "name": "horusec-administrator"
-            }
-          }
+          "password": {"secretKeyRef": {"key": "password", "name": "horusec-administrator"}},
+          "user": {"secretKeyRef": {"key": "username", "name": "horusec-administrator"}}
         },
         "default": {
           "email": "dev@example.com",
           "enabled": false,
-          "password": {
-            "secretKeyRef": {
-              "key": "password",
-              "name": "horusec-default-user"
-            }
-          },
-          "user": {
-            "secretKeyRef": {
-              "key": "username",
-              "name": "horusec-default-user"
-            }
-          }
+          "password": {"secretKeyRef": {"key": "password", "name": "horusec-default-user"}},
+          "user": {"secretKeyRef": {"key": "username", "name": "horusec-default-user"}}
         }
       }
     },
@@ -233,51 +112,21 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-core",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "core.local",
-        "path": "/core",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "core.local", "path": "/core", "tls": null},
       "name": "core",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8003
-      },
+      "port": {"http": 8003},
       "replicaCount": 1
     },
     "manager": {
@@ -287,51 +136,21 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-manager",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "manager.local",
-        "path": "/",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "manager.local", "path": "/", "tls": null},
       "name": "manager",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8080
-      },
+      "port": {"http": 8080},
       "replicaCount": 1,
       "microFrontendPublicPath": ""
     },
@@ -342,69 +161,29 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-messages",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "enabled": false,
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "messages.local",
-        "path": "/messages",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "messages.local", "path": "/messages", "tls": null},
       "mailServer": {
         "host": "smtp.mailtrap.io",
-        "password": {
-          "secretKeyRef": {
-            "key": "password",
-            "name": "horusec-smtp"
-          }
-        },
+        "password": {"secretKeyRef": {"key": "password", "name": "horusec-smtp"}},
         "port": 25,
-        "user": {
-          "secretKeyRef": {
-            "key": "username",
-            "name": "horusec-smtp"
-          }
-        }
+        "user": {"secretKeyRef": {"key": "username", "name": "horusec-smtp"}}
       },
       "emailFrom": "change.me@mycompany.com",
       "name": "messages",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8002
-      },
+      "port": {"http": 8002},
       "replicaCount": 1
     },
     "vulnerability": {
@@ -414,51 +193,21 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-vulnerability",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "vulnerability.local",
-        "path": "/vulnerability",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "vulnerability.local", "path": "/vulnerability", "tls": null},
       "name": "vulnerability",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8001
-      },
+      "port": {"http": 8001},
       "replicaCount": 1
     },
     "webhook": {
@@ -468,70 +217,30 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-webhook",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         },
-        "livenessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
-        "readinessProbe": {
-          "timeoutSeconds": 1,
-          "periodSeconds": 10,
-          "successThreshold": 1,
-          "failureThreshold": 3
-        },
+        "livenessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
+        "readinessProbe": {"timeoutSeconds": 1, "periodSeconds": 10, "successThreshold": 1, "failureThreshold": 3},
         "resources": null,
-        "securityContext": {
-          "enabled": false,
-          "runAsNonRoot": true,
-          "runAsUser": 1000
-        }
+        "securityContext": {"enabled": false, "runAsNonRoot": true, "runAsUser": 1000}
       },
       "extraEnv": [],
-      "ingress": {
-        "enabled": true,
-        "host": "webhook.local",
-        "path": "/webhook",
-        "tls": null
-      },
+      "ingress": {"enabled": true, "host": "webhook.local", "path": "/webhook", "tls": null},
       "name": "webhook",
       "pod": {
-        "autoscaling": {
-          "enabled": false,
-          "maxReplicas": 3,
-          "minReplicas": 1,
-          "targetCPU": 50,
-          "targetMemory": 50
-        },
-        "securityContext": {
-          "enabled": false,
-          "fsGroup": 2000
-        }
+        "autoscaling": {"enabled": false, "maxReplicas": 3, "minReplicas": 1, "targetCPU": 50, "targetMemory": 50},
+        "securityContext": {"enabled": false, "fsGroup": 2000}
       },
-      "port": {
-        "http": 8004
-      },
+      "port": {"http": 8004},
       "replicaCount": 1
     }
   },
   "global": {
     "broker": {
       "host": "",
-      "password": {
-        "secretKeyRef": {
-          "key": "password",
-          "name": "horusec-broker"
-        }
-      },
+      "password": {"secretKeyRef": {"key": "password", "name": "horusec-broker"}},
       "port": 5672,
-      "user": {
-        "secretKeyRef": {
-          "key": "username",
-          "name": "horusec-broker"
-        }
-      }
+      "user": {"secretKeyRef": {"key": "username", "name": "horusec-broker"}}
     },
     "database": {
       "host": "",
@@ -542,48 +251,23 @@
           "pullSecrets": [],
           "registry": "docker.io/horuszup",
           "repository": "horusec-migrations",
-          "tag": "v2.16.5"
+          "tag": "v2.16.8"
         }
       },
       "name": "horusec_db",
-      "password": {
-        "secretKeyRef": {
-          "key": "password",
-          "name": "horusec-platform-database"
-        }
-      },
+      "password": {"secretKeyRef": {"key": "password", "name": "horusec-platform-database"}},
       "port": 5432,
       "sslMode": false,
-      "user": {
-        "secretKeyRef": {
-          "key": "username",
-          "name": "horusec-platform-database"
-        }
-      }
+      "user": {"secretKeyRef": {"key": "username", "name": "horusec-platform-database"}}
     },
-    "jwt": {
-      "secretKeyRef": {
-        "key": "jwt-token",
-        "name": "horusec-jwt"
-      }
-    },
+    "jwt": {"secretKeyRef": {"key": "jwt-token", "name": "horusec-jwt"}},
     "keycloak": {
       "clients": {
         "confidential": {
           "id": "auth",
-          "secretKeyRef": {
-            "key": "client-secret",
-            "name": "horusec-client-secret"
-          }
-        },
-        "public": {
-          "id": "manager"
-        }
-      },
-      "internalURL": "",
-      "otp": false,
-      "publicURL": "",
-      "realm": "horusec"
+          "secretKeyRef": {"key": "client-secret", "name": "horusec-client-secret"}
+        }, "public": {"id": "manager"}
+      }, "internalURL": "", "otp": false, "publicURL": "", "realm": "horusec"
     },
     "ldap": {
       "base": "dc=wimpi,dc=net",
@@ -593,12 +277,7 @@
       "skipTls": true,
       "insecureSkipVerify": true,
       "bindDn": "uid=admin,ou=system",
-      "bindPassword": {
-        "secretKeyRef": {
-          "key": "bind-password",
-          "name": "auth-ldap"
-        }
-      },
+      "bindPassword": {"secretKeyRef": {"key": "bind-password", "name": "auth-ldap"}},
       "userFilter": "(sAMAccountName=%s)",
       "adminGroup": "admin"
     }

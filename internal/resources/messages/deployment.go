@@ -56,6 +56,7 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 						resource.NewEnvFromSecret("HORUSEC_BROKER_PASSWORD", global.Broker.Password.KeyRef),
 						resource.NewEnvFromSecret("HORUSEC_SMTP_USERNAME", component.MailServer.User.KeyRef),
 						resource.NewEnvFromSecret("HORUSEC_SMTP_PASSWORD", component.MailServer.Password.KeyRef),
+						resource.NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", global.JWT.SecretKeyRef),
 					},
 					Ports: []corev1.ContainerPort{
 						{Name: "http", ContainerPort: int32(resource.GetMessagesPortHTTP())},
