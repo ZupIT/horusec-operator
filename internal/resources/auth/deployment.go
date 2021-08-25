@@ -66,7 +66,9 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 	}
 	switch resource.Spec.Components.Auth.Type {
 	case "keycloak":
-		defaultEnvs = append(defaultEnvs, resource.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", global.Keycloak.Clients.Confidential.SecretKeyRef))
+		defaultEnvs = append(defaultEnvs,
+			resource.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", global.Keycloak.Clients.Confidential.SecretKeyRef),
+			resource.NewEnvFromSecret("HORUSEC_JWT_SECRET_KEY", global.JWT.SecretKeyRef))
 	case "ldap":
 		defaultEnvs = append(defaultEnvs, resource.NewEnvFromSecret("HORUSEC_LDAP_BINDPASSWORD", global.Ldap.BindPassword.SecretKeyRef))
 	case "horusec":
@@ -86,7 +88,7 @@ func getEnvVars(resource *v2alpha1.HorusecPlatform) []corev1.EnvVar {
 		{Name: "HORUSEC_MANAGER_URL", Value: resource.GetManagerDefaultURL()},
 		{Name: "HORUSEC_AUTH_URL", Value: resource.GetAuthEndpoint()},
 		{Name: "HORUSEC_DATABASE_SQL_URI", Value: resource.GetGlobalDatabaseURI()},
-		{Name: "HORUSEC_KEYCLOAK_BASE_PATH", Value: global.Keycloak.PublicURL},
+		{Name: "HORUSEC_KEYCLOAK_BASE_PATH", Value: resource.GetKeycloakURL()},
 		{Name: "HORUSEC_KEYCLOAK_CLIENT_ID", Value: global.Keycloak.Clients.Public.ID},
 		{Name: "HORUSEC_KEYCLOAK_REALM", Value: global.Keycloak.Realm},
 		{Name: "HORUSEC_LDAP_BASE", Value: global.Ldap.Base},

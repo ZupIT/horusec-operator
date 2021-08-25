@@ -193,6 +193,14 @@ func (h *HorusecPlatform) GetAuthKeycloakClientSecret() v1.EnvVar {
 	return h.NewEnvFromSecret("HORUSEC_KEYCLOAK_CLIENT_SECRET", h.Spec.Global.Keycloak.Clients.Confidential.SecretKeyRef)
 }
 
+func (h *HorusecPlatform) GetKeycloakURL() string {
+	if h.Spec.Global.Keycloak.InternalURL != "" {
+		return h.Spec.Global.Keycloak.InternalURL
+	}
+
+	return h.Spec.Global.Keycloak.PublicURL
+}
+
 func (h *HorusecPlatform) GetAuthOptionalEnvs() []v1.EnvVar {
 	return []v1.EnvVar{
 		h.GetAuthAdminUsernameEnv(),
