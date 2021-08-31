@@ -23,20 +23,6 @@
   "horusecCliEnableInformationSeverity": false,
   "horusecCliEnableOwaspDependencyCheck": false,
   "horusecCliFalsePositiveHashes": [
-    "4d7473267cca7ab58ec81d5c287e6c31f4dbad2e09d38531c66f51dc2e661dba",
-    "b9f0d3772a885673b4a968d21eb9c350d25aae332b7c1a9bf113b5af24704ff9",
-    "e8c6a9744859f048a44a4eb160ce0e22df524507a288cfbfcbfcdc26d2533c63",
-    "6edefe4c5569f3406d47b867a1dad0cdff2de4d1f3afd787ac9b31d84eb3bc74",
-    "004ecc581851fee8df7b9c2845403735a1020aae25eb25d26246f483d8f72ede",
-    "e33b8064313acb9ed037a6c4b0ba55ceee3fca2e04e8704552415f770552efe2",
-    "0ba146b40e22bcdcd7af7663fbf80a3da48069beed929a001c8ffa8596bd061e",
-    "66abd8cd9d87808e7598891fe2d04ab94250c40aeae3b469b6dceb7956679b2d",
-    "0bdc725eee099831e8fe2b00a518b115f1164c174b8b7e4e1b056ec060533aaa",
-
-    "50b662651c0b34f772a98f4bf41b3f6c123f3d7b5e50170053e6a9ac5d0d2a7b",
-    "0209b3f6101d53ad6b644b249f8ab691ab7b75524c380920e89c0ad96124ebde",
-    "6e8f93c0a1c422dd0a4762ca1acd9b483df8969a9601bdb9841c5a2fd323ad47",
-    "923dfdf4c4e8afa5724a9be2457b8bc4ede81e99c6ca02c36e31d55e0c27c87f"
   ],
   "horusecCliFilesOrPathsToIgnore": [
     "*tmp*",
