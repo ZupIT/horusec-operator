@@ -9,7 +9,7 @@ require (
 	github.com/google/addlicense v1.0.0 // indirect
 	github.com/google/go-cmp v0.5.6
 	github.com/google/wire v0.5.0
-	github.com/onsi/ginkgo v1.14.1
+	github.com/onsi/ginkgo v1.16.4
 	github.com/onsi/gomega v1.10.2
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/stretchr/testify v1.7.0
