@@ -17,10 +17,11 @@ package k8s
 import (
 	"context"
 
-	"github.com/ZupIT/horusec-operator/internal/tracing"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	typedcorev1 "k8s.io/client-go/kubernetes/typed/core/v1"
+
+	"github.com/ZupIT/horusec-operator/internal/tracing"
 )
 
 type ContainerClient struct {

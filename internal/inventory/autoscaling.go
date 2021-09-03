@@ -17,10 +17,11 @@ package inventory
 import (
 	"fmt"
 
-	"github.com/ZupIT/horusec-operator/internal/k8s"
 	"github.com/google/go-cmp/cmp"
 	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/ZupIT/horusec-operator/internal/k8s"
 )
 
 //nolint:funlen,gocritic // to improve in the future
