@@ -17,14 +17,15 @@ package usecase
 import (
 	"context"
 
-	"github.com/ZupIT/horusec-operator/api/v2alpha1"
-	"github.com/ZupIT/horusec-operator/internal/k8s"
 	apps "k8s.io/api/apps/v1"
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
 	networking "k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/types"
+
+	"github.com/ZupIT/horusec-operator/api/v2alpha1"
+	"github.com/ZupIT/horusec-operator/internal/k8s"
 )
 
 type KubernetesClient interface {
