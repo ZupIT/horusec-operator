@@ -38,11 +38,12 @@ func NewJob(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 				Spec: corev1.PodSpec{
 					RestartPolicy:                 corev1.RestartPolicyOnFailure,
 					TerminationGracePeriodSeconds: &terminationPeriod,
+					ImagePullSecrets:              global.Database.Migration.Image.PullSecrets,
 					Containers: []corev1.Container{
 						{
 							Name:            "horusec-platform-database-migration",
 							Image:           resource.GetDatabaseMigrationImage(),
-							ImagePullPolicy: corev1.PullIfNotPresent,
+							ImagePullPolicy: global.Database.Migration.Image.PullPolicy,
 							Command:         []string{"migrate.sh"},
 							Env: []corev1.EnvVar{
 								resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_USERNAME", global.Database.User.KeyRef),

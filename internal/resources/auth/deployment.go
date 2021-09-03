@@ -27,6 +27,7 @@ import (
 
 //nolint:lll, funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
+	component := resource.Spec.Components.Auth
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetAuthName(),
@@ -38,17 +39,21 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetAuthLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetAuthLabels()},
-				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  resource.GetAuthName(),
-					Image: resource.GetAuthImage(),
-					Env:   getEnvVars(resource),
-					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
-						{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
-					},
-					LivenessProbe:  newLivenessProbe(resource),
-					ReadinessProbe: newReadinessProbe(resource),
-				}}},
+				Spec: corev1.PodSpec{
+					ImagePullSecrets: component.Container.Image.PullSecrets,
+					Containers: []corev1.Container{{
+						Name:            resource.GetAuthName(),
+						Image:           resource.GetAuthImage(),
+						ImagePullPolicy: component.Container.Image.PullPolicy,
+						Env:             getEnvVars(resource),
+						Ports: []corev1.ContainerPort{
+							{Name: "http", ContainerPort: int32(resource.GetAuthPortHTTP())},
+							{Name: "grpc", ContainerPort: int32(resource.GetAuthPortGRPC())},
+						},
+						LivenessProbe:  newLivenessProbe(resource),
+						ReadinessProbe: newReadinessProbe(resource),
+					}},
+				},
 			},
 		},
 	}

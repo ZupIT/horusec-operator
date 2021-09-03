@@ -147,11 +147,12 @@ type Container struct {
 }
 
 type Image struct {
-	PullPolicy  string   `json:"pullPolicy,omitempty"`
-	PullSecrets []string `json:"pullSecrets,omitempty"`
-	Registry    string   `json:"registry,omitempty"`
-	Repository  string   `json:"repository,omitempty"`
-	Tag         string   `json:"tag,omitempty"`
+	//+kubebuilder:validation:Enum=Always;Never;IfNotPresent
+	PullPolicy  corev1.PullPolicy             `json:"pullPolicy,omitempty"`
+	PullSecrets []corev1.LocalObjectReference `json:"pullSecrets,omitempty"`
+	Registry    string                        `json:"registry,omitempty"`
+	Repository  string                        `json:"repository,omitempty"`
+	Tag         string                        `json:"tag,omitempty"`
 }
 
 type ContainerSecurityContext struct {
