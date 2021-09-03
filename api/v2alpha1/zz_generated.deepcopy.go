@@ -404,7 +404,7 @@ func (in *Image) DeepCopyInto(out *Image) {
 	*out = *in
 	if in.PullSecrets != nil {
 		in, out := &in.PullSecrets, &out.PullSecrets
-		*out = make([]string, len(*in))
+		*out = make([]v1.LocalObjectReference, len(*in))
 		copy(*out, *in)
 	}
 }

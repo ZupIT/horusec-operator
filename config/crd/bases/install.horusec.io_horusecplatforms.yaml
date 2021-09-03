@@ -76,10 +76,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -200,6 +216,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -319,6 +352,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -338,7 +388,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -351,7 +401,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -519,10 +569,26 @@ spec:
                               image:
                                 properties:
                                   pullPolicy:
+                                    description: PullPolicy describes a policy for
+                                      if/when to pull a container image
+                                    enum:
+                                    - Always
+                                    - Never
+                                    - IfNotPresent
                                     type: string
                                   pullSecrets:
                                     items:
-                                      type: string
+                                      description: LocalObjectReference contains enough
+                                        information to let you locate the referenced
+                                        object inside the same namespace.
+                                      properties:
+                                        name:
+                                          description: 'Name of the referent. More
+                                            info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                            TODO: Add other useful fields. apiVersion,
+                                            kind, uid?'
+                                          type: string
+                                      type: object
                                     type: array
                                   registry:
                                     type: string
@@ -912,10 +978,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -1036,6 +1118,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -1155,6 +1254,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -1174,7 +1290,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -1187,7 +1303,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -1669,10 +1785,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -1793,6 +1925,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -1912,6 +2061,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -1931,7 +2097,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -1944,7 +2110,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -2541,10 +2707,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -2665,6 +2847,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -2784,6 +2983,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -2803,7 +3019,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -2816,7 +3032,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -3298,10 +3514,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -3422,6 +3654,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -3541,6 +3790,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -3560,7 +3826,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -3573,7 +3839,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -4055,10 +4321,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -4179,6 +4461,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -4298,6 +4597,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -4317,7 +4633,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -4330,7 +4646,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -4871,10 +5187,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -4995,6 +5327,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -5114,6 +5463,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -5133,7 +5499,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -5146,7 +5512,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -5628,10 +5994,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string
@@ -5752,6 +6134,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -5871,6 +6270,23 @@ spec:
                                 required:
                                 - port
                                 type: object
+                              terminationGracePeriodSeconds:
+                                description: Optional duration in seconds the pod
+                                  needs to terminate gracefully upon probe failure.
+                                  The grace period is the duration in seconds after
+                                  the processes running in the pod are sent a termination
+                                  signal and the time when the processes are forcibly
+                                  halted with a kill signal. Set this value longer
+                                  than the expected cleanup time for your process.
+                                  If this value is nil, the pod's terminationGracePeriodSeconds
+                                  will be used. Otherwise, this value overrides the
+                                  value provided by the pod spec. Value must be non-negative
+                                  integer. The value zero indicates stop immediately
+                                  via the kill signal (no opportunity to shut down).
+                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate.
+                                format: int64
+                                type: integer
                               timeoutSeconds:
                                 description: 'Number of seconds after which the probe
                                   times out. Defaults to 1 second. Minimum value is
@@ -5890,7 +6306,7 @@ spec:
                                   pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                                   x-kubernetes-int-or-string: true
                                 description: 'Limits describes the maximum amount
-                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                               requests:
                                 additionalProperties:
@@ -5903,7 +6319,7 @@ spec:
                                   of compute resources required. If Requests is omitted
                                   for a container, it defaults to Limits if that is
                                   explicitly specified, otherwise to an implementation-defined
-                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                                 type: object
                             type: object
                           securityContext:
@@ -6445,10 +6861,26 @@ spec:
                           image:
                             properties:
                               pullPolicy:
+                                description: PullPolicy describes a policy for if/when
+                                  to pull a container image
+                                enum:
+                                - Always
+                                - Never
+                                - IfNotPresent
                                 type: string
                               pullSecrets:
                                 items:
-                                  type: string
+                                  description: LocalObjectReference contains enough
+                                    information to let you locate the referenced object
+                                    inside the same namespace.
+                                  properties:
+                                    name:
+                                      description: 'Name of the referent. More info:
+                                        https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                        TODO: Add other useful fields. apiVersion,
+                                        kind, uid?'
+                                      type: string
+                                  type: object
                                 type: array
                               registry:
                                 type: string

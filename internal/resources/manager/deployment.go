@@ -25,6 +25,7 @@ import (
 
 //nolint:funlen // to improve in the future
 func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
+	component := resource.Spec.Components.Manager
 	return appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      resource.GetManagerName(),
@@ -36,27 +37,31 @@ func NewDeployment(resource *v2alpha1.HorusecPlatform) appsv1.Deployment {
 			Selector: &metav1.LabelSelector{MatchLabels: resource.GetManagerLabels()},
 			Template: corev1.PodTemplateSpec{
 				ObjectMeta: metav1.ObjectMeta{Labels: resource.GetManagerLabels()},
-				Spec: corev1.PodSpec{Containers: []corev1.Container{{
-					Name:  resource.GetManagerName(),
-					Image: resource.GetManagerImage(),
-					Env: []corev1.EnvVar{
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: resource.GetAPIEndpoint()},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_ANALYTIC", Value: resource.GetAnalyticEndpoint()},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_CORE", Value: resource.GetCoreEndpoint()},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_WEBHOOK", Value: resource.GetWebhookEndpoint()},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_AUTH", Value: resource.GetAuthEndpoint()},
-						{Name: "REACT_APP_HORUSEC_ENDPOINT_VULNERABILITY", Value: resource.GetVulnerabilityEndpoint()},
-						{Name: "REACT_APP_HORUSEC_MANAGER_PATH", Value: "\\/manager"},
-						{Name: "REACT_APP_KEYCLOAK_BASE_PATH", Value: resource.Spec.Global.Keycloak.PublicURL},
-						{Name: "REACT_APP_KEYCLOAK_CLIENT_ID", Value: resource.Spec.Global.Keycloak.Clients.Public.ID},
-						{Name: "REACT_APP_KEYCLOAK_REALM", Value: resource.Spec.Global.Keycloak.Realm},
-					},
-					Ports: []corev1.ContainerPort{
-						{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},
-					},
-					LivenessProbe:  newLivenessProbe(resource),
-					ReadinessProbe: newReadinessProbe(resource),
-				}}},
+				Spec: corev1.PodSpec{
+					ImagePullSecrets: component.Container.Image.PullSecrets,
+					Containers: []corev1.Container{{
+						Name:            resource.GetManagerName(),
+						Image:           resource.GetManagerImage(),
+						ImagePullPolicy: component.Container.Image.PullPolicy,
+						Env: []corev1.EnvVar{
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_API", Value: resource.GetAPIEndpoint()},
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_ANALYTIC", Value: resource.GetAnalyticEndpoint()},
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_CORE", Value: resource.GetCoreEndpoint()},
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_WEBHOOK", Value: resource.GetWebhookEndpoint()},
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_AUTH", Value: resource.GetAuthEndpoint()},
+							{Name: "REACT_APP_HORUSEC_ENDPOINT_VULNERABILITY", Value: resource.GetVulnerabilityEndpoint()},
+							{Name: "REACT_APP_HORUSEC_MANAGER_PATH", Value: "\\/manager"},
+							{Name: "REACT_APP_KEYCLOAK_BASE_PATH", Value: resource.Spec.Global.Keycloak.PublicURL},
+							{Name: "REACT_APP_KEYCLOAK_CLIENT_ID", Value: resource.Spec.Global.Keycloak.Clients.Public.ID},
+							{Name: "REACT_APP_KEYCLOAK_REALM", Value: resource.Spec.Global.Keycloak.Realm},
+						},
+						Ports: []corev1.ContainerPort{
+							{Name: "http", ContainerPort: int32(resource.GetManagerPortHTTP())},
+						},
+						LivenessProbe:  newLivenessProbe(resource),
+						ReadinessProbe: newReadinessProbe(resource),
+					}},
+				},
 			},
 		},
 	}
