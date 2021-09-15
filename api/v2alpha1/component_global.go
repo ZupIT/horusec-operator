@@ -36,7 +36,7 @@ func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 }
 
 func (h *HorusecPlatform) GetLatestVersion() string {
-	return "v2.16.5"
+	return "v2.17.0"
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {

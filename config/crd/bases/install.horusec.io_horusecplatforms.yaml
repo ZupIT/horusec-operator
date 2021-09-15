@@ -229,8 +229,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -365,8 +366,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -546,6 +548,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -664,14 +680,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -948,6 +965,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -1131,8 +1162,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -1267,8 +1299,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -1448,6 +1481,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -1471,14 +1518,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -1755,6 +1803,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -1938,8 +2000,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -2074,8 +2137,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -2255,6 +2319,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -2278,14 +2356,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -2562,6 +2641,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -2860,8 +2953,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -2996,8 +3090,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -3177,6 +3272,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -3200,14 +3309,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -3484,6 +3594,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -3667,8 +3791,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -3803,8 +3928,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -3984,6 +4110,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -4007,14 +4147,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -4291,6 +4432,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -4474,8 +4629,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -4610,8 +4766,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -4791,6 +4948,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -4818,14 +4989,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -5157,6 +5329,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -5340,8 +5526,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -5476,8 +5663,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -5657,6 +5845,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -5680,14 +5882,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -5964,6 +6167,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -6147,8 +6364,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -6283,8 +6501,9 @@ spec:
                                   value provided by the pod spec. Value must be non-negative
                                   integer. The value zero indicates stop immediately
                                   via the kill signal (no opportunity to shut down).
-                                  This is an alpha field and requires enabling ProbeTerminationGracePeriod
-                                  feature gate.
+                                  This is a beta field and requires enabling ProbeTerminationGracePeriod
+                                  feature gate. Minimum value is 1. spec.terminationGracePeriodSeconds
+                                  is used if unset.
                                 format: int64
                                 type: integer
                               timeoutSeconds:
@@ -6464,6 +6683,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
@@ -6487,14 +6720,15 @@ spec:
                               type: string
                             value:
                               description: 'Variable references $(VAR_NAME) are expanded
-                                using the previous defined environment variables in
-                                the container and any service environment variables.
+                                using the previously defined environment variables
+                                in the container and any service environment variables.
                                 If a variable cannot be resolved, the reference in
-                                the input string will be unchanged. The $(VAR_NAME)
-                                syntax can be escaped with a double $$, ie: $$(VAR_NAME).
-                                Escaped references will never be expanded, regardless
-                                of whether the variable exists or not. Defaults to
-                                "".'
+                                the input string will be unchanged. Double $$ are
+                                reduced to a single $, which allows for escaping the
+                                $(VAR_NAME) syntax: i.e. "$$(VAR_NAME)" will produce
+                                the string literal "$(VAR_NAME)". Escaped references
+                                will never be expanded, regardless of whether the
+                                variable exists or not. Defaults to "".'
                               type: string
                             valueFrom:
                               description: Source for the environment variable's value.
@@ -6771,6 +7005,20 @@ spec:
                                     description: GMSACredentialSpecName is the name
                                       of the GMSA credential spec to use.
                                     type: string
+                                  hostProcess:
+                                    description: HostProcess determines if a container
+                                      should be run as a 'Host Process' container.
+                                      This field is alpha-level and will only be honored
+                                      by components that enable the WindowsHostProcessContainers
+                                      feature flag. Setting this field without the
+                                      feature flag will result in errors when validating
+                                      the Pod. All of a Pod's containers must have
+                                      the same effective HostProcess value (it is
+                                      not allowed to have a mix of HostProcess containers
+                                      and non-HostProcess containers).  In addition,
+                                      if HostProcess is true then HostNetwork must
+                                      also be set to true.
+                                    type: boolean
                                   runAsUserName:
                                     description: The UserName in Windows to run the
                                       entrypoint of the container process. Defaults
