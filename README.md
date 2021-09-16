@@ -116,7 +116,7 @@ Don't worry this is normal because the script is trying create new database, but
 
 After script finish. Install Horusec-Operator
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.3"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.4"
 ```
 
 See the resource if was installed with sucess!
