@@ -40,7 +40,7 @@ To use horusec-operator you need to configure some secrets and dependencies of h
 ## Installing
 After configuring your database connection, connecting to your broker and creating the secrets you need to install horusec-operator on your cluster, see an example below:
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.3"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.1.4"
 ```
 See the resource if was installed with success!
 ```bash
