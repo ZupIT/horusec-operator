@@ -108,9 +108,7 @@ jobs:
           message: "[skip ci] Update versioning files"
 
       - name: Create tag
-        run: |
-          git tag ${{ steps.updated-version.outputs.version }}
-          sleep 5
+        run: git tag ${{ steps.updated-version.outputs.version }} && sleep 10
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
