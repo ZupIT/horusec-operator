@@ -285,7 +285,7 @@ items:
                       name: analytic-database
                 - name: HORUSEC_DATABASE_SQL_URI
                   value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/analytic_db?sslmode=disable
-              image: docker.io/horuszup/horusec-analytic:v2.17.0
+              image: docker.io/horuszup/horusec-analytic:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -609,7 +609,7 @@ items:
                       name: platform-database
                 - name: HORUSEC_DATABASE_SQL_URI
                   value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
-              image: docker.io/horuszup/horusec-api:v2.17.0
+              image: docker.io/horuszup/horusec-api:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -1061,7 +1061,7 @@ items:
                   value: ""
                 - name: HORUSEC_DEFAULT_USER_DATA
                   value: ""
-              image: docker.io/horuszup/horusec-auth:v2.17.0
+              image: docker.io/horuszup/horusec-auth:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -1389,7 +1389,7 @@ items:
                       name: platform-database
                 - name: HORUSEC_DATABASE_SQL_URI
                   value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
-              image: docker.io/horuszup/horusec-core:v2.17.0
+              image: docker.io/horuszup/horusec-core:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -1645,7 +1645,7 @@ items:
                   value: manager
                 - name: REACT_APP_KEYCLOAK_REALM
                   value: horusec
-              image: docker.io/horuszup/horusec-manager:v2.17.0
+              image: docker.io/horuszup/horusec-manager:latest
               imagePullPolicy: IfNotPresent
               name: manager
               ports:
@@ -1951,7 +1951,7 @@ items:
                       name: platform-database
                 - name: HORUSEC_DATABASE_SQL_URI
                   value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
-              image: docker.io/horuszup/horusec-vulnerability:v2.17.0
+              image: docker.io/horuszup/horusec-vulnerability:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -2282,7 +2282,7 @@ items:
                       name: platform-database
                 - name: HORUSEC_DATABASE_SQL_URI
                   value: postgresql://$(HORUSEC_DATABASE_USERNAME):$(HORUSEC_DATABASE_PASSWORD)@horusec-database-postgresql:5432/horusec_db?sslmode=disable
-              image: docker.io/horuszup/horusec-webhook:v2.17.0
+              image: docker.io/horuszup/horusec-webhook:latest
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3

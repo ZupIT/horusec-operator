@@ -15,83 +15,120 @@
 name: Release
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - closed
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: 'Release type: M (Major); m (Minor); p (Path)'
+        required: true
+      horusecPlatformVersion:
+        description: "Version of horusec-platform for this release. Ex: v0.0.0"
+        required: true
+
+permissions:
+  contents: write
 
 jobs:
-  docker:
-    name: "Publish a new release"
-    if: github.event.pull_request.merged == true && (startsWith(github.event.pull_request.head.ref, 'release/') || startsWith(github.event.pull_request.head.ref, 'hotfix/'))
+  Release:
     runs-on: ubuntu-latest
+    env:
+      COSIGN_KEY_LOCATION: "/tmp/cosign.key"
+
     steps:
-      - name: "Extract version from branch name (for release branches)"
-        if: startsWith(github.event.pull_request.head.ref, 'release/')
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=${BRANCH_NAME#release/}
-
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: "Extract version from branch name (for hotfix branches)"
-        if: startsWith(github.event.pull_request.head.ref, 'hotfix/')
-        run: |
-          BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
-          VERSION=${BRANCH_NAME#hotfix/}
-
-          echo "RELEASE_VERSION=$VERSION" >> $GITHUB_ENV
-
-      - name: "Docker meta"
-        uses: docker/metadata-action@v3
-        id: meta
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          images: |
-            horuszup/horusec-operator
-          tags: |
-            type=semver,prefix=v,pattern={{version}},value=${{ env.RELEASE_VERSION }}
-            type=semver,prefix=v,pattern={{major}}.{{minor}},value=${{ env.RELEASE_VERSION }}
-            type=semver,prefix=v,pattern={{major}},value=${{ env.RELEASE_VERSION }}
+          fetch-depth: 0
 
-      - name: "Login to DockerHub"
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Set up nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Docker Login
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: "Build and push"
-        uses: docker/build-push-action@v2
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
         with:
-          push: true
-          file: ./deployments/dockerfiles/Dockerfile
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
 
-      - name: "Write Docker notes"
-        uses: actions/github-script@v4
-        id: docker_notes
+      - name: Cosign Installer
+        uses: sigstore/cosign-installer@main
+        with:
+          cosign-release: 'v1.2.0'
+
+      - name: Install cosign private key
+        run: 'echo "$COSIGN_KEY" > $COSIGN_KEY_LOCATION'
+        shell: bash
         env:
-          DOCKER_TAGS: ${{ steps.meta.outputs.tags }}
-        with:
-          result-encoding: string
-          script: |
-            const notes = ["## Docker images\n"];
-            const {DOCKER_TAGS} = process.env;
-            DOCKER_TAGS.split("\n")
-                .map(image => image.trim())
-                .filter(image => image.length > 0)
-                .forEach(image => notes.push(`-   \`docker pull ${image}\``));
-            return notes.join("\n");
+          COSIGN_KEY: ${{secrets.COSIGN_KEY}}
 
-      - name: "Create Release"
-        uses: actions/create-release@v1
+      - name: Version increment
+        id: updated-version
+        run: |
+          curl https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/semver.sh -o /tmp/semver.sh
+          chmod +x /tmp/semver.sh
+          /tmp/semver.sh -${{ github.event.inputs.releaseType }} ${{ github.event.repository.full_name }}
+
+      - name: Update versioning files
+        run: |
+          npm install -g json
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.analytic.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.analytic.database.migration.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.api.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.auth.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.core.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.manager.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.messages.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.vulnerability.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.components.webhook.container.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          json -I -f api/v2alpha1/horusec_platform_defaults.json -e 'this.global.database.migration.image.tag="${{ github.event.inputs.horusecPlatformVersion }}"'
+          find . -type f -not -path "./.git/*" -not -path "./go.mod" -not -path "./go.sum" | xargs sed -i "s/${{ steps.updated-version.outputs.actualVersion }}/${{ steps.updated-version.outputs.version }}/g"
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7.3.0
+        with:
+          push: false
+          signoff: true
+          author_name: horusec
+          author_email: horusec@zup.com.br
+          committer_name: horusec
+          committer_email: horusec@zup.com.br
+          message: "[skip ci] Update versioning files"
+
+      - name: Create tag
+        run: |
+          git tag ${{ steps.updated-version.outputs.version }}
+          sleep 5
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          commitish: ${{ github.event.pull_request.merge_commit_sha }}
-          tag_name: ${{ env.RELEASE_VERSION }}
-          release_name: ${{ env.RELEASE_VERSION }}
-          body: ${{steps.docker_notes.outputs.result}}
-          draft: false
-          prerelease: false
+          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
+          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.version }}
+
+      - name: Create and push release branch and tag
+        if: github.event.inputs.releaseType != 'p'
+        run: |
+          git push origin ${GITHUB_REF##*/}
+
+          git push --tags
+
+          git branch ${{ steps.updated-version.outputs.releaseBranchName }}
+          git push origin ${{ steps.updated-version.outputs.releaseBranchName }}

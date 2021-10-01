@@ -17,6 +17,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
 	"go.uber.org/zap/zapcore"
@@ -57,8 +58,8 @@ func main() {
 	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
 	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
-		"Enable leader election for controller manager. "+
-			"Enabling this will ensure there is only one active controller manager.")
+		"Enable leader election for controller horusec-operator. "+
+			"Enabling this will ensure there is only one active controller horusec-operator.")
 	opts := zap.Options{
 		Development:     true,
 		StacktraceLevel: zapcore.DPanicLevel,
@@ -84,7 +85,7 @@ func main() {
 		LeaderElectionID:       "719835f9.horusec.io",
 	})
 	if err != nil {
-		setupLog.Error(err, "unable to start manager")
+		setupLog.Error(err, "unable to start horusec-operator")
 		os.Exit(1)
 	}
 
@@ -95,7 +96,7 @@ func main() {
 	}
 
 	if err = reconciler.SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to setup manager", "controller", "HorusecPlatform")
+		setupLog.Error(err, "unable to setup horusec-operator", "controller", "HorusecPlatform")
 		os.Exit(1)
 	}
 	//+kubebuilder:scaffold:builder
@@ -109,9 +110,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	setupLog.Info("starting manager")
+	startLog := fmt.Sprintf(
+		"starting horusec-operator with: version: %s; commit: %s; date: %s",
+		installv2.LatestVersion,
+		installv2.Commit,
+		installv2.Date,
+	)
+	setupLog.Info(startLog)
 	if err := mgr.Start(ctrl.SetupSignalHandler()); err != nil {
-		setupLog.Error(err, "problem running manager")
+		setupLog.Error(err, "problem running horusec-operator")
 		os.Exit(1)
 	}
 }

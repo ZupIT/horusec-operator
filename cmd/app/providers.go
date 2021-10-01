@@ -28,7 +28,7 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/resources"
 )
 
-// nolint:deadcode,unused,varcheck // used for dependency injection container generation
+// nolint // used for dependency injection container generation
 var providers = wire.NewSet(
 	extractClient,
 	extractRestConfig,

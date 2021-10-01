@@ -21,6 +21,10 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
+var LatestVersion = "latest"
+var Commit = ""
+var Date = ""
+
 func (h *HorusecPlatform) NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
 	return corev1.EnvVar{
 		Name:      variableName,
@@ -36,7 +40,7 @@ func (h *HorusecPlatform) GetDefaultLabel() map[string]string {
 }
 
 func (h *HorusecPlatform) GetLatestVersion() string {
-	return "v2.17.0"
+	return LatestVersion
 }
 
 func (h *HorusecPlatform) GetGlobalDatabaseLogMode() string {
