@@ -98,7 +98,7 @@ jobs:
           find . -type f -not -path "./.git/*" -not -path "./go.mod" -not -path "./go.sum" | xargs sed -i "s/${{ steps.updated-version.outputs.actualVersion }}/${{ steps.updated-version.outputs.version }}/g"
 
       - name: Commit changes
-        uses: EndBug/add-and-commit@v7.3.0
+        uses: EndBug/add-and-commit@v7.4.0
         with:
           push: false
           signoff: true
