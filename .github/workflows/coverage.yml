@@ -16,6 +16,7 @@ name: Coverage
 on:
   pull_request:
     branches: ["**"]
+permissions: read-all
 jobs:
   coverage:
     runs-on: ubuntu-latest

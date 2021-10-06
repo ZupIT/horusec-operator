@@ -19,11 +19,12 @@ on:
     branches:
       - main
 
-permissions:
-  contents: write
-
+permissions: read-all
 jobs:
   ReleaseAlpha:
+    permissions:
+      contents: write
+      packages: write
     runs-on: ubuntu-latest
     env:
       COSIGN_KEY_LOCATION: "/tmp/cosign.key"

@@ -24,11 +24,12 @@ on:
         description: "Version of horusec-platform for this release. Ex: v0.0.0"
         required: true
 
-permissions:
-  contents: write
-
+permissions: read-all
 jobs:
   Release:
+    permissions:
+      contents: write
+      packages: write
     runs-on: ubuntu-latest
     env:
       COSIGN_KEY_LOCATION: "/tmp/cosign.key"

@@ -16,6 +16,7 @@ name: Lint
 on:
   pull_request:
     branches: ["**"]
+permissions: read-all
 jobs:
   lint:
     runs-on: ubuntu-latest
