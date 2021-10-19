@@ -27,6 +27,7 @@
     "*tmp*",
     "**/.vscode/**",
     "**/config/default/**",
+    "**/test/**",
     "**/config/manager/manager.yaml"
   ],
   "horusecCliHeaders": {},
