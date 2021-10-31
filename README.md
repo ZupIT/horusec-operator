@@ -45,7 +45,7 @@ After configuring your machine according to the requirements, install horusec-op
 ```bash
 kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.0"
 ```
-2. See if the resoruce was installed: 
+2. See if the resource was installed: 
 ```bash
 kubectl api-resources | grep horus
 ```
@@ -57,7 +57,7 @@ horusecplatforms                  horus        install.horusec.io             tr
 
 ## **Usage**
 
-After installing, you need to send the changes you want to Kubenernetes. In this example we are using an [**example yaml file**](./config/samples/install_v2alpha1_horusecplatform.yaml), if you send an empty yaml file like the example below, it will take the [**default horusec settings**](./api/v2alpha1/horusec_platform_defaults.json): 
+After installing, you need to send the changes you want to Kubernetes. In this example we are using an [**example yaml file**](./config/samples/install_v2alpha1_horusecplatform.yaml), if you send an empty yaml file like the example below, it will take the [**default horusec settings**](./api/v2alpha1/horusec_platform_defaults.json): 
 
 ```yaml
 apiVersion: install.horusec.io/v2alpha1
@@ -124,7 +124,7 @@ psql: could not connect to server: Connection refused
 pod "postgresql-client" deleted
 pod default/postgresql-client terminated (Error)
 ```
-Don't worry, this is normal because the script is trying create new database, but the pod of the postgresql is not ready, it will run again until create new database.
+Don't worry, this is normal because the script is trying to create new database, but the pod of the postgresql is not ready, it will run again until create new database.
 
 **Step 3.** After the script finishes, install Horusec-Operator:
 ```bash
