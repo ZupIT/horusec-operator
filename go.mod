@@ -4,10 +4,12 @@ go 1.16
 
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
+	github.com/ZupIT/horusec-devkit v1.0.20
 	github.com/go-logr/logr v0.4.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.6
 	github.com/google/wire v0.5.0
+	github.com/magefile/mage v1.11.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.16.0
 	github.com/opentracing/opentracing-go v1.2.0

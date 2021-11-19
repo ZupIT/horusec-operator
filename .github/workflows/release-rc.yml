@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Release
+name: ReleaseRC
 
 on:
   workflow_dispatch:
@@ -20,13 +20,10 @@ on:
       releaseType:
         description: "Release types: (M - major); (m - minor); (p - patch)"
         required: true
-      horusecPlatformVersion:
-        description: "Version of horusec-platform for this release. Ex: v0.0.0"
-        required: true
 
 permissions: read-all
 jobs:
-  Release:
+  ReleaseRC:
     permissions:
       contents: write
       packages: write
@@ -98,7 +95,7 @@ jobs:
 
       # Creates a tag with the next version created during the last step, but still don't publish it.
       - name: Create tag
-        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
+        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextRCVersion }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -108,47 +105,8 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextReleaseVersion }}
+          GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextRCVersion }}
 
-      # This step updates the defaults.json to the platform version passed in the workflow input for all microservices.
-      # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
-      - name: Update versioning files
-        run: mage UpdateVersioningFiles
-        env:
-          HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
-          HORUSEC_ACTUAL_VERSION: ${{ steps.updated-version.outputs.actualReleaseVersion }}
-          HORUSEC_RELEASE_VERSION: ${{ steps.updated-version.outputs.nextReleaseVersion }}
-
-      # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
-      # going to trigger any workflow cause the skip ci in the commit message.
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v7.4.0
-        with:
-          push: true
-          signoff: true
-          author_name: Horusec
-          branch: ${{ steps.updated-version.outputs.nextReleaseBranchName }}
-          author_email: horusec@zup.com.br
-          committer_name: Horusec
-          committer_email: horusec@zup.com.br
-          message: "versioning:release - [skip ci] automatic commit updating versioning files"
-
-      # This step gets the sha of last commit made, witch is the updating versioning files commit, after that creates a
-      # branch from the origin main and cherry pick this commit on it. This process need to occur only when the release
-      # workflow is started from a branch that isn't the main branch, for example a release branch.
-      # When the workflow it's triggered to run on main, the commit it's going to be made directly to the main branch.
-      - name: Cherry pick
-        id: cherry-pick
-        run: mage CherryPick
-
-      # This step utilizes an action to create a pull request with the branch that was cherry picked on the last step
-      # into the main branch. As the last commit, this also needs to run only when the release workflow is started from a
-      # branch that isn't the main branch. Others workflows should be skipped cause of the skip ci in the pull request title.
-      - name: Create Pull Request
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "${{ steps.cherry-pick.outputs.cherryPickBranchName }}"
-          destination_branch: "main"
-          pr_title: "versioning:release - [skip ci] automatic pull request updating versioning files"
-          pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.commitShaToPick }} was cherry picked from the release branch, which already contains all the necessary changes."
-          github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+      # Publish the release and tag using mage
+      - name: Push All
+        run: mage GitPushAll

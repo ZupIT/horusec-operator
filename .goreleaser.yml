@@ -56,11 +56,17 @@ dockers:
     goarch: amd64
     ids:
       - horusec-operator
-    image_templates:
-      - "horuszup/horusec-operator:latest"
+  - image_templates:
       - "horuszup/horusec-operator:{{ .Tag }}"
-      - "horuszup/horusec-operator:v{{ .Major }}"
     skip_push: false
+    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
+  - image_templates:
+      - "horuszup/horusec-operator:latest"
+    skip_push: auto
+    dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
+  - image_templates:
+      - "horuszup/horusec-operator:v{{ .Major }}"
+    skip_push: auto
     dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
     use: docker
     build_flag_templates:
