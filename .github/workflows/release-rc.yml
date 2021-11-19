@@ -1,0 +1,129 @@
+# Copyright 2021 ZUP IT SERVICOS EM TECNOLOGIA E INOVACAO SA
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: ReleaseRC
+
+on:
+  workflow_dispatch:
+    inputs:
+      releaseType:
+        description: "Release types: (M - major); (m - minor)"
+        required: true
+
+permissions: read-all
+jobs:
+  ReleaseRC:
+    permissions:
+      contents: write
+      packages: write
+    runs-on: ubuntu-latest
+    env:
+      COSIGN_KEY_LOCATION: "/tmp/cosign.key" #private key used to sing the artefacts and images location.
+      COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Set up nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+
+      - name: Docker Login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Install Mage
+        run: go install github.com/magefile/mage@v1.11
+
+      # Set the default GitHub config with the user:horusec and email:horusec@zup.com.br.
+      - name: Git config
+        run: mage DefaultGitConfig
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Cosign Installer
+        uses: sigstore/cosign-installer@main
+        with:
+          cosign-release: "v1.2.0"
+
+      # This step creates a file containing the private key used to sing the release artefacts and images.
+      - name: Install cosign private key
+        run: mage WriteCosignKeyToFile
+        env:
+          COSIGN_KEY: ${{secrets.COSIGN_KEY}}
+
+      # Run a script contained in the devkit repository that gets the latest release version and create an output
+      # containing the next versions.
+      - name: Version increment
+        id: updated-version
+        run: mage UpVersions ${{ github.event.inputs.releaseType }}
+        env:
+          HORUSEC_REPOSITORY_ORG: ${{ github.repository_owner }}
+          HORUSEC_REPOSITORY_NAME: ${{ github.event.repository.name }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          file: ./deployments/dockerfiles/Dockerfile
+          tags: horuszup/horusec-operator:${{ steps.updated-version.outputs.nextRCVersion }}
+
+      - name: Sign image
+        run: mage SingImage ${{ steps.updated-version.outputs.nextRCVersion }}
+        env:
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
+
+      - name: CreateReleaseBranch
+        run: mage CheckoutRcBranch ${{ steps.updated-version.outputs.nextRCVersion }}
+
+      # Creates a tag with the next version created during the last step, but still don't publish it.
+      - name: Create tag
+        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextRCVersion }}
+
+      - name: Publish Beta Release
+        uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.updated-version.outputs.nextRCVersion }}
+          name: ${{ steps.updated-version.outputs.nextRCVersion }}
+          draft: false
+          prerelease: true
+          commitish: ${{ github.sha }}
+          gzip: true
+          allow_override: true
+          files: |
+            cosign.pub:./deployments/cosign.pub
+          body: |
+            ## Docker images
+            - `docker pull horuszup/horusec-operator:${{ steps.updated-version.outputs.nextRCVersion }}`
+
