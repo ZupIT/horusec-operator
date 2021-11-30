@@ -40,6 +40,9 @@ jobs:
         with:
           go-version: 1.17
 
+      - name: Install Mage
+        run: go install github.com/magefile/mage@v1.11
+
       - name: Docker Login
         uses: docker/login-action@v1
         with:
@@ -51,18 +54,13 @@ jobs:
         with:
           cosign-release: 'v1.2.0'
 
+      # Install consing private key using mage
       - name: Install cosign private key
-        run: 'echo "$COSIGN_KEY" > $COSIGN_KEY_LOCATION'
-        shell: bash
+        run: mage WriteCosignKeyToFile
         env:
           COSIGN_KEY: ${{secrets.COSIGN_KEY}}
 
-      - name: Set Version to build
-        run: |
-          REPOSITORY_NAME=${{ github.event.repository.full_name }}
-          CURRENT_VERSION=$(curl -sL https://api.github.com/repos/$REPOSITORY_NAME/releases/latest | jq -r ".tag_name")
-          sed -i -e "s/$CURRENT_VERSION/alpha/g" "./config/manager/kustomization.yaml"
-
+      # Build and push docker operator alpha image
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
@@ -71,12 +69,22 @@ jobs:
           file: ./deployments/dockerfiles/Dockerfile
           tags: horuszup/horusec-operator:alpha
 
+      # Sign alpha operator using mage
       - name: Sign image
-        run: |
-          cosign sign -key $COSIGN_KEY_LOCATION horuszup/horusec-operator:alpha
+        run: mage SignImage alpha
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PWD }}
 
+      # Delete the latest alpha pre-release
+      - name: Delete outdate release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          delete_release: true
+          tag_name: alpha
+
+      # Create a new alpha pre-release
       - name: Update alpha release
         uses: meeDamian/github-release@2.0
         with:
@@ -86,7 +94,7 @@ jobs:
           draft: false
           prerelease: true
           commitish: ${{ github.sha }}
-          gzip: false
+          gzip: true
           allow_override: true
           files: |
             cosign.pub:./deployments/cosign.pub
