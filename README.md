@@ -43,7 +43,7 @@ After configuring your machine according to the requirements, install horusec-op
 1. Run the command: 
 
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.0"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.1"
 ```
 2. See if the resource was installed: 
 ```bash
@@ -128,7 +128,7 @@ Don't worry, this is normal because the script is trying to create new database,
 
 **Step 3.** After the script finishes, install Horusec-Operator:
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.0"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.1"
 ```
 
 **Step 4.** Check if the resource was installed: 
