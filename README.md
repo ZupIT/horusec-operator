@@ -22,30 +22,45 @@
 </p>
 
 # **Horusec-Operator**
+
+## **Table of contents**
+### 1. [**About**](#about)
+### 2. [**Usage**](#usage)
+>#### 2.1. [**Requirements**](#requirements)
+>#### 2.2. [**Installation**](#installation)
+>#### 2.3. [**Configuration**](#configuration)
+### 3. [**Development Environment**](#development-environment)
+### 4. [**Documentation**](#documentation)
+### 5. [**Contributing**](#contributing)
+### 6. [**License**](#license)
+### 7. [**Community**](#community)
+
+## **About**
 Horusec-operator performs management between horus web services and its Kubernetes cluster. It was created based on the community's idea and it can have a simpler way to install the services in an environment using Kubernetes.
 
 This is the Kubernetes operator that enhances the Horusec-Platform installation system in a unified way. 
  
-## **Requirements**
-To use horusec-operator you need to configure some secrets and dependencies, see them below:
+## **Usage**
+### **Requirements**
+See below the requirements to install and configure Horusec-Operator:
 * [**Kubectl**](https://kubernetes.io/docs/tasks/tools/#kubectl) and connection with your cluster
 * Connection with a database:
-    * You can upload a pod from a PostgreSQL database [**you can see in the development environment example**](#development-environment), or you can create secrets of connection with your database.
-    * Create two databases for horusec-platform and horusec-analytic. 
+    * You can upload a pod from a PostgreSQL database. [**Check out the development environment example**](#development-environment), or you can create secrets of connection with your database.
+    * Create two databases for Horusec-Platform and Horusec-Analytic. 
 * Connection with a message broker:
     * You can upload a pod from a RabbitMQ message broker or you can create secrets of connection with your message broker.
-* Other secrets necessary:
-    * The secrets you need to configure may vary depending on how you use horusec. [**Check out the configuration options**](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
+* Other necessary secrets:
+    * The secrets you need to configure may vary depending on how you use Horusec. [**Check out the configuration options**](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
 
-## **Installing Operator**
-After configuring your machine according to the requirements, install horusec-operator on your cluster, see an example below:
+### **Installation**
+Install Horusec-Operator on your cluster, see an example below:
 
 1. Run the command: 
 
 ```bash
 kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.1"
 ```
-2. See if the resource was installed: 
+2. Check if the resource was installed: 
 ```bash
 kubectl api-resources | grep horus
 ```
@@ -55,9 +70,11 @@ $ kubectl api-resources | grep horus
 horusecplatforms                  horus        install.horusec.io             true         HorusecPlatform
 ```
 
-## **Usage**
+### **Configuration**
 
-After installing, you need to send the changes you want to Kubernetes. In this example we are using an [**example yaml file**](./config/samples/install_v2alpha1_horusecplatform.yaml), if you send an empty yaml file like the example below, it will take the [**default horusec settings**](./api/v2alpha1/horusec_platform_defaults.json): 
+After installing, you need to send the changes you want to Kubenernetes. 
+
+- In this example we are using a [**YAML file**](./config/samples/install_v2alpha1_horusecplatform.yaml).If you send an empty YAML file, it will take the [**default Horusec settings**](./api/v2alpha1/horusec_platform_defaults.json): 
 
 ```yaml
 apiVersion: install.horusec.io/v2alpha1
@@ -67,13 +84,13 @@ metadata:
 spec: {}
 ```
 
-And now you apply your changes: 
+- Apply your changes: 
 
 ```bash
 kubectl apply -f "https://raw.githubusercontent.com/ZupIT/horusec-operator/main/config/samples/install_v2alpha1_horusecplatform.yaml"
 ```
 
-You can see all horusec web services upload in your cluster, like this example:
+- You can see all Horusec web services upload in your cluster, like the example below:
 ```text
 $ kubectl get pods
 NAME                                                    READY   STATUS      RESTARTS   AGE
@@ -93,7 +110,7 @@ webhook-7b5c45c859-cq4nf                                1/1     Running     0   
 ```
 
 ## **Development Environment**
-This is a development environment example on how to use horusec-operator.
+This is a development environment example on how to use Horusec-Operator.
 
 You will need to install: 
 - [**Helm**](https://helm.sh/docs/intro/install/#from-script) 
@@ -182,24 +199,45 @@ For more information about Horusec, please check out the [**documentation**](htt
 
 ## **Contributing**
 
-If you want to contribute to this repository, access our [**Contributing Guide**](https://github.com/ZupIT/charlescd/blob/main/CONTRIBUTING.md). 
-And if you want to know more about Horusec, check out some of our other projects:
+If you want to contribute to this repository, access our [**Contributing Guide**](https://github.com/ZupIT/horusec-operator/blob/main/CONTRIBUTING.md). 
 
+### **Developer Certificate of Origin - DCO**
 
-- [**Admin**](https://github.com/ZupIT/horusec-admin)
-- [**Charts**](https://github.com/ZupIT/charlescd/tree/main/circle-matcher)
-- [**Devkit**](https://github.com/ZupIT/horusec-devkit)
-- [**Jenkins**](https://github.com/ZupIT/horusec-jenkins-sharedlib)
-- [**Platform**](https://github.com/ZupIT/horusec-platform)
-- [**VSCode plugin**](https://github.com/ZupIT/horusec-vscode-plugin)
-- [**Kotlin**](https://github.com/ZupIT/horusec-tree-sitter-kotlin)
-- [**Vulnerabilities**](https://github.com/ZupIT/horusec-examples-vulnerabilities)
+ This is a security layer for the project and for the developers. It is mandatory.
+ 
+ Follow one of these two methods to add DCO to your commits:
+ 
+**1. Command line**
+ Follow the steps: 
+ **Step 1:** Configure your local git environment adding the same name and e-mail configured at your GitHub account. It helps to sign commits manually during reviews and suggestions.
+
+ ```
+git config --global user.name “Name”
+git config --global user.email “email@domain.com.br”
+```
+**Step 2:** Add the Signed-off-by line with the `'-s'` flag in the git commit command:
+
+```
+$ git commit -s -m "This is my commit message"
+```
+
+**2. GitHub website**
+You can also manually sign your commits during GitHub reviews and suggestions, follow the steps below: 
+
+**Step 1:** When the commit changes box opens, manually type or paste your signature in the comment box, see the example:
+
+```
+Signed-off-by: Name < e-mail address >
+```
+
+For this method, your name and e-mail must be the same registered on your GitHub account.
+
+## **License**
+[**Apache License 2.0**](https://github.com/ZupIT/horusec-operator/blob/main/LICENSE).
 
 ## **Community**
-Feel free to reach out to us at:
-
-- [**GitHub Issues**](https://github.com/ZupIT/horusec-devkit/issues)
-- [**Zup Open Source Forum**](https://forum.zup.com.br)
+Do you have any question about Horusec? Let's chat in our [**forum**](https://forum.zup.com.br/).
 
 
 This project exists thanks to all the contributors. You rock! ❤️🚀
+
