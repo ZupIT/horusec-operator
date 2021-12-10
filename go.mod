@@ -11,7 +11,7 @@ require (
 	github.com/google/wire v0.5.0
 	github.com/magefile/mage v1.11.0
 	github.com/onsi/ginkgo v1.16.5
-	github.com/onsi/gomega v1.16.0
+	github.com/onsi/gomega v1.17.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/stretchr/testify v1.7.0
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
