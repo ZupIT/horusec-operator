@@ -54,6 +54,9 @@ up-sample: # Up all dev dependencies kubernetes
 	chmod +x ./config/samples/sample_install_dependencies.sh
 	./config/samples/sample_install_dependencies.sh
 
+install-operator: # Install local operator yaml
+	kubectl apply -k config/default
+
 apply-sample: # Apply yaml in kubernetes
 	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
 
