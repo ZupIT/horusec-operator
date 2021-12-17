@@ -44,7 +44,7 @@ func NewV1ToV2Job(resource *v2alpha1.HorusecPlatform) batchv1.Job {
 							Name:            "horusec-analytic-v1-2-v2",
 							Image:           resource.GetAnalyticImage(),
 							ImagePullPolicy: component.Container.Image.PullPolicy,
-							Command:         []string{"/horusec-analytic-v1-to-v2-migrate"},
+							Command:         []string{"/horusec-analytic-migrate-v1-v2"},
 							Env: []corev1.EnvVar{
 								resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_USERNAME", resource.Spec.Global.Database.User.KeyRef),
 								resource.NewEnvFromSecret("HORUSEC_PLATFORM_DATABASE_PASSWORD", resource.Spec.Global.Database.Password.KeyRef),
