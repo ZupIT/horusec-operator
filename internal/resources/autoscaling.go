@@ -19,6 +19,7 @@ import (
 	"reflect"
 
 	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
 	"github.com/ZupIT/horusec-operator/internal/resources/analytic"
@@ -29,8 +30,6 @@ import (
 	"github.com/ZupIT/horusec-operator/internal/resources/messages"
 	"github.com/ZupIT/horusec-operator/internal/resources/vulnerability"
 	"github.com/ZupIT/horusec-operator/internal/resources/webhook"
-
-	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 )
 
 func (b *Builder) AutoscalingFor(resource *v2alpha1.HorusecPlatform) ([]autoscalingv2beta2.HorizontalPodAutoscaler, error) {
