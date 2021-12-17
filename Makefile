@@ -1,41 +1,39 @@
 GO ?= go
 GOFMT ?= gofmt
-GO_FILES ?= $$(find . -name '*.go' | grep -v vendor)
-GOLANG_CI_LINT ?= $(shell pwd)/bin/golangci-lint
+GO_FILES ?= $$(find . -name '*.go' | grep -v vendor | grep -v _gen.go | grep -v zz_generated.deepcopy.go | grep -v wire.go)
+GOLANG_CI_LINT ?= golangci-lint
 GO_IMPORTS ?= goimports
 GO_IMPORTS_LOCAL ?= github.com/ZupIT/horusec-operator
 HORUSEC ?= horusec
 CONTROLLER_GEN ?= $(shell pwd)/bin/controller-gen
 KUSTOMIZE ?= $(shell pwd)/bin/kustomize
 CRD_OPTIONS ?= "crd:trivialVersions=true,preserveUnknownFields=false"
-OPERATOR_VERSION ?= $(shell semver get release)
+OPERATOR_VERSION ?= $(shell curl -sL https://api.github.com/repos/ZupIT/horusec-operator/releases/latest | jq -r ".tag_name") # Get the latest version of the operator
 REGISTRY_IMAGE ?= horuszup/horusec-operator:${OPERATOR_VERSION}
 ADDLICENSE ?= addlicense
+GO_GCI ?= gci
+GO_FUMPT ?= gofumpt
 
-fmt: # Check fmt in application
-	$(GOFMT) -w $(GO_FILES)
+lint: # Run install and run golangci lint tool
+	$(GO) install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	$(GOLANG_CI_LINT) run -v --timeout=5m -c .golangci.yml ./...
 
-lint: # Check lint in application
-    ifeq ($(wildcard $(GOLANG_CI_LINT)), $(GOLANG_CI_LINT))
-		$(GOLANG_CI_LINT) run -v --timeout=5m -c .golangci.yml ./...
-    else
-		curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s latest
-		$(GOLANG_CI_LINT) run -v --timeout=5m -c .golangci.yml ./...
-    endif
+format: install-format-dependencies # Install format dependencies and run format
+	$(GOFMT) -s -l -w $(GO_FILES)
+	$(GO_IMPORTS) -w -local $(GO_IMPORTS_LOCAL) $(GO_FILES)
+	$(GO_FUMPT) -l -w $(GO_FILES)
+	$(GO_GCI) -w -local $(GO_IMPORTS_LOCAL) $(GO_FILES)
+
+install-format-dependencies: # Install format dependencies
+	$(GO) install golang.org/x/tools/cmd/goimports@latest
+	$(GO) install mvdan.cc/gofumpt@latest
+	$(GO) install github.com/daixiang0/gci@latest
 
 coverage: # Check coverage in application
 	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/coverage.sh | bash -s 0 .
 
 tests: # Run all tests in application
 	$(GO) clean -testcache && $(GO) test -v ./... -timeout=2m -parallel=1 -failfast -short
-
-fix-imports: # Setup all imports to default mode
-    ifeq (, $(shell which $(GO_IMPORTS)))
-		$(GO) get -u golang.org/x/tools/cmd/goimports
-		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
-    else
-		$(GO_IMPORTS) -local $(GO_IMPORTS_LOCAL) -w $(GO_FILES)
-    endif
 
 security: # Run security pipeline
     ifeq (, $(shell which $(HORUSEC)))
@@ -48,43 +46,15 @@ security: # Run security pipeline
 build: # Build operator image
 	$(GO) build -o "./tmp/bin/operator" ./cmd/app
 
-pipeline: fmt fix-imports lint test coverage build security  # Run all processes of the pipeline
+license: # Check for missing license headers
+	$(GO) install github.com/google/addlicense@latest
+	@$(ADDLICENSE) -check -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
 
-up-sample: # Up all dev dependencies kubernetes
-	chmod +x ./config/samples/sample_install_dependencies.sh
-	./config/samples/sample_install_dependencies.sh
+license-fix: # Add missing license headers
+	$(GO) install github.com/google/addlicense@latest
+	@$(ADDLICENSE) -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
 
-install-operator: # Install local operator yaml
-	kubectl apply -k config/default
-
-apply-sample: # Apply yaml in kubernetes
-	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
-
-replace-sample: # Replace to re-apply yaml in kubernetes
-	kubectl replace -f ./config/samples/install_v2alpha1_horusecplatform.yaml
-
-install-semver: # Install semver binary
-	curl -fsSL https://raw.githubusercontent.com/ZupIT/horusec-devkit/main/scripts/install-semver.sh | bash
-
-docker-up-alpha: # Update alpha in docker image
-	chmod +x ./deployments/scripts/update-image.sh
-	./deployments/scripts/update-image.sh alpha false
-
-docker-up-rc: # Update rc in docker image
-	chmod +x ./deployments/scripts/update-image.sh
-	./deployments/scripts/update-image.sh rc false
-
-docker-up-release: # Update release in docker image
-	chmod +x ./deployments/scripts/update-image.sh
-	./deployments/scripts/update-image.sh release false
-
-docker-up-release-latest: # Update release and latest in docker image
-	chmod +x ./deployments/scripts/update-image.sh
-	./deployments/scripts/update-image.sh release true
-
-docker-up-minor-latest: # Update minor and latest in docker image
-	chmod +x ./deployments/scripts/update-image.sh
-	./deployments/scripts/update-image.sh minor true
+pipeline: format lint test coverage build security license  # Run all processes of the pipeline
 
 ######### Operator commands #########
 # go-get-tool will 'go get' any package $2 and install it to $1.
@@ -113,7 +83,7 @@ manifests: controller-gen  # Update all manifests in config
 generate: controller-gen # Generate new controller
 	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
 
-generate-service-yaml: kustomize install-semver
+generate-service-yaml: kustomize
 	mkdir -p $(shell pwd)/tmp
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default > $(shell pwd)/tmp/horusec-operator.yaml
@@ -124,7 +94,7 @@ install: manifests kustomize # install horusec crd in kubernetes
 uninstall: manifests kustomize # uninstall horusec crd in kubernetes
 	$(KUSTOMIZE) build config/crd | kubectl delete -f -
 
-deploy: manifests kustomize install-semver # deploy horusec-operator in environment
+deploy: manifests kustomize # deploy horusec-operator in environment
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(REGISTRY_IMAGE)
 	$(KUSTOMIZE) build config/default | kubectl apply -f -
 
@@ -134,10 +104,14 @@ undeploy: # undeploy horusec-operator in environment
 mock: # generate source code for a mock
 	mockgen -package=test -destination test/kubernetes_client.go -source=internal/horusec/usecase/kubeclient.go KubernetesClient
 
-license:
-	$(GO) get -u github.com/google/addlicense
-	@$(ADDLICENSE) -check -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
+up-sample: # Starts a kind cluster with all platform dependencies and secrets
+	chmod +x ./config/samples/sample_install_dependencies.sh
+	./config/samples/sample_install_dependencies.sh
 
-license-fix:
-	$(GO) get -u github.com/google/addlicense
-	@$(ADDLICENSE) -f ./copyright.txt $(shell find -regex '.*\.\(go\|js\|ts\|yml\|yaml\|sh\|dockerfile\)')
+apply-sample: # Apply a sample operator from platform
+	kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+
+replace-sample: # Replace sample operator from platform
+	kubectl replace -f ./config/samples/install_v2alpha1_horusecplatform.yaml
+
+up-local-operator: up-sample install deploy apply-sample # Start a kind cluster and install operator with a example
