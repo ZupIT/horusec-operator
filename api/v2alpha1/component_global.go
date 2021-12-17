@@ -21,9 +21,11 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-var LatestVersion = "latest"
-var Commit = ""
-var Date = ""
+var (
+	LatestVersion = "latest"
+	Commit        = ""
+	Date          = ""
+)
 
 func (h *HorusecPlatform) NewEnvFromSecret(variableName string, secretKeyRef *corev1.SecretKeySelector) corev1.EnvVar {
 	return corev1.EnvVar{
