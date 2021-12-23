@@ -24,17 +24,13 @@ The **BUILD.md** is a file to check the environment and build specifications of 
 
 ## **Development**
 
-At the root of the project, run the following command to bring the cluster up along with its dependencies:
+At the root of the project, run the following command:
 
 ```bash
-make up-sample
+make up-local-operator
 ```
 
-After running the above command, the cluster will be available. Then run the command below to apply the settings to the development environment:
-
-```bash
-make apply-sample
-```
+It will create a kind cluster with all dependencies and secrets, install operator CDR and apply a yaml with the platform definitions.
 
 ### **Style Guide**
 
@@ -48,13 +44,7 @@ make lint
 The project also has a dependency import pattern, and the commands below organize your code in the pattern defined by the Horusec team, run:
 
 ```bash
-make fmt
-```
-
-Then, run the command:
-
-```bash
-make fix-imports
+make format
 ```
 
 All project files must have the [**license header**](./copyright.txt). You can check if all files are in agreement, using the command:
