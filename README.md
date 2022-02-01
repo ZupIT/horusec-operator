@@ -31,9 +31,10 @@
 >#### 2.3. [**Configuration**](#configuration)
 ### 3. [**Development Environment**](#development-environment)
 ### 4. [**Documentation**](#documentation)
-### 5. [**Contributing**](#contributing)
-### 6. [**License**](#license)
-### 7. [**Community**](#community)
+### 5. [**Issues**](#issues)
+### 6. [**Contributing**](#contributing)
+### 7. [**License**](#license)
+### 8. [**Community**](#community)
 
 ## **About**
 Horusec-operator performs management between horus web services and its Kubernetes cluster. It was created based on the community's idea and it can have a simpler way to install the services in an environment using Kubernetes.
@@ -196,6 +197,9 @@ webhook-7b5c45c859-cq4nf                                1/1     Running     0   
 
 For more information about Horusec, please check out the [**documentation**](https://horusec.io/docs/).
 
+## **Issues**
+
+To open or track an issue for this project, in order to better coordinate your discussions, we recommend that you use the [**Issues tab**](https://github.com/ZupIT/horusec/issues) in the main [**Horusec**](https://github.com/ZupIT/horusec) repository.
 
 ## **Contributing**
 
