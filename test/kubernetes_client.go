@@ -10,10 +10,10 @@ import (
 
 	gomock "github.com/golang/mock/gomock"
 	v1 "k8s.io/api/apps/v1"
-	v2beta2 "k8s.io/api/autoscaling/v2beta2"
-	v10 "k8s.io/api/batch/v1"
-	v11 "k8s.io/api/core/v1"
-	v1beta1 "k8s.io/api/networking/v1beta1"
+	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
+	batchv1 "k8s.io/api/batch/v1"
+	corev1 "k8s.io/api/core/v1"
+	networkingv1 "k8s.io/api/networking/v1"
 
 	v2alpha1 "github.com/ZupIT/horusec-operator/api/v2alpha1"
 	k8s "github.com/ZupIT/horusec-operator/internal/k8s"
@@ -57,10 +57,10 @@ func (mr *MockKubernetesClientMockRecorder) Apply(ctx, objects interface{}) *gom
 }
 
 // ListAutoscalingByOwner mocks base method.
-func (m *MockKubernetesClient) ListAutoscalingByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v2beta2.HorizontalPodAutoscaler, error) {
+func (m *MockKubernetesClient) ListAutoscalingByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]autoscalingv2beta2.HorizontalPodAutoscaler, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListAutoscalingByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v2beta2.HorizontalPodAutoscaler)
+	ret0, _ := ret[0].([]autoscalingv2beta2.HorizontalPodAutoscaler)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -87,10 +87,10 @@ func (mr *MockKubernetesClientMockRecorder) ListDeploymentsByOwner(ctx, owner in
 }
 
 // ListIngressByOwner mocks base method.
-func (m *MockKubernetesClient) ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v1beta1.Ingress, error) {
+func (m *MockKubernetesClient) ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networkingv1.Ingress, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListIngressByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v1beta1.Ingress)
+	ret0, _ := ret[0].([]networkingv1.Ingress)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -102,10 +102,10 @@ func (mr *MockKubernetesClientMockRecorder) ListIngressByOwner(ctx, owner interf
 }
 
 // ListJobsByOwner mocks base method.
-func (m *MockKubernetesClient) ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v10.Job, error) {
+func (m *MockKubernetesClient) ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]batchv1.Job, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListJobsByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v10.Job)
+	ret0, _ := ret[0].([]batchv1.Job)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -117,10 +117,10 @@ func (mr *MockKubernetesClientMockRecorder) ListJobsByOwner(ctx, owner interface
 }
 
 // ListPodsByOwner mocks base method.
-func (m *MockKubernetesClient) ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v11.Pod, error) {
+func (m *MockKubernetesClient) ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]corev1.Pod, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListPodsByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v11.Pod)
+	ret0, _ := ret[0].([]corev1.Pod)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -132,10 +132,10 @@ func (mr *MockKubernetesClientMockRecorder) ListPodsByOwner(ctx, owner interface
 }
 
 // ListServiceAccountsByOwner mocks base method.
-func (m *MockKubernetesClient) ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v11.ServiceAccount, error) {
+func (m *MockKubernetesClient) ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]corev1.ServiceAccount, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListServiceAccountsByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v11.ServiceAccount)
+	ret0, _ := ret[0].([]corev1.ServiceAccount)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -147,10 +147,10 @@ func (mr *MockKubernetesClientMockRecorder) ListServiceAccountsByOwner(ctx, owne
 }
 
 // ListServicesByOwner mocks base method.
-func (m *MockKubernetesClient) ListServicesByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]v11.Service, error) {
+func (m *MockKubernetesClient) ListServicesByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]corev1.Service, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListServicesByOwner", ctx, owner)
-	ret0, _ := ret[0].([]v11.Service)
+	ret0, _ := ret[0].([]corev1.Service)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
