@@ -21,7 +21,7 @@ import (
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
-	networking "k8s.io/api/networking/v1beta1"
+	networkingv1 "k8s.io/api/networking/v1"
 	"k8s.io/apimachinery/pkg/types"
 
 	"github.com/ZupIT/horusec-operator/api/v2alpha1"
@@ -33,7 +33,7 @@ type KubernetesClient interface {
 	UpdateHorusStatus(ctx context.Context, horus *v2alpha1.HorusecPlatform) error
 	ListAutoscalingByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]autoscaling.HorizontalPodAutoscaler, error)
 	ListDeploymentsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]apps.Deployment, error)
-	ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networking.Ingress, error)
+	ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networkingv1.Ingress, error)
 	ListJobsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]batch.Job, error)
 	ListPodsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.Pod, error)
 	ListServiceAccountsByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]core.ServiceAccount, error)

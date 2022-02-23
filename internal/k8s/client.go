@@ -23,7 +23,7 @@ import (
 	autoscaling "k8s.io/api/autoscaling/v2beta2"
 	batch "k8s.io/api/batch/v1"
 	core "k8s.io/api/core/v1"
-	networking "k8s.io/api/networking/v1beta1"
+	networkingv1 "k8s.io/api/networking/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -130,7 +130,7 @@ func (d *Client) ListDeploymentsByOwner(ctx context.Context, owner *v2alpha1.Hor
 	return list.Items, nil
 }
 
-func (d *Client) ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networking.Ingress, error) {
+func (d *Client) ListIngressByOwner(ctx context.Context, owner *v2alpha1.HorusecPlatform) ([]networkingv1.Ingress, error) {
 	span, ctx := tracing.StartSpanFromContext(ctx)
 	defer span.Finish()
 
@@ -138,7 +138,7 @@ func (d *Client) ListIngressByOwner(ctx context.Context, owner *v2alpha1.Horusec
 		client.InNamespace(owner.GetNamespace()),
 		client.MatchingLabels(owner.GetDefaultLabel()),
 	}
-	list := &networking.IngressList{}
+	list := &networkingv1.IngressList{}
 	if err := d.List(ctx, list, opts...); err != nil {
 		return nil, span.HandleError(fmt.Errorf("failed to list %s ingress: %w", owner.GetName(), err))
 	}
