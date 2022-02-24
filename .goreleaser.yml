@@ -28,18 +28,49 @@ builds:
     goarch:
       - amd64
     binary: horusec-operator
+
 changelog:
-  skip: true
+  skip: false
+  use: github
+  groups:
+  - title: 'Features'
+    regexp: "^.*:(feature|feat)\\s-.*$"
+    order: 0
+  - title: 'Bug fixes'
+    regexp: "^.*:(bugfix|fix)\\s-.*$"
+    order: 1
+  - title: 'Hotfixes'
+    regexp: "^.*:hotfix\\s-.*$"
+    order: 2
+  - title: 'Chores'
+    regexp: "^.*:chore\\s-.*$"
+    order: 3
+  - title: Others
+    order: 999
+  filters:
+    exclude:
+      - '^deps:chore.*$'
+      - '^Commit\sfrom\sGitHub\sActions.*$'
+      - '^build(deps):.*$'
+      - '^Update\sdependency.*$'
+      - '^versioning:release.*$'
+
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 archives:
   - format: binary
 release:
-  draft: true
+  prerelease: auto
+  draft: false
+  mode: append
   extra_files:
     - glob: ./deployments/cosign.pub
-  ids:
-    -
+  footer: |
+    ## Docker images
+    - `docker pull horuszup/horusec-operator:{{ .Tag }}`
+
+    **Full Changelog**: https://github.com/ZupIT/horusec-operator/compare/{{ .PreviousTag }}...{{ .Tag }}
+
 signs:
   - cmd: cosign
     stdin: '{{ .Env.COSIGN_PWD }}'
@@ -58,7 +89,7 @@ dockers:
       - horusec-operator
   - image_templates:
       - "horuszup/horusec-operator:{{ .Tag }}"
-    skip_push: false
+    skip_push: "false"
     dockerfile: ./deployments/dockerfiles/Dockerfile.gorelease
   - image_templates:
       - "horuszup/horusec-operator:latest"

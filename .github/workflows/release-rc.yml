@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: ReleaseRC
+name: release-rc
 
 on:
   workflow_dispatch:
@@ -27,11 +27,12 @@ jobs:
     permissions:
       contents: write
       packages: write
+      issues:   write
     runs-on: ubuntu-latest
     env:
       COSIGN_KEY_LOCATION: "/tmp/cosign.key" #private key used to sing the artefacts and images location.
       COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
-
+    if: contains('["wiliansilvazup","matheusalcantarazup","lucasbrunozup","nathanmartinszup","iancardosozup","oliveirafelipezup"]', github.actor)
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -66,7 +67,7 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v4
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          passphrase: ${{ secrets.GPG_PASSWORD }}
           git_user_signingkey: true
           git_commit_gpgsign: true
 
@@ -93,9 +94,9 @@ jobs:
       - name: Checkout Release Branch
         run: mage CheckoutReleaseBranch ${{ steps.updated-version.outputs.nextReleaseBranchName }}
 
-      # Creates a tag with the next version created during the last step, but still don't publish it.
-      - name: Create tag
-        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextRCVersion }}
+      # Creates a tag with the next version created during the last step
+      - name: Create and push tag
+        run: mage -v createAndPushTag ${{ steps.updated-version.outputs.nextRCVersion }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -105,8 +106,15 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextRCVersion }}
+          GORELEASER_PREVIOUS_TAG: ${{ steps.updated-version.outputs.actualRCVersion }}
 
       # Publish the release and tag using mage
       - name: Push All
-        run: mage GitPushAll
+        if: ${{ success() }}
+        run: mage -v gitPushAll
+
+      - name: Remove updates
+        if: ${{ !success() }}
+        run: mage -v removeTag ${{ steps.updated-version.outputs.nextRCVersion }}

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Release
+name: release-final
 
 on:
   workflow_dispatch:
@@ -26,15 +26,16 @@ on:
 
 permissions: read-all
 jobs:
-  Release:
+  ReleaseFinal:
     permissions:
       contents: write
       packages: write
+      issues:   write
     runs-on: ubuntu-latest
     env:
       COSIGN_KEY_LOCATION: "/tmp/cosign.key" #private key used to sing the artefacts and images location.
       COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
-
+    if: contains('["wiliansilvazup","matheusalcantarazup","lucasbrunozup","nathanmartinszup","iancardosozup","oliveirafelipezup"]', github.actor)
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -69,7 +70,7 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v4
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          passphrase: ${{ secrets.GPG_PASSWORD }}
           git_user_signingkey: true
           git_commit_gpgsign: true
 
@@ -96,9 +97,9 @@ jobs:
       - name: Checkout Release Branch
         run: mage CheckoutReleaseBranch ${{ steps.updated-version.outputs.nextReleaseBranchName }}
 
-      # Creates a tag with the next version created during the last step, but still don't publish it.
-      - name: Create tag
-        run: mage CreateLocalTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
+      # Creates a tag with the next version created during the last step
+      - name: Create and push tag
+        run: mage -v createAndPushTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -108,11 +109,14 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COSIGN_PWD: ${{ secrets.COSIGN_PWD }}
           GORELEASER_CURRENT_TAG: ${{ steps.updated-version.outputs.nextReleaseVersion }}
+          GORELEASER_PREVIOUS_TAG: ${{ steps.updated-version.outputs.actualReleaseVersion }}
 
       # This step updates the defaults.json to the platform version passed in the workflow input for all microservices.
       # The README.md and kustomization.yaml also are updated to match the new operator version that ir being released.
       - name: Update versioning files
+        if: ${{ success() }}
         run: mage UpdateVersioningFiles
         env:
           HORUSEC_PLATFORM_VERSION: ${{ github.event.inputs.horusecPlatformVersion }}
@@ -122,6 +126,7 @@ jobs:
       # The changes made in the last step are committed to the branch that the workflow was triggered, this commit is not
       # going to trigger any workflow cause the skip ci in the commit message.
       - name: Commit changes
+        if: ${{ success() }}
         uses: EndBug/add-and-commit@v8.0.2
         with:
           push: true
@@ -137,6 +142,7 @@ jobs:
       # workflow is started from a branch that isn't the main branch, for example a release branch.
       # When the workflow it's triggered to run on main, the commit it's going to be made directly to the main branch.
       - name: Cherry pick
+        if: ${{ success() }}
         id: cherry-pick
         run: mage CherryPick
 
@@ -144,6 +150,7 @@ jobs:
       # into the main branch. As the last commit, this also needs to run only when the release workflow is started from a
       # branch that isn't the main branch. Others workflows should be skipped cause of the skip ci in the pull request title.
       - name: Create Pull Request
+        if: ${{ success() }}
         uses: repo-sync/pull-request@v2
         with:
           source_branch: "${{ steps.cherry-pick.outputs.cherryPickBranchName }}"
@@ -151,3 +158,7 @@ jobs:
           pr_title: "versioning:release - [skip ci] automatic pull request updating versioning files"
           pr_body: "This is a automatic pull request that contains changes to files that need to be updated with the new release version. Where the commit ${{ steps.cherry-pick.outputs.commitShaToPick }} was cherry picked from the release branch, which already contains all the necessary changes."
           github_token: ${{ secrets.HORUSEC_PUSH_TOKEN }}
+
+      - name: Remove updates
+        if: ${{ !success() }}
+        run: mage -v removeTag ${{ steps.updated-version.outputs.nextReleaseVersion }}
