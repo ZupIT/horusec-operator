@@ -59,7 +59,7 @@ Install Horusec-Operator on your cluster, see an example below:
 1. Run the command: 
 
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.2"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.3"
 ```
 2. Check if the resource was installed: 
 ```bash
@@ -146,7 +146,7 @@ Don't worry, this is normal because the script is trying to create new database,
 
 **Step 3.** After the script finishes, install Horusec-Operator:
 ```bash
-kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.2"
+kubectl apply -k "https://github.com/ZupIT/horusec-operator/config/default?ref=v2.2.3"
 ```
 
 **Step 4.** Check if the resource was installed: 
