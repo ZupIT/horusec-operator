@@ -51,7 +51,7 @@ See below the requirements to install and configure Horusec-Operator:
 * Connection with a message broker:
     * You can upload a pod from a RabbitMQ message broker or you can create secrets of connection with your message broker.
 * Other necessary secrets:
-    * The secrets you need to configure may vary depending on how you use Horusec. [**Check out the configuration options**](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources).
+    * The secrets you need to configure may vary depending on how you use Horusec. [**Check out the configuration options**](https://docs.horusec.io/docs/web/installation/install-with-operator/yaml-definition/).
 
 ### **Installation**
 Install Horusec-Operator on your cluster, see an example below:
@@ -168,7 +168,7 @@ NAME                                                   READY   STATUS           
 horusec-operator-controller-manager-7b9696d4c4-t7w2q   2/2     Running             0          2m10s
 ```
 
-**Step 5.** And now, pass the [**yaml with your configuration**](https://horusec.io/docs/web/installation/install-with-horusec-operator#resources) to upload in your Kubernetes cluster. See the example:
+**Step 5.** And now, pass the [**yaml with your configuration**](https://docs.horusec.io/docs/web/installation/install-with-operator/yaml-definition/) to upload in your Kubernetes cluster. See the example:
 
 ```bash
 kubectl apply -f ./config/samples/install_v2alpha1_horusecplatform.yaml
@@ -195,7 +195,7 @@ webhook-7b5c45c859-cq4nf                                1/1     Running     0   
 
 ## **Documentation**
 
-For more information about Horusec, please check out the [**documentation**](https://horusec.io/docs/).
+For more information about Horusec, please check out the [**documentation**](https://docs.horusec.io/docs/).
 
 ## **Issues**
 
