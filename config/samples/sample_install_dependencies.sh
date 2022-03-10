@@ -34,7 +34,6 @@ export POSTGRES_PASSWORD=$(kubectl get secret postgresql -o jsonpath="{.data.pos
 export RABBITMQ_USERNAME="user"
 export RABBITMQ_PASSWORD=$(kubectl get secret rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)
 export JWT_SECRET="4ff42f67-5929-fc52-65f1-3afc77ad86d5"
-export CONFIDENTIAL_CLIENT_SECRET="4ff42f67-5929-fc52-65f1-3afc77ad86d5"
 
 # waits for postgres to be ready
 kubectl wait --for=condition=ready pod postgresql-0 --timeout 300s
@@ -48,5 +47,3 @@ kubectl create secret generic horusec-analytic-database --from-literal="username
 kubectl create secret generic horusec-broker --from-literal="username=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
 
 kubectl create secret generic horusec-jwt --from-literal=jwt-token=$JWT_SECRET
-
-kubectl create secret generic horusec-keycloak-client --from-literal="client-secret=$CONFIDENTIAL_CLIENT_SECRET"
