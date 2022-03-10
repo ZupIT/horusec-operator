@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/magefile/mage/sh"
 	// mage:import
 	_ "github.com/ZupIT/horusec-devkit/pkg/utils/mageutils"
-	"github.com/magefile/mage/sh"
 )
 
 const (
@@ -47,6 +47,7 @@ const (
 	envReleaseVersion  = "HORUSEC_RELEASE_VERSION"
 )
 
+// UpdateVersioningFiles update project version in all files
 func UpdateVersioningFiles() error {
 	if err := sh.RunV("npm", "install", "-g", "json"); err != nil {
 		return err
