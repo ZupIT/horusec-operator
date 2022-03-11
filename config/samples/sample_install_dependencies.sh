@@ -28,17 +28,16 @@ echo "Adding installing dependencies..."
 helm install rabbitmq bitnami/rabbitmq
 helm install postgresql --set auth.database=horusec_db bitnami/postgresql
 
+# necessary to avoid the command 'kubectl wait --for=condition=ready pod postgresql-0 --timeout 300s' run before the
+# pod even exits.
+sleep 5
+
 echo "Getting user and pwd of dependencies..."
 export POSTGRES_USERNAME="postgres"
 export POSTGRES_PASSWORD=$(kubectl get secret postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode)
 export RABBITMQ_USERNAME="user"
 export RABBITMQ_PASSWORD=$(kubectl get secret rabbitmq -o jsonpath="{.data.rabbitmq-password}" | base64 --decode)
 export JWT_SECRET="4ff42f67-5929-fc52-65f1-3afc77ad86d5"
-
-# waits for postgres to be ready
-kubectl wait --for=condition=ready pod postgresql-0 --timeout 300s
-
-kubectl run postgresql-client --rm -it --restart='Never' --image docker.io/bitnami/postgresql --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U $POSTGRES_USERNAME -d horusec_db -p 5432 --no-password -c "create database horusec_analytic_db;"
 
 echo "Creating secrets of dependencies..."
 kubectl create secret generic horusec-platform-database --from-literal="username=$POSTGRES_USERNAME" --from-literal="password=$POSTGRES_PASSWORD"
@@ -47,3 +46,9 @@ kubectl create secret generic horusec-analytic-database --from-literal="username
 kubectl create secret generic horusec-broker --from-literal="username=$RABBITMQ_USERNAME" --from-literal="password=$RABBITMQ_PASSWORD"
 
 kubectl create secret generic horusec-jwt --from-literal=jwt-token=$JWT_SECRET
+
+# waits for postgres to be ready
+kubectl wait --for=condition=ready pod postgresql-0 --timeout 300s
+
+# creates horusec_analytic_db
+kubectl run postgresql-client --rm -it --restart='Never' --image docker.io/bitnami/postgresql --env="PGPASSWORD=$POSTGRES_PASSWORD" --command -- psql --host postgresql -U $POSTGRES_USERNAME -d horusec_db -p 5432 --no-password -c "create database horusec_analytic_db;"
