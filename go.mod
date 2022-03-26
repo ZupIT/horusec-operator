@@ -3,7 +3,7 @@ module github.com/ZupIT/horusec-operator
 go 1.17
 
 require (
-	github.com/ZupIT/horusec-devkit v1.0.23
+	github.com/ZupIT/horusec-devkit v1.0.24
 	github.com/go-logr/logr v0.4.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.7
