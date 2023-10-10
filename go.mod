@@ -6,7 +6,7 @@ require (
 	github.com/ZupIT/horusec-devkit v1.0.23
 	github.com/go-logr/logr v0.4.0
 	github.com/golang/mock v1.6.0
-	github.com/google/go-cmp v0.5.7
+	github.com/google/go-cmp v0.6.0
 	github.com/google/wire v0.5.0
 	github.com/magefile/mage v1.12.1
 	github.com/onsi/ginkgo v1.16.5
