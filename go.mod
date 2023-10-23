@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/google/go-cmp v0.5.7
 	github.com/google/wire v0.5.0
-	github.com/magefile/mage v1.12.1
+	github.com/magefile/mage v1.15.0
 	github.com/onsi/ginkgo v1.16.5
 	github.com/onsi/gomega v1.18.1
 	github.com/opentracing/opentracing-go v1.2.0
